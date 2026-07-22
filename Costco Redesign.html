@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Costco Redesign · Michelle Yi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--toc-accent:var(--md);}
+.toc-widget{position:fixed;left:24px;bottom:24px;z-index:80;font-family:var(--sans);}
+.toc-fab{display:flex;align-items:center;gap:8px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:999px;padding:9px 16px;cursor:pointer;box-shadow:0 8px 20px rgba(58,43,40,.1);transition:box-shadow .2s;}
+.toc-fab:hover{box-shadow:0 10px 26px rgba(58,43,40,.16);}
+.toc-fab .tf-count{font:700 12px/1 var(--sans);color:var(--toc-accent);}
+.toc-fab .tf-sep{color:rgba(58,43,40,.3);font-size:12px;}
+.toc-fab .tf-total{font:600 12px/1 var(--sans);color:rgba(58,43,40,.4);}
+.toc-fab .tf-bar{color:rgba(58,43,40,.25);}
+.toc-fab .tf-label{font:600 12px/1 var(--sans);color:var(--ink);}
+.toc-panel{position:absolute;bottom:calc(100% + 12px);left:0;width:220px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:20px;padding:16px;box-shadow:0 20px 44px rgba(58,43,40,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s;}
+.toc-widget.open .toc-panel{opacity:1;visibility:visible;transform:translateY(0);}
+.toc-item{display:flex;align-items:baseline;gap:10px;padding:8px 6px;border-radius:10px;cursor:pointer;text-decoration:none;transition:background .15s;}
+.toc-item:hover{background:var(--cream);}
+.toc-item .ti-n{font:700 11px/1 var(--sans);color:rgba(58,43,40,.35);flex:none;width:18px;}
+.toc-item .ti-l{font:600 13px/1.3 var(--sans);color:rgba(58,43,40,.55);}
+.toc-item.active .ti-n,.toc-item.active .ti-l{color:var(--toc-accent);}
+.toc-item.active .ti-l{font-weight:700;}
+@media(max-width:680px){.toc-widget{left:14px;bottom:14px;}.toc-panel{width:190px;}}
+:root{
+  --bg:#FFF6E9;--paper:#FFFBF3;--cream:#FFF0DE;--cd:#F4E2C9;
+  --mint:#96C1C5;--ms:#C3DCDE;--md:#5E9AA0;
+  --brown:#694A47;--ink:#3A2B28;--dark:#2A1F1C;
+  --cblue:#0A2D6E;--cred:#CC2028;--cgold:#E8A020;
+  --sh:8px 10px 0 var(--ink);--ss:5px 6px 0 var(--ink);
+  --sans:"Host Grotesk",system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+  --mono:"Space Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:auto;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--mint);color:var(--ink);}
+.wp{max-width:1200px;margin:0 auto;padding:0 clamp(18px,4vw,52px);}
+/* scroll reveal */
+.sr{opacity:0;transform:translateY(22px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1);}
+.sr.in{opacity:1;transform:none;}
+.sr.d1{transition-delay:.1s;}.sr.d2{transition-delay:.2s;}.sr.d3{transition-delay:.28s;}.sr.d4{transition-delay:.36s;}
+@media(prefers-reduced-motion:reduce){.sr{opacity:1!important;transform:none!important;transition:none!important;}}
+/* shared */
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--md);opacity:1;}
+.pill{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:30px;padding:5px 11px;}
+.ctar{display:flex;gap:9px;flex-wrap:wrap;}
+.ctar a{font-size:13px;font-weight:700;border:1.5px solid var(--ink);border-radius:30px;padding:11px 18px;transition:background .25s,color .25s,transform .2s;}
+.ctar a.f{background:var(--ink);color:var(--paper);}
+.ctar a:hover,.ctar a.f:hover{background:var(--brown);border-color:var(--ink);color:var(--paper);transform:translateY(-2px);}
+.back-link{position:fixed;top:20px;left:20px;z-index:50;font:600 12px/1 var(--sans);letter-spacing:.02em;background:var(--paper);border:1.5px solid var(--ink);border-radius:30px;padding:10px 16px;display:flex;align-items:center;gap:6px;color:var(--ink);}
+.back-link:hover{background:var(--brown);color:var(--paper)!important;border-color:var(--ink);}
+
+/* ── HERO ────────────────────────────────────────── */
+
+/* hero — unified editorial system */
+.hero{background:var(--hcolor);overflow:hidden;position:relative;}
+.hero-inner{max-width:1180px;margin:0 auto;min-height:92vh;padding:clamp(96px,12vh,130px) clamp(20px,3vw,36px) clamp(48px,6vh,68px);position:relative;display:grid;grid-template-columns:minmax(280px,.84fr) minmax(320px,1.16fr);align-items:center;gap:clamp(20px,3.5vw,48px);}
+.hero::before{content:"";position:absolute;width:56vw;height:56vw;max-width:760px;max-height:760px;border-radius:50%;background:rgba(255,255,255,.09);right:-14%;top:-9%;pointer-events:none;z-index:1;}
+.hero .hp-dot{position:absolute;width:9px;height:9px;background:rgba(255,255,255,.55);opacity:.6;transform:rotate(45deg);z-index:3;}
+.hero-left{position:relative;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(16px,2.2vh,22px);}
+.hero .htag{font:700 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);}
+.hero h1{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--paper);font-size:var(--tsize,clamp(40px,4.4vw,76px));line-height:1.08;max-width:13ch;text-wrap:pretty;}
+.hero h1 em{font-style:italic;opacity:.72;}
+.hero .hq{color:rgba(255,255,255,.82);max-width:38ch;font-size:clamp(14px,1.2vw,16.5px);line-height:1.6;}
+.hero-phones{position:relative;z-index:2;height:clamp(460px,66vh,660px);display:flex;align-items:center;justify-content:center;gap:14px;}
+.hero-phones img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 30px 54px rgba(0,0,0,.26));}
+.hero-phones:not(.solo) img:first-child{transform:rotate(-5deg) translateY(3%);margin-right:-9%;z-index:1;}
+.hero-phones:not(.solo) img:last-child{transform:rotate(5deg) translateY(-2%);z-index:2;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;min-height:auto;gap:32px;}.hero-phones{height:clamp(320px,52vh,420px);order:-1;}}
+
+/* meta strip */
+.meta-strip{background:var(--ink);border-top:1px solid rgba(255,246,233,.08);border-bottom:2px solid var(--ink);}
+.meta-strip .inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.meta-strip .mi{padding:clamp(18px,3vh,26px) clamp(20px,3vw,36px);border-right:1.5px solid rgba(255,246,233,.08);}
+.meta-strip .mi:last-child{border-right:0;}
+.meta-strip .mk{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,246,233,.3);margin-bottom:6px;}
+.meta-strip .mv{font-size:clamp(13px,1.3vw,15px);font-weight:600;color:rgba(255,246,233,.8);}
+@media(max-width:720px){
+  .hero .hero-inner{grid-template-columns:1fr;min-height:auto;}
+  .hero .hero-right{height:320px;margin-top:16px;}
+  .meta-strip .inner{grid-template-columns:1fr 1fr;}
+}
+/* ══ RESET + BASE ════════════════════════════════════ */
+:root{--bg:#FFF6E9;--paper:#FFFBF3;--cream:#FFF0DE;--cd:#F4E2C9;--ms:#C3DCDE;--md:#5E9AA0;--brown:#694A47;--ink:#3A2B28;--sh:6px 8px 0 var(--ink);--sans:"Host Grotesk",system-ui,sans-serif;--serif:"Instrument Serif",Georgia,serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+em{font-style:italic;}
+a{color:inherit;}
+img{max-width:100%;display:block;}
+.wp{max-width:clamp(700px,88vw,1100px);margin:0 auto;padding:0 clamp(20px,4vw,60px);}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--md);opacity:1;}
+
+/* ── scroll reveal ──────────────────────────────────── */
+.sr{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.sr.visible{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+
+/* ══ META STRIP ══════════════════════════════════════ */
+.meta-strip{background:var(--ink);border-top:1px solid rgba(255,246,233,.08);border-bottom:2px solid var(--ink);}
+.meta-strip .inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.meta-strip .mi{padding:clamp(18px,3vh,26px) clamp(20px,3vw,36px);border-right:1.5px solid rgba(255,246,233,.08);}
+.meta-strip .mi:last-child{border-right:0;}
+.meta-strip .mk{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,246,233,.3);margin-bottom:6px;}
+.meta-strip .mv{font-size:clamp(13px,1.3vw,15px);font-weight:600;color:rgba(255,246,233,.8);}
+
+/* ══ OVERVIEW ═══════════════════════════════════════ */
+.overview{padding:clamp(70px,10vh,120px) 0;background:var(--paper);border-bottom:2px solid var(--ink);}
+.overview .ov-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink);opacity:.7;margin-bottom:clamp(12px,2vh,18px);}
+.overview .ov-statement{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;color:var(--ink);margin-bottom:clamp(36px,5.5vh,56px);max-width:16ch;}
+.overview .ov-statement em{font-style:italic;color:var(--md);}
+.ov-cols{display:flex;align-items:stretch;gap:clamp(14px,2.5vw,24px);}
+.ov-col{flex:1;padding:clamp(22px,3.5vw,40px);border:2px solid var(--ink);border-radius:20px;}
+.ov-col-p{background:var(--cream);}
+.ov-col-s{background:var(--paper);}
+.ov-col-num{font-family:var(--serif);font-style:italic;font-size:clamp(48px,7vw,80px);line-height:.85;color:var(--ink);opacity:.12;margin-bottom:10px;}
+.ov-col-lbl{font:700 9px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;color:var(--ink);}
+.ov-col-s .ov-col-lbl{color:var(--ms);}
+.ov-col-title{font-family:var(--serif);font-size:clamp(17px,2vw,24px);line-height:1.15;letter-spacing:-.01em;margin-bottom:12px;}
+.ov-col-title em{font-style:italic;}
+.ov-col p{font-size:clamp(13px,1.4vw,15px);line-height:1.7;color:var(--ink);}
+.ov-arrow{flex:none;width:clamp(28px,3.5vw,46px);display:flex;align-items:center;justify-content:center;}
+.ov-arrow svg{width:100%;height:auto;opacity:.32;}
+.ov-split .prob-side p{font-size:clamp(14px,1.5vw,17px);line-height:1.65;color:rgba(255,246,233,.75);}
+.ov-split .sol-side p{font-size:clamp(14px,1.5vw,17px);line-height:1.65;color:var(--ink);}
+@media(max-width:680px){.ov-split{grid-template-columns:1fr;}}
+/* ══ PERSONAS V2 ══════════════════════════════════════ */
+.personas-v2{padding:clamp(70px,10vh,120px) 0;background:var(--bg);border-bottom:2px solid var(--ink);}
+.pv2h{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(28px,4vh,44px);}
+.pv2h em{font-style:italic;color:var(--md);}
+.c-ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5px;background:var(--ink);border:2px solid var(--ink);border-radius:18px;overflow:hidden;margin-bottom:clamp(18px,2.8vh,28px);}
+.c-ptabs .cpt{background:var(--cream);padding:clamp(12px,2vh,18px) clamp(12px,2vw,18px);cursor:pointer;border:0;display:flex;flex-direction:column;gap:4px;transition:background .18s;text-align:left;}
+.c-ptabs .cpt:hover{background:var(--cd);}
+.c-ptabs .cpt.on{background:var(--paper);}
+.c-ptabs .cpt .cpnum{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1;color:var(--ink);opacity:.25;margin-bottom:2px;}
+.c-ptabs .cpt.on .cpnum{opacity:.5;color:var(--md);}
+.c-ptabs .cpt .cpname{font-weight:700;font-size:clamp(11px,1.2vw,14px);letter-spacing:-.01em;color:var(--ink);}
+.c-ptabs .cpt .cpsub{font-size:10.5px;color:var(--ink);}
+.c-vtabs{display:flex;gap:0;margin-bottom:clamp(16px,2.4vh,26px);}
+.c-vtabs .cvt{font:700 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;background:transparent;border:0;padding:11px 0;cursor:pointer;color:var(--ink);opacity:.55;position:relative;margin-right:26px;transition:color .2s,opacity .2s;}
+.c-vtabs .cvt:hover{opacity:.85;}
+.c-vtabs .cvt::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--ink);transform:scaleX(0);transition:transform .22s cubic-bezier(.2,.7,.2,1);}
+.c-vtabs .cvt.on{color:var(--ink);opacity:1;font-weight:800;}
+.c-vtabs .cvt.on::after{transform:scaleX(1);}
+.c-view{display:none;}
+.c-view.show{display:block;animation:pv2fade .35s cubic-bezier(.16,1,.3,1);}
+.c-jscroll{overflow-x:auto;}
+@keyframes pv2fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* ── journey map ──────────────────────────────────────*/
+.jmap-o{border:2px solid var(--ink);border-radius:20px;overflow:hidden;}
+.jmap-o .jhead{background:var(--ink);}
+.jmap-o .jhead-row{display:grid;grid-template-columns:repeat(5,1fr);}
+.jmap-o .jstg{padding:clamp(10px,1.8vh,16px) clamp(10px,1.5vw,14px);border-right:1.5px solid rgba(255,246,233,.1);text-align:center;}
+.jmap-o .jstg:last-child{border-right:0;}
+.jmap-o .jsn{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,246,233,.3);margin-bottom:3px;}
+.jmap-o .jst{font-weight:700;font-size:clamp(11px,1.2vw,13px);color:rgba(255,246,233,.9);}
+.jmap-o .jacts-row{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1.5px solid rgba(105,74,71,.1);background:var(--paper);}
+.jmap-o .jact{padding:clamp(10px,1.8vh,16px) clamp(10px,1.5vw,14px);border-right:1.5px solid rgba(105,74,71,.08);font-size:11.5px;line-height:1.5;color:var(--ink);}
+.jmap-o .jact:last-child{border-right:0;}
+.jmap-o .jcurve-o{position:relative;height:64px;padding-bottom:10px;background:var(--paper);border-bottom:1.5px solid rgba(105,74,71,.1);}
+.jmap-o .jcurve-o svg{position:absolute;inset:0;width:100%;height:100%;}
+.jmap-o .jdots-o{position:absolute;inset:0;display:flex;}
+.jmap-o .jdots-o .jd{flex:1;position:relative;}
+.jmap-o .jdot{width:9px;height:9px;border-radius:50%;position:absolute;left:50%;transform:translate(-50%,-50%);border:2px solid var(--paper);}
+.jmap-o .jdot.pos{background:#4CAF73;}
+.jmap-o .jdot.neu{background:#E8A020;}
+.jmap-o .jdot.neg{background:#CC2028;opacity:.8;}
+.jmap-o .jems-row{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:2px solid var(--ink);background:var(--cream);}
+.jmap-o .jem{padding:clamp(10px,1.8vh,16px) clamp(10px,1.5vw,14px);border-right:1.5px solid rgba(105,74,71,.1);}
+.jmap-o .jem:last-child{border-right:0;}
+.jmap-o .jei{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.jmap-o .jed{width:7px;height:7px;border-radius:50%;flex:none;}
+.jmap-o .jed.pos{background:#4CAF73;}
+.jmap-o .jed.neu{background:#E8A020;}
+.jmap-o .jed.neg{background:#CC2028;opacity:.8;}
+.jmap-o .jel{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);}
+.jmap-o .jet{font-size:11px;line-height:1.45;color:var(--ink);}
+.jmap-o .jopps-o{background:var(--ms);}
+.jmap-o .jopp-lbl-o{padding:clamp(8px,1.4vh,12px) clamp(12px,2vw,16px) 0;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--md);}
+.jmap-o .jop-row{display:grid;grid-template-columns:repeat(5,1fr);}
+.jmap-o .jopc{padding:clamp(8px,1.4vh,12px) clamp(12px,2vw,16px) clamp(18px,2.6vh,24px);border-right:1.5px solid rgba(94,154,160,.25);font-size:11px;font-weight:600;color:var(--ink);line-height:1.4;}
+.jmap-o .jopc:last-child{border-right:0;}
+
+/* ══ INSIGHTS ══════════════════════════════════════════ */
+.insights{padding:clamp(70px,10vh,120px) 0;background:var(--paper);border-bottom:2px solid var(--ink);}
+.insights .ih{font-family:var(--serif);font-style:italic;font-size:clamp(14px,1.6vw,18px);color:var(--ink);margin-bottom:clamp(28px,4vh,44px);}
+/* research method blocks */
+.rm-stats{display:flex;flex-wrap:wrap;gap:clamp(20px,3.5vw,44px);margin-bottom:clamp(48px,7vh,72px);padding-bottom:clamp(28px,4vh,40px);border-bottom:1.5px solid rgba(105,74,71,.15);}
+.rm-stat b{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(32px,4vw,46px);color:var(--ink);line-height:1;}
+.rm-stat span{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;}
+.rm-block{margin-bottom:clamp(56px,7.5vh,80px);}
+.rm-block:last-of-type{margin-bottom:clamp(44px,6vh,64px);}
+.rm-label{font:700 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
+.rm-title{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;margin-bottom:clamp(16px,2.4vh,22px);max-width:44ch;}
+.rm-body{font-size:14px;line-height:1.7;color:var(--ink);max-width:62ch;margin-bottom:clamp(22px,3vh,30px);}
+/* usability testing */
+.ut-tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:clamp(28px,4vh,36px);}
+.ut-task{border:1.5px solid rgba(58,43,40,.16);border-radius:14px;padding:14px 16px;background:var(--bg);}
+.ut-task .utn{font-family:var(--serif);font-style:italic;color:var(--ink);opacity:.5;font-size:15px;margin-right:6px;}
+.ut-task span.utt{font-size:12.5px;line-height:1.4;color:var(--ink);}
+.ut-pains{display:flex;flex-wrap:wrap;gap:10px;}
+.ut-pain{font-size:12.5px;font-weight:500;padding:10px 16px;color:var(--ink);background:var(--bg);border:1.5px solid rgba(58,43,40,.16);border-radius:20px;}
+/* interviews affinity */
+.aff-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px;margin-bottom:clamp(16px,2.4vh,22px);}
+.aff-scroll img{height:340px;width:auto;flex:none;border:2px solid var(--ink);border-radius:14px;display:block;background:#fff;}
+.rm-cap{font:600 10.5px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:rgba(58,43,40,.42);}
+/* survey */
+.sv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:clamp(28px,4vh,36px);}
+.sv-stat{border:1.5px solid rgba(58,43,40,.16);border-radius:14px;padding:18px 20px;background:var(--bg);}
+.sv-stat b{display:block;font-family:var(--serif);font-style:italic;font-size:30px;color:var(--ink);line-height:1;margin-bottom:6px;}
+.sv-stat p{font-size:12px;line-height:1.5;color:var(--ink);}
+.sv-charts{display:flex;gap:16px;overflow-x:auto;padding-bottom:10px;}
+.sv-charts img{height:220px;width:auto;flex:none;border:1.5px solid rgba(58,43,40,.14);border-radius:12px;display:block;background:#fff;}
+/* sticky note boards */
+.stk-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(20px,2.6vh,28px) clamp(16px,2.6vw,28px);margin-bottom:clamp(28px,4vh,36px);align-items:start;}
+.stk-group-title{font-family:var(--serif);font-size:clamp(19px,2vw,25px);letter-spacing:-.01em;color:var(--ink);margin-bottom:16px;}
+.stk-board{display:flex;gap:10px;flex-wrap:wrap;}
+.stk-note{flex:1;min-width:120px;max-width:220px;min-height:130px;padding:14px 14px 12px;font-size:12px;line-height:1.42;font-weight:500;color:#20302a;display:flex;flex-direction:column;justify-content:space-between;border-radius:2px;}
+.stk-note .stkq{}
+.stk-note .stka{font-size:10px;font-weight:600;color:rgba(32,48,42,.55);margin-top:12px;}
+.stk-note.pink{background:#F3B8CE;margin-bottom:6px;}
+.stk-note.yellow{background:#FBDD8E;}
+.stk-note.green{background:#BFE7C2;}
+.stk-note.blue{background:#A9E0F0;}
+.stk-note.mint{background:#BEF2E1;}
+.iq-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-top:clamp(20px,3vh,26px);}
+.iq-item{border:1.5px solid rgba(58,43,40,.16);border-radius:14px;padding:14px 16px;background:var(--bg);font-size:12.5px;line-height:1.45;color:var(--ink);}
+.iq-item .iqt{font:700 9.5px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);display:block;margin-bottom:6px;opacity:.7;}
+/* ── brown em in section headings ──────────────────── */
+.ov-statement em,.ch em,.pv2h em,.bah em,.idh em,.ph2 em{color:var(--md);}
+.feat .ft h2 em,.ins-item h3 em{color:var(--ink);}
+.insights .ins-list{display:flex;flex-direction:column;gap:0;}
+.insights .ins-item{display:grid;grid-template-columns:50px 1fr;gap:24px;align-items:center;padding:24px 0;border-top:1.5px solid rgba(105,74,71,.15);}
+.insights .ins-item:last-child{border-bottom:1.5px solid rgba(105,74,71,.15);}
+.insights .in{font-family:var(--serif);font-style:italic;font-size:30px;color:rgba(58,43,40,.25);}
+.insights .it{font-family:var(--sans);font-weight:700;font-size:clamp(10px,1vw,11px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);border:1.5px solid rgba(105,74,71,.3);border-radius:999px;padding:8px 16px;white-space:nowrap;}
+.insights .ib p{font-family:var(--sans);font-size:15.5px;line-height:1.7;letter-spacing:-.005em;color:#694A47;}
+
+/* ══ COMPETITIVE ANALYSIS ══════════════════════════════ */
+.compet{padding:clamp(70px,10vh,120px) 0;background:var(--bg);border-bottom:2px solid var(--ink);}
+.compet .ch{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(12px,2vh,20px);}
+.compet .ch em{font-style:italic;color:var(--md);}
+.compet .csub{font-size:clamp(14px,1.5vw,16px);line-height:1.65;color:var(--ink);max-width:70ch;margin-bottom:clamp(28px,4vh,44px);}
+.cmat3-wrap{overflow-x:auto;border:1.5px solid rgba(105,74,71,.2);border-radius:18px;overflow:hidden;}
+.cmat3{width:100%;border-collapse:collapse;background:var(--paper);}
+.cmat3 thead{background:var(--cream);border-bottom:2px solid var(--ink);}
+.cmat3 thead th{padding:clamp(12px,2vh,18px) clamp(10px,1.5vw,16px);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);text-align:center;border-right:1.5px solid rgba(105,74,71,.14);}
+.cmat3 thead th:last-child{border-right:0;}
+.cmat3 thead th .ch-inner{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.cmat3 thead th .ch-inner img{width:42px;height:42px;border-radius:12px;object-fit:contain;box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.cmat3 thead th .ch-name{font-size:10px;font-weight:700;}
+.cmat3 thead th.feat-h{text-align:left;padding-left:clamp(16px,2.4vw,28px);min-width:200px;}
+.cmat3 thead th.chs,.cmat3 thead th.you-h{background:#EDD9B8;border-left:2.5px solid var(--ink);border-right:0;}
+.cmat3 tbody tr{border-bottom:1.5px solid rgba(105,74,71,.08);}
+.cmat3 tbody tr:last-child{border-bottom:0;}
+.cmat3 tbody tr:hover{background:rgba(105,74,71,.03);}
+.cmat3 tbody td{padding:clamp(10px,1.6vh,14px) clamp(10px,1.5vw,16px);text-align:center;font-size:13px;border-right:1.5px solid rgba(105,74,71,.08);}
+.cmat3 tbody td:last-child{border-right:0;}
+.cmat3 tbody td.feat-cell{text-align:left;font-size:13.5px;font-weight:600;color:var(--ink);padding-left:clamp(16px,2.4vw,28px);border-right:1.5px solid rgba(105,74,71,.14);}
+.cmat3 tbody td.chs,.cmat3 tbody td.you{background:rgba(237,217,184,.35);border-left:2.5px solid var(--ink);border-right:0;}
+.cmat3 .ci{display:inline-block;width:14px;height:14px;border-radius:50%;}
+.cmat3 .ci.g{background:#4CAF73;}
+.cmat3 .ci.r{background:#CC5A55;}
+.cmat3 .ci.ms2{background:#E8A020;}
+.cmat3 .ci.mn{background:rgba(105,74,71,.2);}
+.cmat3-legend{display:flex;align-items:center;gap:clamp(16px,3vw,28px);margin-top:0;padding:clamp(14px,2.2vh,20px) clamp(16px,2.4vw,28px);border-top:1.5px solid rgba(105,74,71,.12);flex-wrap:wrap;}
+.cmat3-legend .li{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
+.cmat3-legend .li svg{width:14px;height:14px;flex:none;}
+
+/* ══ IDEATION ══════════════════════════════════════════ */
+.ideation{padding:clamp(70px,10vh,120px) 0;background:var(--bg);border-bottom:2px solid var(--ink);}
+.ideation .idh{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(12px,2vh,20px);}
+.ideation .idsub{font-size:clamp(14px,1.5vw,16px);line-height:1.65;color:var(--ink);max-width:60ch;margin-bottom:clamp(24px,3.5vh,36px);}
+.idea-tabs{display:flex;gap:3px;background:var(--cd);border:2px solid var(--ink);border-radius:14px;padding:4px;margin-bottom:clamp(24px,3.5vh,36px);}
+.idea-tabs button{flex:1;border:0;border-radius:10px;padding:clamp(10px,1.6vh,14px) clamp(10px,1.5vw,14px);background:transparent;cursor:pointer;font:700 clamp(11px,1.1vw,13px)/1 var(--sans);letter-spacing:.02em;color:var(--ink);transition:background .18s,color .18s;}
+.idea-tabs button.on{background:var(--paper);color:var(--ink);}
+.idea-panel{display:none;}
+.idea-panel.show{display:block;}
+
+/* ── sketch view switcher ─────────────────────────── */
+.sk-view-sw{display:inline-flex;gap:4px;background:rgba(105,74,71,.06);border-radius:10px;padding:4px;margin-bottom:20px;}
+.sk-view-sw button{border:0;background:transparent;cursor:pointer;padding:7px 16px;border-radius:8px;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);transition:background .18s,color .18s;}
+.sk-view-sw button.on{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(58,43,40,.08);}
+
+/* ── carousel ─────────────────────────────────────── */
+.sk-carousel{display:none;}
+.sk-carousel.show{display:block;}
+.sk-cat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.sk-cat-btn{border:1.5px solid rgba(58,43,40,.16);background:var(--paper);cursor:pointer;padding:8px 18px;border-radius:999px;font:700 11px/1 var(--sans);letter-spacing:.04em;text-transform:lowercase;color:var(--ink);transition:background .18s,color .18s,border-color .18s;}
+.sk-cat-btn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sk-car-wrap{position:relative;display:flex;align-items:center;gap:12px;}
+.sk-car-track{flex:1;display:flex;gap:16px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:4px 4px 12px;}
+.sk-car-track::-webkit-scrollbar{height:5px;}
+.sk-car-track::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-car-slide{flex:none;scroll-snap-align:center;height:clamp(320px,42vh,460px);display:flex;align-items:center;}
+.sk-car-slide img{height:100%;width:auto;border-radius:12px;border:1.5px solid rgba(105,74,71,.14);box-shadow:0 6px 24px rgba(58,43,40,.1);background:var(--cream);object-fit:contain;}
+.sk-car-arrow{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(58,43,40,.18);background:var(--paper);cursor:pointer;font-size:18px;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;}
+.sk-car-arrow:hover{background:rgba(58,43,40,.06);border-color:rgba(58,43,40,.35);}
+.sk-car-count{text-align:center;margin-top:12px;font:600 11px/1 var(--sans);letter-spacing:.04em;color:rgba(58,43,40,.4);}
+.sk-intro,.lf-intro{font-size:clamp(13px,1.4vw,15px);line-height:1.65;color:var(--ink);margin-bottom:clamp(18px,2.8vh,28px);max-width:60ch;}
+.sk-overview{font-size:clamp(13px,1.4vw,15px);line-height:1.65;color:var(--ink);margin-bottom:clamp(18px,2.8vh,28px);}
+.sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.sg{border:2px solid var(--ink);border-radius:14px;overflow:hidden;background:var(--paper);}
+.sg img{width:100%;height:auto;display:block;}
+.sgl{font-size:10px;font-weight:700;letter-spacing:.06em;padding:8px 12px;border-top:1.5px solid rgba(105,74,71,.1);color:var(--ink);}
+/* lo-fi scroll */
+.lf-scroll{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;}
+.lf-scroll::-webkit-scrollbar{height:4px;}
+.lf-scroll::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.lf-phone{flex:none;width:clamp(160px,18vw,220px);border:2px solid var(--ink);border-radius:20px;overflow:hidden;background:var(--paper);display:flex;flex-direction:column;}
+.lf-phone .lfn{width:56px;height:14px;background:var(--ink);border-radius:7px;margin:8px auto 4px;}
+.lf-phone img{width:100%;height:auto;display:block;}
+.lf-phone .lfl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border-top:1.5px solid rgba(105,74,71,.1);color:var(--ink);}
+/* IA diagrams */
+.ia-subtabs{display:flex;gap:0;margin-bottom:28px;}
+.ia-stab{font:700 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;background:transparent;border:0;padding:11px 0;cursor:pointer;color:var(--ink);opacity:.55;position:relative;margin-right:26px;transition:color .2s,opacity .2s;}
+.ia-stab:hover{opacity:.85;}
+.ia-stab::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--ink);transform:scaleX(0);transition:transform .22s cubic-bezier(.2,.7,.2,1);}
+.ia-stab.on{color:var(--ink);opacity:1;font-weight:800;}
+.ia-stab.on::after{transform:scaleX(1);}
+.ia-canvas{display:none;overflow-x:auto;overflow-y:visible;padding-bottom:6px;}
+.ia-canvas.show{display:block;}
+.ia-intro{font-size:clamp(14px,1.5vw,16px);line-height:1.68;color:var(--ink);max-width:60ch;margin-bottom:clamp(22px,3.5vh,38px);}
+.ia-legend{display:flex;align-items:center;gap:clamp(14px,2.5vw,28px);margin-bottom:22px;flex-wrap:wrap;}
+.ia-legend .il{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--ink);}
+.ia-legend .il .ild{width:14px;height:14px;border-radius:7px;flex:none;}
+/* ia-detail */
+.ia-detail{margin-top:28px;}
+.ia-ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.ia-col{border:2px solid var(--ink);border-radius:16px;overflow:hidden;background:var(--paper);}
+.ia-img{width:100%;height:auto;display:block;}
+.ia-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:10px 16px;border-bottom:1.5px solid rgba(105,74,71,.1);color:var(--ink);}
+
+/* ══ PRINCIPLES ══════════════════════════════════════ */
+.princs{padding:clamp(70px,10vh,120px) 0;background:var(--paper);border-bottom:2px solid var(--ink);}
+.princs .ph2{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;max-width:52ch;margin-bottom:clamp(36px,5vh,60px);}
+.princs .ph2 em{font-style:italic;color:var(--md);}
+.princs .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid var(--ink);border-radius:20px;overflow:hidden;}
+.princs .pc2{padding:clamp(24px,4vw,40px);border-right:2px solid var(--ink);background:var(--paper);}
+.princs .pc2:last-child{border-right:0;}
+.princs .pn2{font-family:var(--serif);font-style:italic;font-size:clamp(40px,6vw,72px);line-height:.9;color:var(--ink);opacity:.2;margin-bottom:12px;}
+.princs .ptitle{font-family:var(--serif);font-weight:400;font-size:clamp(18px,2.2vw,26px);line-height:1.15;letter-spacing:-.01em;margin-bottom:12px;}
+.princs .ptitle em{font-style:italic;}
+.princs .pp{font-size:clamp(13px,1.3vw,14px);line-height:1.65;color:var(--ink);}
+
+/* ══ FEATURES ══════════════════════════════════════════ */
+.feat{padding:clamp(70px,10vh,120px) 0;background:var(--paper);border-bottom:2px solid var(--ink);}
+.feat.fl{background:var(--bg);}
+.feat .fi{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,72px);align-items:center;}
+.feat.fl .fi{direction:rtl;}
+.feat.fl .fi>*{direction:ltr;}
+.feat .ft{display:flex;flex-direction:column;gap:clamp(16px,2.5vh,24px);}
+.feat .fnum{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);opacity:.4;}
+.feat h2{font-family:var(--serif);font-weight:400;font-size:clamp(22px,3vw,38px);line-height:1.1;letter-spacing:-.015em;}
+.feat h2 em{font-style:italic;color:var(--ink);}
+.feat .fp{font-size:clamp(13px,1.4vw,15px);line-height:1.7;color:var(--ink);}
+.feat .decis{border:2px solid var(--ink);border-radius:16px;padding:clamp(14px,2.2vw,22px) clamp(16px,2.5vw,24px);background:var(--cream);}
+.feat .decis .dk{font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--md);margin-bottom:8px;}
+.feat .decis .dv{font-size:clamp(12px,1.3vw,14px);line-height:1.6;color:var(--ink);}
+.feat .fv{border-radius:20px;overflow:visible;background:transparent;}
+.feat .fv img{width:100%;height:auto;display:block;}
+/* phone frame in feat */
+.feat .cphone,.feat .cpb,.feat .cpd,.feat .cph,.feat .cpn,.feat .qact,.feat .qgrid,.feat .qi,.feat .ql{display:block;}
+.feat .cph{background:#1a1a1a;border-radius:40px;padding:10px;box-shadow:0 20px 50px rgba(0,0,0,.25);overflow:hidden;}
+.feat .cpn{width:60px;height:16px;background:#0d0d0d;border-radius:8px;margin:0 auto 6px;display:block;}
+.feat .cpd{border-radius:30px;overflow:hidden;}
+.feat .cpd img{width:100%;height:auto;display:block;}
+/* membership card */
+.feat .memcard{background:linear-gradient(135deg,var(--ink),#5a3f3a);color:#fff;border-radius:14px;padding:clamp(14px,2.2vw,20px);display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.feat .mn{font-size:11px;opacity:.5;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.feat .ms2{font-weight:700;font-size:clamp(16px,1.8vw,20px);}
+/* search grid */
+.feat .qgrid{display:flex;flex-direction:column;gap:8px;}
+.feat .qi{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 14px;background:var(--cream);border:1.5px solid rgba(105,74,71,.15);border-radius:10px;}
+.feat .ql{font-size:12px;font-weight:600;color:var(--ink);}
+.feat .qact{font-size:10px;color:var(--md);font-weight:700;}
+/* pcrd (product card) */
+.feat .pcrd{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;padding:10px 14px;background:var(--paper);border:1.5px solid rgba(105,74,71,.12);border-radius:10px;margin-bottom:6px;}
+
+/* ══ FINAL SOLUTION ══════════════════════════════════ */
+.fs-sec{padding:clamp(70px,10vh,120px) 0;background:var(--bg);border-bottom:2px solid var(--ink);}
+.fs-sec .bah{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(6px,1vh,12px);}
+.fs-sec .bah em{font-style:italic;color:var(--md);}
+.fs-sec .basub{font-size:clamp(14px,1.5vw,16px);color:var(--ink);margin-bottom:clamp(48px,6.5vh,68px);max-width:70ch;}
+.fs-hmw-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:clamp(56px,7.5vh,80px);}
+.fs-hmw-item{border:1.5px solid rgba(105,74,71,.16);border-radius:20px;padding:clamp(20px,2.6vw,26px);background:var(--paper);}
+.fs-hmw-item .fhn{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--md);opacity:.7;display:block;margin-bottom:10px;}
+.fs-hmw-item p{font-family:var(--serif);font-size:clamp(16px,1.8vw,19px);line-height:1.4;color:var(--ink);}
+.fs-hmw-item p em{color:var(--md);font-style:italic;}
+@media(max-width:680px){.fs-hmw-strip{grid-template-columns:1fr;}}
+.fs-impact{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:clamp(56px,7.5vh,80px);}
+.fs-impact-card{flex:1;min-width:200px;border:1.5px solid rgba(105,74,71,.16);border-radius:20px;padding:clamp(20px,2.6vw,26px);background:var(--paper);}
+.fs-impact-card .fin{font-family:var(--serif);font-style:italic;font-size:clamp(32px,3.6vw,44px);color:var(--md);line-height:1;margin-bottom:8px;}
+.fs-impact-card p{font-size:13px;line-height:1.5;color:var(--brown);}
+.fs-cat{margin-bottom:clamp(64px,9vh,96px);padding-top:clamp(48px,6.5vh,68px);border-top:1.5px solid rgba(105,74,71,.16);}
+.fs-cat:first-child{padding-top:0;border-top:0;}
+.fs-cat:last-child{margin-bottom:0;}
+.fs-cat-head{margin-bottom:clamp(28px,3.8vh,38px);}
+.fs-cat-tag{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.fs-cat-num{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--md);opacity:.7;line-height:1;}
+.fs-cat-pl{font:700 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;}
+.fs-cat-head h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,44px);letter-spacing:-.015em;color:var(--ink);}
+.fs-pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,48px);}
+.fs-pair+.fs-pair{margin-top:clamp(36px,5vh,48px);padding-top:clamp(28px,4vh,36px);border-top:1.5px dashed rgba(105,74,71,.18);}
+.fs-sub-lbl{font:700 9px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--brown);opacity:.55;margin:clamp(36px,5vh,48px) 0 20px;padding-top:clamp(28px,4vh,36px);border-top:1.5px dashed rgba(105,74,71,.18);}
+.fs-col{border:1.5px solid rgba(105,74,71,.14);border-radius:46px;background:var(--paper);padding:clamp(24px,3vw,32px);}
+.fs-col .fs-lbl{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.2vw,24px);color:var(--brown);opacity:.5;margin-bottom:16px;display:block;text-transform:capitalize;}
+.fs-col .fs-lbl.after{color:var(--md);opacity:1;}
+.fs-frame{border-radius:36px;overflow:hidden;background:var(--cream);max-width:200px;margin:0 auto;}
+.fs-frame img{display:block;width:100%;height:auto;}
+.fs-topic-wrap{position:relative;}
+.fs-topic-scroll{display:flex;gap:clamp(24px,3vw,36px);overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;}
+.fs-topic{flex:0 0 auto;width:min(720px,88vw);scroll-snap-align:start;}
+.fs-topic .fs-pair{width:100%;}
+.fs-topic-wrap.has-more::after{content:"";position:absolute;top:0;right:0;bottom:14px;width:64px;background:linear-gradient(90deg,transparent,var(--bg) 75%);pointer-events:none;border-radius:0 20px 20px 0;}
+.fs-scroll-hint{display:none;position:absolute;top:50%;right:14px;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:var(--paper);border:1.5px solid rgba(58,43,40,.18);align-items:center;justify-content:center;color:var(--brown);pointer-events:none;z-index:2;font-size:16px;}
+.fs-topic-wrap.has-more .fs-scroll-hint{display:flex;}
+.fs-frame-phone{aspect-ratio:1170/2532;max-width:220px;}
+.fs-frame-phone img{width:100%;height:100%;object-fit:cover;display:none;border-radius:36px;}
+.fs-frame-phone img.on{display:block;}
+.fs-before-img{border:8px solid #000;box-sizing:border-box;border-radius:36px;}
+.fs-before-sw{display:flex;gap:6px;margin-top:12px;justify-content:center;}
+.fs-before-sw button{width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(58,43,40,.2);background:var(--paper);font:700 11px/1 var(--sans);color:var(--brown);cursor:pointer;}
+.fs-before-sw button.on{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+@media(max-width:680px){.fs-pair{grid-template-columns:1fr;}}
+/* ══ BEFORE / AFTER (legacy, retained for .ba-note styling) ══ */
+.ba-sec{padding:clamp(70px,10vh,120px) 0;background:var(--bg);border-bottom:2px solid var(--ink);}
+/* ══ PROTOTYPE ═══════════════════════════════════════ */
+.proto-sec{padding:clamp(70px,10vh,120px) 0;background:var(--paper);border-bottom:2px solid var(--ink);}
+.proto-sec .bah{font-family:var(--serif);font-weight:400;font-size:clamp(26px,4vw,54px);letter-spacing:-.015em;margin-bottom:clamp(6px,1vh,12px);}
+.proto-sec .bah em{font-style:italic;color:var(--ink);}
+.proto-sec .basub{font-size:clamp(14px,1.5vw,17px);color:var(--ink);margin-bottom:clamp(28px,4vh,44px);}
+.proto-frame{width:100%;max-width:900px;margin:0 auto;aspect-ratio:16/9;border:2px solid var(--ink);border-radius:20px;overflow:hidden;box-shadow:var(--sh);background:#fff;}
+@media(max-width:640px){.proto-frame{aspect-ratio:4/5;}}
+.ba-sec .bah{font-family:var(--serif);font-weight:400;font-size:clamp(26px,4vw,54px);letter-spacing:-.015em;margin-bottom:clamp(6px,1vh,12px);}
+.ba-sec .bah em{font-style:italic;color:var(--ink);}
+.ba-sec .basub{font-size:clamp(13px,1.4vw,15px);color:var(--ink);margin-bottom:clamp(28px,4vh,44px);}
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,36px);}
+.ba-col .balbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.ba-col .balbl::after{content:"";flex:1;height:1.5px;background:rgba(105,74,71,.25);}
+.ba-col .balbl.after{color:var(--md);}
+.ba-col .balbl.after::after{background:var(--md);opacity:.4;}
+.ba-phone-wrap{border:2px solid var(--ink);border-radius:20px;overflow:hidden;background:var(--paper);}
+.ba-phone-wrap .bphone{display:flex;flex-direction:column;}
+.ba-phone-wrap .bpn{padding:10px 16px;display:flex;justify-content:center;}
+.ba-phone-wrap .bpd{width:56px;height:14px;background:var(--ink);border-radius:7px;}
+.ba-phone-wrap .bpb{padding:12px;}
+.bban{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--ink);color:#fff;border-radius:8px;margin-bottom:8px;font-size:11px;}
+.bbt{font-weight:700;font-size:11px;color:#fff;}
+.bbs{font-size:13px;}
+.bbanner{background:var(--ms);padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:11px;font-weight:600;}
+.bbanner2{background:var(--cd);padding:10px 12px;border-radius:8px;font-size:11px;font-weight:600;}
+.ba-notes{display:flex;flex-direction:column;gap:12px;margin-top:20px;}
+.ba-note{font-size:14px;line-height:1.6;color:var(--brown);padding-left:16px;position:relative;}
+.ba-note::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:rgba(105,74,71,.35);}
+.ba-note.g{color:var(--ink);}
+.ba-note.g::before{background:var(--md);}
+/* after phone */
+.brow2{display:flex;gap:6px;margin-bottom:8px;}
+.bcard{background:var(--ms);padding:8px 10px;border-radius:8px;font-size:10px;font-weight:700;flex:1;text-align:center;border:1.5px solid var(--md);}
+.blist{display:flex;flex-direction:column;gap:5px;}
+.bli{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--cd);border-radius:8px;font-size:11px;font-weight:600;}
+.bnav{display:flex;justify-content:space-around;padding:10px;border-top:1.5px solid rgba(105,74,71,.12);}
+
+/* ══ IMPACT ══════════════════════════════════════════ */
+.impact{padding:clamp(70px,10vh,120px) 0;background:var(--cream);border-bottom:2px solid var(--ink);}
+.impact h2{font-family:var(--serif);font-weight:400;font-size:clamp(26px,4vw,54px);letter-spacing:-.015em;color:var(--ink);margin-bottom:clamp(36px,5vh,60px);}
+.impact h2 em{font-style:italic;color:var(--md);}
+.impact .ig{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:2px solid rgba(105,74,71,.16);border-radius:20px;overflow:hidden;}
+.impact .ib{padding:clamp(24px,4vw,44px);border-right:2px solid rgba(105,74,71,.14);}
+.impact .ib:last-child{border-right:0;}
+.impact .ibn{font-family:var(--serif);font-style:italic;font-size:clamp(52px,7vw,88px);line-height:.9;color:var(--md);margin-bottom:8px;}
+.impact .ibl{font-weight:700;font-size:clamp(14px,1.5vw,17px);color:var(--ink);margin-bottom:8px;letter-spacing:-.01em;}
+.impact .ibd{font-size:clamp(12px,1.3vw,14px);line-height:1.6;color:var(--brown);}
+.impact .refl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,24px);margin-top:clamp(28px,4vh,44px);}
+.impact .refl-card{padding:clamp(20px,2.6vw,30px);border:2px solid rgba(105,74,71,.16);border-radius:16px;}
+.impact .refl-card p{font-size:clamp(14px,1.5vw,16px);line-height:1.65;color:var(--brown);}
+.impact .refl-next{margin-top:clamp(28px,4vh,44px);padding:clamp(24px,3vw,34px);border:2px solid rgba(105,74,71,.16);border-radius:16px;background:var(--paper);}
+.impact .refl-next-h{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2vw,22px);color:var(--md);margin-bottom:14px;}
+.impact .refl-next ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.impact .refl-next li{font-size:clamp(14px,1.5vw,16px);line-height:1.6;color:var(--brown);padding-left:22px;position:relative;}
+.impact .refl-next li::before{content:'→';position:absolute;left:0;color:var(--md);}
+
+/* ══ CLOSE ══════════════════════════════════════════ */
+.close-sec{padding:clamp(64px,9vh,100px) 0;background:var(--paper);border-bottom:0;border-top:2px solid var(--ink);text-align:center;}
+.close-sec .cq{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,48px);line-height:1.2;letter-spacing:-.015em;margin:0 0 clamp(24px,3.2vh,32px);}
+.close-sec .cq em{font-style:italic;color:var(--md);}
+.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vh,24px);}
+.close-actions a{font-size:13.5px;font-weight:600;border:1.5px solid var(--ink);border-radius:30px;padding:11px 24px;text-decoration:none;color:var(--ink);transition:background .25s,color .25s;display:inline-flex;align-items:center;letter-spacing:.01em;}
+.close-actions a.back-pill{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.close-actions a.back-pill:hover{background:var(--brown);border-color:var(--brown);}
+.close-actions a:not(.back-pill){opacity:.6;border-color:transparent;padding:13px 8px;}
+.close-actions a:not(.back-pill):hover{opacity:1;}
+.close-copy{font-size:12.5px;color:var(--ink);opacity:.5;}
+.footbar{border-top:1.5px solid rgba(105,74,71,.2);padding:18px 0 0;margin-top:clamp(28px,4vh,40px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12.5px;font-weight:500;color:var(--ink);opacity:.7;}
+.footbar .top{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink);text-decoration:none;opacity:1;}
+.footbar .top:hover{color:var(--brown);}
+
+.close-sec .ctar{display:flex;gap:clamp(12px,2vw,20px);flex-wrap:wrap;align-items:center;}
+
+/* ══ RESPONSIVE ══════════════════════════════════════ */
+@media(max-width:720px){
+  .hero .hero-inner{grid-template-columns:1fr;min-height:auto;}
+  .hero .hero-right{height:320px;margin-top:16px;}
+  .meta-strip .inner{grid-template-columns:1fr 1fr;}
+  .prob .pgrid,.princs .pgrid{grid-template-columns:1fr;}
+  .prob .pc,.princs .pc2{border-right:0;border-bottom:2px solid var(--ink);}
+  .prob .pc:last-child,.princs .pc2:last-child{border-bottom:0;}
+  .feat .fi{grid-template-columns:1fr;}
+  .feat.fl .fi{direction:ltr;}
+  .ba-grid{grid-template-columns:1fr;}
+  .impact .ig{grid-template-columns:1fr;}
+  .impact .ib{border-right:0;border-bottom:2px solid rgba(105,74,71,.14);}
+  .impact .ib:last-child{border-bottom:0;}
+  .impact .refl-grid{grid-template-columns:1fr;}
+  .ins-item{padding:18px 0;}
+  .c-ptabs{grid-template-columns:1fr 1fr;}
+}
+
+/* ══ PERSONA CARD V2 (pcard2 layout) ════════════════ */
+.pcard2{border:2px solid var(--ink);border-radius:24px;overflow:hidden;background:var(--paper);display:grid;grid-template-columns:clamp(220px,28vw,300px) 1fr;}
+.pcard2 .p2l{background:var(--cd);padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:clamp(16px,2.5vh,24px);border-right:2px solid var(--ink);}
+.pcard2 .p2l .p2av{width:clamp(80px,11vw,120px);height:clamp(80px,11vw,120px);border-radius:50%;border:2.5px solid var(--ink);overflow:hidden;background:var(--ms);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:clamp(28px,4vw,40px);color:var(--md);flex:none;}
+.pcard2 .p2l .p2av img{width:100%;height:100%;object-fit:cover;display:block;}
+.pcard2 .p2l .p2lbl{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.5;}
+.pcard2 .p2l .p2name{font-family:var(--serif);font-style:italic;font-size:clamp(28px,3.8vw,44px);line-height:.95;letter-spacing:-.02em;color:var(--ink);}
+.pcard2 .p2l .p2meta{display:flex;flex-direction:column;gap:8px;}
+.pcard2 .p2l .p2m{display:flex;flex-direction:column;gap:2px;}
+.pcard2 .p2l .p2mk{font-size:7.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);opacity:.45;}
+.pcard2 .p2l .p2mv{font-size:clamp(12px,1.3vw,14px);font-weight:700;color:var(--ink);letter-spacing:-.01em;}
+.pcard2 .p2l .p2q{font-family:var(--serif);font-style:italic;font-size:clamp(13px,1.4vw,15px);line-height:1.5;color:var(--ink);border-left:2.5px solid var(--md);padding-left:12px;}
+.pcard2 .p2r{padding:clamp(24px,4vw,40px);display:flex;flex-direction:column;gap:clamp(18px,2.8vh,28px);}
+.pcard2 .p2r .p2blbl{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.5;margin-bottom:-10px;}
+.pcard2 .p2r .p2bio{font-size:clamp(13px,1.4vw,15px);line-height:1.7;color:var(--ink);}
+.pcard2 .p2r .p2divider{height:1.5px;background:rgba(105,74,71,.12);border:0;}
+.pcard2 .p2r .p2cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,3vw,36px);}
+.pcard2 .p2r .p2col .p2clbl{font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink);opacity:.5;margin-bottom:12px;}
+.pcard2 .p2r .p2col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.pcard2 .p2r .p2col li{font-size:clamp(12px,1.3vw,14px);line-height:1.5;color:var(--ink);display:flex;gap:8px;align-items:flex-start;}
+.pcard2 .p2r .p2col li::before{content:"";width:6px;height:6px;border-radius:50%;flex:none;margin-top:5px;}
+.pcard2 .p2r .p2col.needs li::before{background:var(--md);}
+.pcard2 .p2r .p2col.pains li::before{background:var(--brown);opacity:.5;}
+@media(max-width:680px){.pcard2{grid-template-columns:1fr;}.pcard2 .p2l{border-right:0;border-bottom:2px solid var(--ink);}.pcard2 .p2r .p2cols{grid-template-columns:1fr;}}
+
+/* ── real phone frame in feat sections ──────────────── */
+.rp-wrap{display:flex;justify-content:center;align-items:flex-start;padding:clamp(20px,3vw,36px);}
+.rp-frame{background:#111;border-radius:46px;padding:12px;box-shadow:0 30px 70px rgba(0,0,0,.28),0 0 0 1.5px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.06);position:relative;width:clamp(220px,26vw,300px);}
+.rp-pill{width:80px;height:22px;background:#111;border-radius:11px;margin:0 auto 8px;}
+.rp-screen{border-radius:34px;overflow:hidden;display:block;}
+.rp-screen img{display:block;width:100%;height:auto;}
+
+
+/* ── sticky TOC (option 4: top-right counter) ─────── */
+#case-toc{
+  position:fixed;top:clamp(14px,2.5vh,22px);right:clamp(14px,2.5vw,24px);
+  z-index:80;font-family:var(--sans);
+  opacity:0;pointer-events:none;transition:opacity .35s ease;
+}
+#case-toc.vis{opacity:1;pointer-events:all;}
+.counter-trigger{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,251,243,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1.5px solid rgba(58,43,40,.2);
+  border-radius:8px;padding:5px 10px;
+  cursor:pointer;transition:border-color .15s,box-shadow .15s;
+  user-select:none;
+}
+.counter-trigger:hover{border-color:rgba(58,43,40,.45);box-shadow:0 2px 14px rgba(58,43,40,.1);}
+.counter-cur{font:700 12px/1 var(--sans);color:var(--ms);}
+.counter-sep{font:400 11px/1 var(--sans);color:rgba(58,43,40,.25);}
+.counter-tot{font:500 11px/1 var(--sans);color:rgba(58,43,40,.35);}
+.counter-name{font:500 10px/1 var(--sans);color:rgba(58,43,40,.55);margin-left:4px;padding-left:7px;border-left:1px solid rgba(58,43,40,.15);}
+.counter-dropdown{
+  position:absolute;top:calc(100% + 6px);right:0;
+  background:var(--paper);border:1.5px solid var(--ink);border-radius:12px;
+  padding:6px 0;min-width:168px;
+  box-shadow:0 8px 28px rgba(58,43,40,.14);
+  display:none;
+}
+#case-toc.open .counter-dropdown{display:block;}
+.counter-dropdown a{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 14px;font:500 11.5px/1 var(--sans);
+  color:rgba(58,43,40,.55);text-decoration:none;
+  transition:background .12s;
+}
+.counter-dropdown a:hover{background:rgba(58,43,40,.05);color:var(--ink);}
+.counter-dropdown a.active{color:var(--ms);font-weight:700;}
+.counter-dropdown a .cdn{font-size:10px;font-weight:700;opacity:.4;min-width:18px;}
+.counter-dropdown a.active .cdn{opacity:1;color:var(--ms);}
+@media(max-width:768px){#case-toc{display:none;}}
+
+
+/* ── sketch gallery ─────────────────────────────────── */
+.sk-gallery{display:flex;flex-direction:column;gap:clamp(22px,3vh,34px);}
+.sk-row{display:flex;gap:clamp(14px,2vw,22px);align-items:flex-start;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
+.sk-row::-webkit-scrollbar{height:4px;}
+.sk-row::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-group{display:flex;flex-direction:column;gap:10px;flex:none;}
+.sk-pill{display:inline-flex;align-items:center;padding:9px 22px;
+  background:var(--ink);color:#FFFBF3;border-radius:999px;
+  font:600 11px/1 var(--sans);letter-spacing:.07em;text-transform:lowercase;
+  width:fit-content;margin-bottom:8px;}
+.sk-imgs{display:flex;gap:6px;height:clamp(150px,13vw,190px);flex:none;}
+.sk-imgs img{border-radius:8px;object-fit:contain;object-position:center;
+  height:100%;width:auto;flex:none;display:block;
+  border:1px solid rgba(105,74,71,.1);background:var(--cream);}
+.sk-intro{font-size:clamp(13px,1.3vw,15px);line-height:1.7;color:var(--ink);margin-bottom:clamp(18px,2.8vh,28px);max-width:64ch;}
+
+
+.cs-footer a:hover{color:var(--ink);}
+</style>
+<body>
+
+<a href="04 Studio Class - Shippable.html" class="back-link">← back to portfolio</a>
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<header class="hero" style="--hcolor:#3F6083">
+  <div class="hero-inner">
+    <div class="hp-dot" style="top:8%;left:6%"></div>
+    <div class="hp-dot" style="bottom:10%;right:7%"></div>
+    <div class="hero-left">
+      <div class="htag">UX/UI · Mobile · Spring 2026</div>
+      <h1 style="--tsize:clamp(42px,4.6vw,78px);max-width:9ch;">Costco <em>Redesign.</em></h1>
+      <p class="hq">Improving the Costco mobile app experience.</p>
+    </div>
+    <div class="hero-phones">
+      <img src="screens/hero-warehouse.png" alt="Warehouse home"/>
+      <img src="screens/hero-item.png" alt="Item detail"/>
+    </div>
+  </div>
+</header>
+
+<!-- ══ META ══════════════════════════════════════════ -->
+<div class="meta-strip">
+  <div class="inner">
+    <div class="mi"><div class="mk">Role</div><div class="mv">Project Lead</div></div>
+    <div class="mi"><div class="mk">Team</div><div class="mv">2 leads · 3 designers</div></div>
+    <div class="mi"><div class="mk">Timeline</div><div class="mv">Jan – May 2026</div></div>
+    <div class="mi"><div class="mk">Platform</div><div class="mv">iOS · Android</div></div>
+  </div>
+</div>
+
+
+<!-- ══ OVERVIEW ════════════════════════════════════════ -->
+<section class="overview" id="s-overview">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">overview</div>
+    <h2 class="ov-statement sr">Project <span style="color:#694a47"><i>Context</i></span></h2>
+    <div class="ov-cols sr d1">
+      <div class="ov-col ov-col-p">
+        <div class="ov-col-num">01</div>
+        <div class="ov-col-lbl">The problem</div>
+        <div class="ov-col-title">Inconsistent, crowded, <em>disconnected.</em></div>
+        <p>Inconsistent layouts, crowded interfaces, and disconnected user flows make navigation and shopping feel overwhelming. Core features like lists, browsing, and product discovery lack clarity and visual hierarchy.</p>
+      </div>
+      <div class="ov-arrow" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="4" y1="24" x2="38" y2="24" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/><polyline points="28,14 40,24 28,34" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      </div>
+      <div class="ov-col ov-col-s">
+        <div class="ov-col-num">02</div>
+        <div class="ov-col-lbl" style="color:#5E9AA0">The solution</div>
+        <div class="ov-col-title">Simplified, cohesive, <em>intentional.</em></div>
+        <p>We redesigned the Costco mobile app to create a more intuitive and cohesive shopping experience through simplified navigation, and information architecture, clearer visual hierarchy, and improved visual consistency.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PERSONAS & JOURNEYS ══════════════════════════════════════════ -->
+<section class="personas-v2" id="s-research">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">research</div>
+    <h2 class="pv2h sr">User Personas &amp; Journeys</h2>
+    <div class="c-ptabs" id="psel"><button class="cpt on" data-p="hannah"><span class="cpnum">01</span><span class="cpname">Hustling Hannah</span><span class="cpsub">Business student · 20</span></button><button class="cpt" data-p="reed"><span class="cpnum">02</span><span class="cpname">Responsible Reed</span><span class="cpsub">Data analyst · 50</span></button><button class="cpt" data-p="penny"><span class="cpnum">03</span><span class="cpname">Planning Penny</span><span class="cpsub">Nurse practitioner · 28</span></button><button class="cpt" data-p="wilson"><span class="cpnum">04</span><span class="cpname">Wheelchair Wilson</span><span class="cpsub">IT auditor · 30</span></button></div>
+    <div class="c-vtabs">
+      <button class="cvt on" data-view="persona">Persona</button>
+      <button class="cvt" data-view="journey">Journey map</button>
+    </div>
+    
+<div class="c-view show" id="c-pv-hannah">
+  <div class="pcard2">
+  <div class="p2l">
+    <div class="p2av"><img src="screens/personas/hannah-photo.png" alt="Hustling Hannah"/></div>
+    <div class="p2lbl">User Persona</div>
+    <div class="p2name">Hustling Hannah</div>
+    <div class="p2meta"><div class="p2m"><div class="p2mk">Age</div><div class="p2mv">20</div></div><div class="p2m"><div class="p2mk">Location</div><div class="p2mv">Champaign, IL</div></div><div class="p2m"><div class="p2mk">Occupation</div><div class="p2mv">Business Administration Student</div></div></div>
+  </div>
+  <div class="p2r">
+    <div class="p2blbl">Biography</div>
+    <div class="p2bio">Hannah is a junior majoring in business administration at the University of Urbana-Champaign. She lives in an off-campus apartment with two roommates. Every 2–3 weeks, they shop at Costco to split bulk groceries. She values saving money but dislikes how chaotic and time-consuming the experience can feel.</div>
+    <hr class="p2divider"/>
+    <div class="p2cols">
+      <div class="p2col needs"><div class="p2clbl">User needs</div><ul><li>Plan trips efficiently around her school schedule</li><li>Minimize time spent in the store</li><li>A smart store map with aisle directions</li><li>An easy way to create and share lists</li><li>Real-time crowd and wait time estimates</li><li>Clear and personalized dashboard</li></ul></div>
+      <div class="p2col pains"><div class="p2clbl">Pain points</div><ul><li>Long checkout lines cut into her limited time</li><li>Finding parking is stressful on weekends</li><li>Overwhelmed by irrelevant information on screen</li><li>Difficulty creating and accessing lists on the app</li></ul></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="c-view" id="c-jv-hannah">
+  <div class="c-jscroll"><div class="jmap-o" style="min-width:700px;">
+  <div class="jhead"><div class="jhead-row"><div class="jstg"><div class="jsn">01</div><div class="jst">Planning</div></div><div class="jstg"><div class="jsn">02</div><div class="jst">Arrival</div></div><div class="jstg"><div class="jsn">03</div><div class="jst">Shopping</div></div><div class="jstg"><div class="jsn">04</div><div class="jst">Checkout</div></div><div class="jstg"><div class="jsn">05</div><div class="jst">Post-trip</div></div></div></div>
+  <div class="jacts-row"><div class="jact">Realizes she's low on groceries. Tries to build a list on the app.</div><div class="jact">Drives over. Circles the parking lot several times before finding a spot.</div><div class="jact">Wanders multiple aisles without a map. Eventually asks an employee.</div><div class="jact">Heads to checkout and waits in a long line with no wait time shown.</div><div class="jact">Returns home, reviews the receipt and splits the cost with roommates.</div></div>
+  <div class="jcurve-o"><svg viewBox="0 0 900 64" preserveAspectRatio="none"><line x1="0" y1="32" x2="900" y2="32" stroke="rgba(105,74,71,.08)" stroke-width="1"/><path d="M90,20 C160,20 220,32 270,36 C320,40 380,50 450,52 C530,54 590,54 630,52 C700,46 760,28 810,24" stroke="rgba(94,154,160,.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="jdots-o"><div class="jd"><div class="jdot pos" style="top:20px"></div></div><div class="jd"><div class="jdot neu" style="top:36px"></div></div><div class="jd"><div class="jdot neg" style="top:52px"></div></div><div class="jd"><div class="jdot neg" style="top:52px"></div></div><div class="jd"><div class="jdot neu" style="top:24px"></div></div></div></div>
+  <div class="jems-row"><div class="jem"><div class="jei"><div class="jed pos"></div><span class="jel">Motivated</span></div><p class="jet">Motivated to restock but frustrated she can't quickly find her list.</p></div><div class="jem"><div class="jei"><div class="jed neu"></div><span class="jel">Frustrated</span></div><p class="jet">Grows frustrated circling the parking lot.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Stressed</span></div><p class="jet">Disoriented in the warehouse without navigation help.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Tired</span></div><p class="jet">Exhausted from wandering and waiting in a long checkout line.</p></div><div class="jem"><div class="jei"><div class="jed neu"></div><span class="jel">Satisfied</span></div><p class="jet">Accomplished from bulk savings, but slightly drained.</p></div></div>
+  <div class="jopps-o"><div class="jopp-lbl-o">Opportunities</div><div class="jop-row"><div class="jopc">Prominent list feature in main nav</div><div class="jopc">Real-time crowd indicator</div><div class="jopc">In-app aisle guidance</div><div class="jopc">Estimated wait times at checkout</div><div class="jopc">Simplified bill splitting</div></div></div>
+</div></div>
+</div>
+<div class="c-view" id="c-pv-reed">
+  <div class="pcard2">
+  <div class="p2l">
+    <div class="p2av"><img src="screens/personas/reed-photo.png" alt="Responsible Reed"/></div>
+    <div class="p2lbl">User Persona</div>
+    <div class="p2name">Responsible Reed</div>
+    <div class="p2meta"><div class="p2m"><div class="p2mk">Age</div><div class="p2mv">50</div></div><div class="p2m"><div class="p2mk">Location</div><div class="p2mv">Chicago, IL</div></div><div class="p2m"><div class="p2mk">Occupation</div><div class="p2mv">Senior Data Analyst</div></div></div>
+    
+  </div>
+  <div class="p2r">
+    <div class="p2blbl">Biography</div>
+    <div class="p2bio">Reed shops at Costco every Saturday morning like clockwork. He mentally tracks what the house needs and loves discovering new deals — but the walk through the entire store and long checkout lines leave him more exhausted than he'd like.</div>
+    <hr class="p2divider"/>
+    <div class="p2cols">
+      <div class="p2col needs"><div class="p2clbl">User needs</div><ul><li>Auto-generated restock reminders based on purchase history</li><li>Deal comparisons for similar items in store</li><li>Real-time budget or cart total while shopping</li><li>In-store pick-up for staple restocks like milk and eggs</li></ul></div>
+      <div class="p2col pains"><div class="p2clbl">Pain points</div><ul><li>Has to mentally remember what needs restocking</li><li>Gets swayed by deals and overspends</li><li>Long checkout lines with a full, heavy cart</li><li>No way to track his spending while shopping</li></ul></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="c-view" id="c-jv-reed">
+  <div class="c-jscroll"><div class="jmap-o" style="min-width:700px;">
+  <div class="jhead"><div class="jhead-row"><div class="jstg"><div class="jsn">01</div><div class="jst">Planning</div></div><div class="jstg"><div class="jsn">02</div><div class="jst">Arrival</div></div><div class="jstg"><div class="jsn">03</div><div class="jst">Shopping</div></div><div class="jstg"><div class="jsn">04</div><div class="jst">Checkout</div></div><div class="jstg"><div class="jsn">05</div><div class="jst">Home</div></div></div></div>
+  <div class="jacts-row"><div class="jact">It's Saturday morning. Reed goes on his weekly grocery run — checks the pantry and fridge mentally.</div><div class="jact">Gets gas first, does a quick return, then goes shopping and gets swayed by new deals and pop-ups.</div><div class="jact">Tired from walking back and forth through the aisles to get his necessary items. Wishes there was a faster way.</div><div class="jact">Waits in the long line, missed the free samples, and is exhausted from shopping.</div><div class="jact">Finally home — spent a little too much on new snacks, but feels accomplished for restocking.</div></div>
+  <div class="jcurve-o"><svg viewBox="0 0 900 64" preserveAspectRatio="none"><line x1="0" y1="32" x2="900" y2="32" stroke="rgba(105,74,71,.08)" stroke-width="1"/><path d="M90,18 C160,18 220,34 270,40 C320,46 380,54 450,58 C530,60 590,62 630,62 C700,56 760,22 810,16" stroke="rgba(94,154,160,.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="jdots-o"><div class="jd"><div class="jdot pos" style="top:18px"></div></div><div class="jd"><div class="jdot neu" style="top:40px"></div></div><div class="jd"><div class="jdot neg" style="top:58px"></div></div><div class="jd"><div class="jdot neg" style="top:62px"></div></div><div class="jd"><div class="jdot pos" style="top:16px"></div></div></div></div>
+  <div class="jems-row"><div class="jem"><div class="jei"><div class="jed pos"></div><span class="jel">Excited</span></div><p class="jet">Excited to go to Costco and start his tasks for the day!</p></div><div class="jem"><div class="jei"><div class="jed neu"></div><span class="jel">Curious</span></div><p class="jet">Curious about all the new snacks and foods on sale — starts adding to cart.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Tired</span></div><p class="jet">Getting tired from all the walking the entire store.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Exhausted</span></div><p class="jet">Exhausted from waiting in a long line and having to push a cart full of items.</p></div><div class="jem"><div class="jei"><div class="jed pos"></div><span class="jel">Accomplished</span></div><p class="jet">Finally home and excited to munch on the new snacks he bought.</p></div></div>
+  <div class="jopps-o"><div class="jopp-lbl-o">Opportunities</div><div class="jop-row"><div class="jopc">Auto-generated list or reminder of restocks based on purchase history</div><div class="jopc">Deal comparisons for similar items in store</div><div class="jopc">Real-time budget or cart tracking while shopping</div><div class="jopc">In-store pick-up for all the restock items like milk and eggs</div><div class="jopc">—</div></div></div>
+</div></div>
+</div>
+<div class="c-view" id="c-pv-penny">
+  <div class="pcard2">
+  <div class="p2l">
+    <div class="p2av"><img src="screens/personas/penny-photo.png" alt="Planning Penny"/></div>
+    <div class="p2lbl">User Persona</div>
+    <div class="p2name">Planning Penny</div>
+    <div class="p2meta"><div class="p2m"><div class="p2mk">Age</div><div class="p2mv">28</div></div><div class="p2m"><div class="p2mk">Location</div><div class="p2mv">Chicago, IL</div></div><div class="p2m"><div class="p2mk">Occupation</div><div class="p2mv">Nurse Practitioner</div></div></div>
+    
+  </div>
+  <div class="p2r">
+    <div class="p2blbl">Biography</div>
+    <div class="p2bio">Planning Penny is 28 years old and works a full-time job as a Nurse Practitioner. She goes grocery shopping once a week and prefers to plan ahead so she doesn't waste time or money. Before every trip, she checks her pantries and fridge, makes a detailed grocery list, and checks prices ahead of time.</div>
+    <hr class="p2divider"/>
+    <div class="p2cols">
+      <div class="p2col needs"><div class="p2clbl">User needs</div><ul><li>Reorder past purchases quickly so she doesn't have to create a list from scratch every week</li><li>A centralized place to plan, organize, and purchase without switching tools</li><li>Accurate real-time inventory information to ensure she doesn't waste time on her trip</li></ul></div>
+      <div class="p2col pains"><div class="p2clbl">Pain points</div><ul><li>Feels repetitive to manually rewrite some of the same items on her grocery list every week</li><li>She occasionally forgets to add out-of-stock items to her grocery list</li><li>Penny dislikes uncertainty, especially not knowing if an item will be in stock</li></ul></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="c-view" id="c-jv-penny">
+  <div class="c-jscroll"><div class="jmap-o" style="min-width:700px;">
+  <div class="jhead"><div class="jhead-row"><div class="jstg"><div class="jsn">01</div><div class="jst">Planning</div></div><div class="jstg"><div class="jsn">02</div><div class="jst">Pre-trip</div></div><div class="jstg"><div class="jsn">03</div><div class="jst">Shopping</div></div><div class="jstg"><div class="jsn">04</div><div class="jst">Out of stock</div></div><div class="jstg"><div class="jsn">05</div><div class="jst">Home</div></div></div></div>
+  <div class="jacts-row"><div class="jact">Checks pantry and fridge, writes a detailed grocery list before every trip.</div><div class="jact">Opens app to check prices and availability — real-time stock isn't available.</div><div class="jact">Arrives with a clear list and shops efficiently.</div><div class="jact">Discovers a key item is missing. No substitution suggestions in the app.</div><div class="jact">Returns without all items — has to order the rest separately.</div></div>
+  <div class="jcurve-o"><svg viewBox="0 0 900 64" preserveAspectRatio="none"><line x1="0" y1="32" x2="900" y2="32" stroke="rgba(105,74,71,.08)" stroke-width="1"/><path d="M90,20 C150,20 210,50 270,54 C320,58 370,46 450,18 C530,18 580,52 630,56 C700,60 760,62 810,62" stroke="rgba(94,154,160,.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="jdots-o"><div class="jd"><div class="jdot pos" style="top:20px"></div></div><div class="jd"><div class="jdot neg" style="top:54px"></div></div><div class="jd"><div class="jdot pos" style="top:18px"></div></div><div class="jd"><div class="jdot neg" style="top:56px"></div></div><div class="jd"><div class="jdot neg" style="top:62px"></div></div></div></div>
+  <div class="jems-row"><div class="jem"><div class="jei"><div class="jed pos"></div><span class="jel">Organized</span></div><p class="jet">Organized and focused. Planning is second nature.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Frustrated</span></div><p class="jet">Frustrated real-time inventory isn't available — she has to guess.</p></div><div class="jem"><div class="jei"><div class="jed pos"></div><span class="jel">Efficient</span></div><p class="jet">In control when shopping goes to plan.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Annoyed</span></div><p class="jet">Annoyed to find a key item missing — preventable with better info.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Disappointed</span></div><p class="jet">Disappointed — a better app would have prevented this wasted trip.</p></div></div>
+  <div class="jopps-o"><div class="jopp-lbl-o">Opportunities</div><div class="jop-row"><div class="jopc">Real-time inventory checking before the trip</div><div class="jopc">Smart substitution suggestions when items are out of stock</div><div class="jopc">Quick reorder from past purchases with one tap</div><div class="jopc">Centralized list + purchase flow in one place</div><div class="jopc">—</div></div></div>
+</div></div>
+</div>
+<div class="c-view" id="c-pv-wilson">
+  <div class="pcard2">
+  <div class="p2l">
+    <div class="p2av"><img src="screens/personas/wilson-photo.png" alt="Wheelchair Wilson"/></div>
+    <div class="p2lbl">User Persona</div>
+    <div class="p2name">Wheelchair Wilson</div>
+    <div class="p2meta"><div class="p2m"><div class="p2mk">Age</div><div class="p2mv">30</div></div><div class="p2m"><div class="p2mk">Location</div><div class="p2mv">Champaign, IL</div></div><div class="p2m"><div class="p2mk">Occupation</div><div class="p2mv">IT Auditor</div></div></div>
+    
+  </div>
+  <div class="p2r">
+    <div class="p2blbl">Biography</div>
+    <div class="p2bio">Wilson is 30 and relies on grocery delivery due to limited mobility. He uses the Costco app to order groceries after work — but the delivery experience is fragmented, and pressing "same day delivery" unexpectedly redirects him to InstaCart instead of the Costco cart.</div>
+    <hr class="p2divider"/>
+    <div class="p2cols">
+      <div class="p2col needs"><div class="p2clbl">User needs</div><ul><li>Efficient and reliable grocery delivery without leaving the Costco app</li><li>Clear delivery options, timing, and tracking shown upfront</li></ul></div>
+      <div class="p2col pains"><div class="p2clbl">Pain points</div><ul><li>Pressing "same day delivery" redirects to InstaCart instead of Costco cart</li><li>Limited contextual search — can only filter by keyword, not category</li><li>Delivery takes 2 days when he expected same-day</li></ul></div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="c-view" id="c-jv-wilson">
+  <div class="c-jscroll"><div class="jmap-o" style="min-width:700px;">
+  <div class="jhead"><div class="jhead-row"><div class="jstg"><div class="jsn">01</div><div class="jst">Ordering</div></div><div class="jstg"><div class="jsn">02</div><div class="jst">Searching</div></div><div class="jstg"><div class="jsn">03</div><div class="jst">Delivery</div></div><div class="jstg"><div class="jsn">04</div><div class="jst">Alternative</div></div><div class="jstg"><div class="jsn">05</div><div class="jst">Checkout</div></div></div></div>
+  <div class="jacts-row"><div class="jact">Orders groceries after work to replenish stock at home.</div><div class="jact">Searches for items to purchase on the Costco app.</div><div class="jact">Presses "same day delivery" — redirected to InstaCart instead of Costco cart.</div><div class="jact">Goes back and presses "2-day delivery" to stay in the Costco app.</div><div class="jact">Types in address and orders items. Groceries are on their way.</div></div>
+  <div class="jcurve-o"><svg viewBox="0 0 900 64" preserveAspectRatio="none"><line x1="0" y1="32" x2="900" y2="32" stroke="rgba(105,74,71,.08)" stroke-width="1"/><path d="M90,32 C160,32 220,48 270,54 C320,58 380,60 450,62 C530,62 590,62 630,62 C700,60 760,46 810,42" stroke="rgba(94,154,160,.55)" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg><div class="jdots-o"><div class="jd"><div class="jdot neu" style="top:32px"></div></div><div class="jd"><div class="jdot neg" style="top:54px"></div></div><div class="jd"><div class="jdot neg" style="top:60px"></div></div><div class="jd"><div class="jdot neg" style="top:62px"></div></div><div class="jd"><div class="jdot neu" style="top:42px"></div></div></div></div>
+  <div class="jems-row"><div class="jem"><div class="jei"><div class="jed neu"></div><span class="jel">Excited</span></div><p class="jet">Tired from work but excited to get more food.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Frustrated</span></div><p class="jet">Frustrated that the item doesn't pop up immediately.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Annoyed</span></div><p class="jet">Annoyed that they are taken to InstaCart and not Costco cart.</p></div><div class="jem"><div class="jei"><div class="jed neg"></div><span class="jel">Resigned</span></div><p class="jet">Finally taken to Costco cart but dislikes that it will take 2 days.</p></div><div class="jem"><div class="jei"><div class="jed neu"></div><span class="jel">Unsatisfied</span></div><p class="jet">Unsatisfied about how long it took but groceries complete.</p></div></div>
+  <div class="jopps-o"><div class="jopp-lbl-o">Opportunities</div><div class="jop-row"><div class="jopc">Allow and improve contextual filtering instead of just by word</div><div class="jopc">Allow same-day delivery outside of InstaCart or within the Costco app itself</div><div class="jopc">—</div><div class="jopc">—</div><div class="jopc">—</div></div></div>
+</div></div>
+</div>
+  </div>
+</section>
+
+<!-- ══ INSIGHTS ═══════════════════════════════════════ -->
+<section class="insights" id="s-insights">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">research</div>
+    <div class="ih sr" style="font-size: 52px">User research &amp; usability testing</div>
+
+    <div class="rm-stats sr">
+      <div class="rm-stat"><b>5</b><span>usability tests</span></div>
+      <div class="rm-stat"><b>10</b><span>user interviews</span></div>
+      <div class="rm-stat"><b>28</b><span>survey responses</span></div>
+    </div>
+
+    <div class="rm-block">
+      <div class="rm-title sr">Usability Testing</div>
+      <p class="rm-body sr d1">We ran think-aloud sessions, asking users to narrate what they were seeing and thinking as they worked through five real tasks in the live Costco app.</p>
+      <div class="ut-tasks sr d1">
+        <div class="ut-task"><span class="utn">01</span><span class="utt">Find the nearest warehouse &amp; check its hours</span></div>
+        <div class="ut-task"><span class="utn">02</span><span class="utt">Search for grapes &amp; add to cart</span></div>
+        <div class="ut-task"><span class="utn">03</span><span class="utt">Save an item to a list, then find that list</span></div>
+        <div class="ut-task"><span class="utn">04</span><span class="utt">Pull up a digital membership card</span></div>
+        <div class="ut-task"><span class="utn">05</span><span class="utt">Match tires to a Hyundai Venue 2025</span></div>
+      </div>
+      <div class="rm-cap sr d2" style="margin-bottom:12px;">field notes from the sessions</div>
+      <div class="stk-board sr d2">
+        <div class="stk-note pink">"Where the grapes at? They got gift baskets, snacks... where's the fruit section?"</div>
+        <div class="stk-note pink">"I don't see an add to cart button" &mdash; found it under Same Day Delivery instead</div>
+        <div class="stk-note pink">"Is there a shopping list button?" &mdash; didn't associate the heart icon with lists</div>
+        <div class="stk-note pink">"I have to sign in to make a shopping list? That's bs"</div>
+        <div class="stk-note pink">"Why is tires a separate icon?" &mdash; expected it under Auto Services</div>
+        <div class="stk-note pink">"Feels like a website crammed into an app," slow and overwhelming</div>
+      </div>
+      <div class="rm-cap sr d2" style="margin-top:clamp(24px,3.4vh,32px);margin-bottom:14px;">recurring pain points across sessions</div>
+      <div class="ut-pains sr d2">
+        <span class="ut-pain">confusing information architecture</span>
+        <span class="ut-pain">hidden buttons &amp; features</span>
+        <span class="ut-pain">visual inconsistency</span>
+        <span class="ut-pain">too many external pages</span>
+        <span class="ut-pain">overwhelming amount of info</span>
+        <span class="ut-pain">unintuitive actions</span>
+      </div>
+    </div>
+
+    <div class="rm-block">
+      <div class="rm-title sr">Interviews</div>
+      <p class="rm-body sr d1">We interviewed 10 shoppers about how they plan trips, use grocery apps, and feel about Costco specifically, then affinity-mapped every quote into recurring themes.</p>
+      <div class="stk-groups sr d1">
+        <div class="stk-group">
+          <div class="stk-group-title">Frustrations in store: Long lines/crowded</div>
+          <div class="stk-board">
+            <div class="stk-note green"><div class="stkq">A common frustration with Costco is long lines and crowdedness</div></div>
+            <div class="stk-note mint"><div class="stkq">People are annoyed with long lines/waits</div></div>
+            <div class="stk-note yellow"><div class="stkq">Long lines and parking may be frustrating in Costco</div></div>
+            <div class="stk-note mint"><div class="stkq">People prefer a quick and efficient shopping experience</div></div>
+          </div>
+        </div>
+        <div class="stk-group">
+          <div class="stk-group-title">Grocery store app features/uses</div>
+          <div class="stk-board">
+            <div class="stk-note yellow"><div class="stkq">In-store maps are the most useful, especially while shopping</div></div>
+            <div class="stk-note blue"><div class="stkq">To prepare, most people check their inventory and/or make a list</div></div>
+            <div class="stk-note blue"><div class="stkq">People mainly use grocery apps for convenience</div></div>
+            <div class="stk-note green"><div class="stkq">People like checking real-time inventory to ensure that the items they want to buy are in stock</div></div>
+            <div class="stk-note yellow"><div class="stkq">Having a place to see receipts is important</div></div>
+          </div>
+        </div>
+        <div class="stk-group">
+          <div class="stk-group-title">App Issues</div>
+          <div class="stk-board">
+            <div class="stk-note blue"><div class="stkq">People find long loading times to be frustrating</div></div>
+            <div class="stk-note blue"><div class="stkq">Users have issues completing certain tasks within the app, mainly lists and adding items to carts</div></div>
+            <div class="stk-note blue"><div class="stkq">App seems overwhelming due to large amounts of content at once</div></div>
+          </div>
+        </div>
+        <div class="stk-group">
+          <div class="stk-group-title">Navigating the store</div>
+          <div class="stk-board">
+            <div class="stk-note mint"><div class="stkq">People walk around a lot at Costco due to the size and everything being everywhere</div></div>
+            <div class="stk-note green"><div class="stkq">Some people find it easy to get lost and not that easy to find the items they are looking for due to a lack of signage</div></div>
+          </div>
+        </div>
+        <div class="stk-group">
+          <div class="stk-group-title">Membership/exclusive benefit</div>
+          <div class="stk-board">
+            <div class="stk-note green"><div class="stkq">Several people only use the app for the membership card</div></div>
+            <div class="stk-note blue"><div class="stkq">Users only use the app if it's relevant to them or they get an exclusive benefit</div></div>
+            <div class="stk-note mint"><div class="stkq">People without a membership do not find any benefit to using the Costco app</div></div>
+          </div>
+        </div>
+        <div class="stk-group">
+          <div class="stk-group-title">Value sales/coupons</div>
+          <div class="stk-board">
+            <div class="stk-note blue"><div class="stkq">Most people value deals/coupons</div></div>
+            <div class="stk-note yellow"><div class="stkq">Being able to see coupons and sales is helpful before you go shopping</div></div>
+            <div class="stk-note mint"><div class="stkq">People enjoy seeing deals and items on sale</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="rm-cap sr d2" style="margin-bottom:12px;">a few of the questions we asked</div>
+      <div class="iq-list sr d2">
+        <div class="iq-item"><span class="iqt">background</span>Is there anything you do before you go grocery shopping?</div>
+        <div class="iq-item"><span class="iqt">grocery apps</span>What features do you value most in a grocery shopping app?</div>
+        <div class="iq-item"><span class="iqt">costco</span>Is there anything you find frustrating about shopping at Costco?</div>
+        <div class="iq-item"><span class="iqt">costco app</span>Do you have any frustrations with the app?</div>
+      </div>
+    </div>
+
+    <div class="rm-block">
+      <div class="rm-title sr">Survey (<i>n</i> = 28)</div>
+      <p class="rm-body sr d1">Survey responses revealed that most shoppers prepare before grocery trips, with saving money, digital coupons, and member benefits standing out as the strongest user priorities.</p>
+      <div class="sv-charts sr d1">
+        <img src="screens/costco/survey-prepare.png" alt="Survey chart: how respondents prepare for grocery shopping"/>
+        <img src="screens/costco/survey-purpose.png" alt="Survey chart: main purpose for using grocery mobile apps"/>
+        <img src="screens/costco/survey-frequency.png" alt="Survey chart: how often respondents use online grocery shopping"/>
+        <img src="screens/costco/survey-features.png" alt="Survey chart: most valued grocery app features"/>
+      </div>
+    </div>
+
+    <div class="rm-label sr">insights</div>
+    <div class="ins-list">
+      <div class="ins-item sr">
+        <div class="in">01</div>
+        <div class="ib"><p>Shoppers feel stressed when long lines and crowding make their trip unpredictable and inefficient.</p></div>
+      </div>
+      <div class="ins-item sr d1">
+        <div class="in">02</div>
+        <div class="ib"><p>Shoppers struggle to quickly find items in Costco due to its large layout and limited navigation support.</p></div>
+      </div>
+      <div class="ins-item sr d2">
+        <div class="in">03</div>
+        <div class="ib"><p>Users disengage from the app when it feels slow, cluttered, or difficult to complete basic tasks.</p></div>
+      </div>
+      <div class="ins-item sr d3">
+        <div class="in">04</div>
+        <div class="ib"><p>Shoppers use grocery apps primarily to save time through planning, inventory checks, and in-store navigation.</p></div>
+      </div>
+      <div class="ins-item sr">
+        <div class="in">05</div>
+        <div class="ib"><p>Users only see value in the Costco app when it provides clear membership-related benefits and easily visible deals and sales information.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMPETITIVE MATRIX ═════════════════════════════ -->
+<section class="compet" id="s-competitive">
+  <div class="wp">
+    <h2 class="ch sr">Competitive <span style="color:#694a47"><i>Analysis</i></span></h2>
+    <p class="csub sr d1">We compared Costco with six competing grocery apps across the features shoppers rely on most. While the core experience was similar across every app, the biggest differences appeared in planning, navigation, and everyday convenience. Those became the biggest opportunities for our redesign.</p>
+    <div class="cmat3-wrap sr d2">
+      <table class="cmat3">
+        <thead>
+          <tr>
+            <th class="feat-h"></th>
+            <th><div class="ch-inner"><img src="screens/logos/sams.png" alt="Sam's Club"/><span class="ch-name">Sam's Club</span></div></th>
+            <th><div class="ch-inner"><img src="screens/logos/walmart.png" alt="Walmart"/><span class="ch-name">Walmart</span></div></th>
+            <th><div class="ch-inner"><img src="screens/logos/bjs.png" alt="BJ's"/><span class="ch-name">BJ's</span></div></th>
+            <th><div class="ch-inner"><img src="screens/logos/target.png" alt="Target"/><span class="ch-name">Target</span></div></th>
+            <th><div class="ch-inner"><img src="screens/logos/kroger.png" alt="Kroger"/><span class="ch-name">Kroger</span></div></th>
+            <th><div class="ch-inner"><img src="screens/logos/aldi.png" alt="Aldi"/><span class="ch-name">Aldi</span></div></th>
+            <th class="you-h"><div class="ch-inner"><img src="screens/logos/costco.png" alt="Costco"/><span class="ch-name">Costco</span></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="feat-cell">Online Shopping</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Delivery / Pickup</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Reorder</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Shopping Lists</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td></tr>
+          <tr><td class="feat-cell">In-Store Navigation</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Minimal Content Overload</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC2028" opacity=".75"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Strong Branding</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#E8A020"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Digital Coupons / Deals</td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class=""><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td class="you"><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+        </tbody>
+      </table>
+      <div class="cmat3-legend">
+        <div class="li"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#4CAF73"/></svg>Supported</div>
+        <div class="li"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#E8A020"/></svg>Partial</div>
+        <div class="li"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#CC2028" opacity=".75"/></svg>Missing</div>
+      </div>
+    </div>  </div>
+</section>
+
+<section class="princs" id="s-principles">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">how might we</div>
+    <h2 class="ph2 sr">Three questions that <span style="color:#694a47">framed our design.</span></h2>
+    <div class="pgrid">
+      <div class="pc2 sr d1">
+        <div class="pn2">01</div>
+        <div class="ptitle"><span style="color:#5E9AA0;">How might we</span> make grocery shopping feel <em>less overwhelming</em> and more user friendly?</div>
+      </div>
+      <div class="pc2 sr d2">
+        <div class="pn2">02</div>
+        <div class="ptitle"><span style="color:#5E9AA0;">How might we</span> make features that users deem relevant <em>more visible</em> and easier to access?</div>
+      </div>
+      <div class="pc2 sr d3">
+        <div class="pn2">03</div>
+        <div class="ptitle"><span style="color:#5E9AA0;">How might we</span> make the Costco shopping experience <em>more time-efficient</em>?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ IDEATION ═════════════════════════════════════════ -->
+<section class="ideation" id="s-ideation">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">ideation</div>
+    <h2 class="idh sr">Sketches, Lo-fis, &amp; Information Architecture</h2>
+    <p class="idsub sr d1">Before any pixels, we sketched every major screen by hand — testing navigation patterns, content hierarchy, and interaction ideas. Lo-fi wireframes followed, refining structure before visual design began.</p>
+    <div class="idea-tabs">
+      <button class="on" data-tab="sketches">Sketches</button>
+      <button data-tab="lofi">Lo-fi wireframes</button>
+      <button data-tab="ia">Information architecture</button>
+    </div>
+    <div class="idea-panel show" id="tab-sketches">
+      <p class="sk-intro">6 app sections explored — testing navigation patterns, information hierarchy, and interaction models before committing to any direction.</p>
+
+
+      <div class="sk-gallery show" id="sk-grid-view">
+
+        <div class="sk-row">
+          <div class="sk-group">
+            <div class="sk-pill">explore</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/explore1.png" alt="Explore sketch 1"/>
+              <img src="screens/ideation/explore2.png" alt="Explore sketch 2"/>
+              <img src="screens/ideation/explore3.png" alt="Explore sketch 3"/>
+            </div>
+          </div>
+          <div class="sk-group">
+            <div class="sk-pill">services</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/services1.png" alt="Services 1"/>
+              <img src="screens/ideation/services2.png" alt="Services 2"/>
+              <img src="screens/ideation/services3.png" alt="Services 3"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="sk-row">
+          <div class="sk-group">
+            <div class="sk-pill">items</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/items.png" alt="Items"/>
+            </div>
+          </div>
+          <div class="sk-group">
+            <div class="sk-pill">warehouse</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/wh1.png" alt="Warehouse 1"/>
+              <img src="screens/ideation/wh2.png" alt="Warehouse 2"/>
+              <img src="screens/ideation/wh3.png" alt="Warehouse 3"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="sk-row">
+          <div class="sk-group">
+            <div class="sk-pill">account</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/account1.png" alt="Account 1"/>
+              <img src="screens/ideation/account2.png" alt="Account 2"/>
+            </div>
+          </div>
+          <div class="sk-group">
+            <div class="sk-pill">shop</div>
+            <div class="sk-imgs">
+              <img src="screens/ideation/shop1.png" alt="Shop 1"/>
+              <img src="screens/ideation/shop2.png" alt="Shop 2"/>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    
+    <div class="idea-panel" id="tab-lofi">
+      <p class="sk-intro">Lo-fi wireframes refined structure and hierarchy before visual design began — translating sketch concepts into testable screen flows.</p>
+
+
+      <div class="sk-carousel show" id="lf-carousel-view">
+        <div class="sk-cat-pills" id="lf-cat-pills">
+          <button class="sk-cat-btn on" data-cat="explore">explore</button>
+          <button class="sk-cat-btn" data-cat="services">services</button>
+          <button class="sk-cat-btn" data-cat="items">items</button>
+          <button class="sk-cat-btn" data-cat="warehouse">warehouse</button>
+          <button class="sk-cat-btn" data-cat="account">account</button>
+          <button class="sk-cat-btn" data-cat="shop">shop</button>
+        </div>
+        <div class="sk-car-wrap">
+          <button class="sk-car-arrow" id="lf-car-prev" aria-label="Previous">‹</button>
+          <div class="sk-car-track" id="lf-car-track">
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore1.png" alt="explore lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore2.png" alt="explore lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore3.png" alt="explore lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore4.png" alt="explore lo-fi 4"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore5.png" alt="explore lo-fi 5"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore6.png" alt="explore lo-fi 6"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore7.png" alt="explore lo-fi 7"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore8.png" alt="explore lo-fi 8"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore9.png" alt="explore lo-fi 9"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore10.png" alt="explore lo-fi 10"/></div>
+            <div class="sk-car-slide" data-cat="explore"><img src="screens/ideation/lofi-explore11.png" alt="explore lo-fi 11"/></div>
+            <div class="sk-car-slide" data-cat="services"><img src="screens/ideation/lofi-services1.png" alt="services lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="services"><img src="screens/ideation/lofi-services2.png" alt="services lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="services"><img src="screens/ideation/lofi-services3.png" alt="services lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="items"><img src="screens/ideation/lofi-items1.png" alt="items lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="items"><img src="screens/ideation/lofi-items2.png" alt="items lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="items"><img src="screens/ideation/lofi-items3.png" alt="items lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="items"><img src="screens/ideation/lofi-items4.png" alt="items lo-fi 4"/></div>
+            <div class="sk-car-slide" data-cat="items"><img src="screens/ideation/lofi-items5.png" alt="items lo-fi 5"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh1.png" alt="warehouse lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh2.png" alt="warehouse lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh3.png" alt="warehouse lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh4.png" alt="warehouse lo-fi 4"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh5.png" alt="warehouse lo-fi 5"/></div>
+            <div class="sk-car-slide" data-cat="warehouse"><img src="screens/ideation/lofi-wh6.png" alt="warehouse lo-fi 6"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account1.png" alt="account lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account2.png" alt="account lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account3.png" alt="account lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account4.png" alt="account lo-fi 4"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account5.png" alt="account lo-fi 5"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account6.png" alt="account lo-fi 6"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account7.png" alt="account lo-fi 7"/></div>
+            <div class="sk-car-slide" data-cat="account"><img src="screens/ideation/lofi-account8.png" alt="account lo-fi 8"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop1.png" alt="shop lo-fi 1"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop2.png" alt="shop lo-fi 2"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop3.png" alt="shop lo-fi 3"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop4.png" alt="shop lo-fi 4"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop5.png" alt="shop lo-fi 5"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop6.png" alt="shop lo-fi 6"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop7.png" alt="shop lo-fi 7"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop8.png" alt="shop lo-fi 8"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop9.png" alt="shop lo-fi 9"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop10.png" alt="shop lo-fi 10"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop11.png" alt="shop lo-fi 11"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop12.png" alt="shop lo-fi 12"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop13.png" alt="shop lo-fi 13"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop14.png" alt="shop lo-fi 14"/></div>
+            <div class="sk-car-slide" data-cat="shop"><img src="screens/ideation/lofi-shop15.png" alt="shop lo-fi 15"/></div>
+          </div>
+          <button class="sk-car-arrow" id="lf-car-next" aria-label="Next">›</button>
+        </div>
+        <div class="sk-car-count" id="lf-car-count">1 / 48</div>
+      </div>
+
+    </div>
+    <div class="idea-panel" id="tab-ia"></div>
+  </div>
+</section>
+
+<!-- ══ FINAL SOLUTION ═══════════════════════════════ -->
+<section class="fs-sec" id="s-design">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">the final solution</div>
+    <h2 class="bah sr">From insight to <em>interface</em>.</h2>
+    <p class="basub sr d1">Every change below traces back to one of three questions we kept asking throughout the redesign.</p>
+    <div class="fs-hmw-strip sr d1">
+      <div class="fs-hmw-item"><span class="fhn">01</span><p>How might we make grocery shopping feel <em>less overwhelming</em>?</p></div>
+      <div class="fs-hmw-item"><span class="fhn">02</span><p>How might we make relevant features <em>more visible</em>?</p></div>
+      <div class="fs-hmw-item"><span class="fhn">03</span><p>How might we make the experience <em>more time-efficient</em>?</p></div>
+    </div>
+
+    <div class="fs-cat sr d1">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">01</span></div><h3>Landing</h3></div>
+      <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/landing-before.png" alt="Original landing screen with cluttered banners and buttons"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Visual overload from buttons, font styles, icons, and horizontal scrolls</div>
+            <div class="ba-note r">Redundant information repeated throughout the screen</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/home-after.gif" alt="Redesigned landing screen with Selected For You and What's New"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">"What's New" and other key features highlighted at the top, cutting shopping time</div>
+            <div class="ba-note g">"Selected For You" recommends based on past spending</div>
+            <div class="ba-note g">Consistent branding and layout across the page</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-cat sr d2">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">02</span></div><h3>Shop</h3></div>
+      <div class="fs-topic-wrap has-more">
+        <div class="fs-topic-scroll">
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">browsing categories</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/shop-sitemap-before.png" alt="Original site map requiring re-navigation to view categories"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Clicking "View More Categories" navigated away, requiring users to re-see other categories</div>
+            <div class="ba-note r">The next page felt like a separate site map, with subcategories that quickly became overwhelming</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/shop-1-after.gif" alt="Redesigned shop categories in place, no re-navigation"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Categories expand in place instead of jumping to a new page</div>
+            <div class="ba-note g">"Selected For You" no longer eats up the whole screen, so browsing starts faster</div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">filtering</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/shop-filter-before.png" alt="Original sort and filter menu with only parent categories shown, not collapsible"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Displayed filters only show the parent category, not useful for narrowing results</div>
+            <div class="ba-note r">Filters aren't collapsible, making it harder to see or apply what actually matters</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/shop-2-after.gif" alt="Redesigned collapsible sort and filter menu"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Filters are collapsible sections, so users can scan and pick relevant ones quickly</div>
+            <div class="ba-note g">Subcategories are shown directly, not just the parent category</div>
+          </div>
+        </div>
+      </div>
+          </div>
+        </div>
+        <div class="fs-scroll-hint">→</div>
+      </div>
+    </div>
+
+    <div class="fs-cat sr d2">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">03</span></div><h3>Warehouse</h3></div>
+      <div class="fs-topic-wrap has-more">
+        <div class="fs-topic-scroll">
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">my warehouse home</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/warehouse-tools-before.png" alt="Original Warehouse Tools grid burying key info"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Warehouse info was just a grid of tool buttons, no context on the warehouse itself</div>
+            <div class="ba-note r">No sense of how busy the store is before a member commits to a trip</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/warehouse-1-after.gif" alt="Redesigned My Warehouse home with live crowd graph"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">A live crowd-level graph and gas prices inform trip planning at a glance</div>
+            <div class="ba-note g">Warehouse becomes a first-class home, not just a folder of tools</div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">order history &amp; store details</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/warehouse-2-after.gif" alt="Order history screen, reorder and list actions surfaced"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Clicking into a previous order now opens quick actions: reorder, add to list, or return</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/warehouse-3-after.gif" alt="Store details page with clearer hierarchy and store map"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Store details page has clearer visual hierarchy so members find info faster</div>
+            <div class="ba-note g">A store map helps users navigate directly to a specific product</div>
+          </div>
+        </div>
+      </div>
+          </div>
+        </div>
+        <div class="fs-scroll-hint">→</div>
+      </div>
+    </div>
+
+    <div class="fs-cat sr d2">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">04</span></div><h3>Services</h3></div>
+      <div class="fs-topic-wrap has-more">
+        <div class="fs-topic-scroll">
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">main services</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/services-before.png" alt="Original deep-linked services promo page"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Services were buried behind individual promo pages instead of one home</div>
+            <div class="ba-note r">Membership perks like ReMember Services had no dedicated space</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/services-1-after.gif" alt="Redesigned Main Services, 9 reduced to 7 with a dropdown"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Main Services reduced from 9 to 7, with a dropdown for the rest</div>
+            <div class="ba-note g">Each service is informational with directly relevant actions</div>
+          </div>
+        </div>
+      </div>
+          </div>
+          <div class="fs-topic">
+            <div class="fs-sub-lbl">ReMember Services</div>
+            <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/services-before.png" alt="Services with no separated membership section"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Membership-exclusive services had no separate section, adding to the clutter</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/services-2-after.gif" alt="Redesigned ReMember Services as its own section"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">ReMember Services is now its own section, keeping the same consistent format</div>
+            <div class="ba-note g">Promotes and organizes Costco's membership services on their own</div>
+          </div>
+        </div>
+      </div>
+          </div>
+        </div>
+        <div class="fs-scroll-hint">→</div>
+      </div>
+    </div>
+
+    <div class="fs-cat sr d2">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">05</span></div><h3>Account &amp; Lists</h3></div>
+      <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame"><img src="screens/costco/final/account-before.png" alt="Original Account page listing features as plain rows"/></div>
+          <div class="ba-notes">
+            <div class="ba-note r">Inbox, Lists, and Settings sat as plain, undifferentiated rows</div>
+            <div class="ba-note r">Lists were a single flat list, no way to organize by trip or purpose</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/account-after.gif" alt="Redesigned Account page with QR membership card and organized lists"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Membership QR code front and center, no longer buried steps deep</div>
+            <div class="ba-note g">Lists become multiple named, custom lists members can create and manage</div>
+          </div>
+        </div>
+      </div>
+      <div class="fs-sub-lbl">cart &amp; checkout</div>
+      <div class="fs-pair">
+        <div class="fs-col" style="grid-column:1 / -1;max-width:340px;margin:0 auto;">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame"><img src="screens/costco/final/cart-after.gif" alt="Redesigned cart with delivery options and running total"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Delivery, express, and pickup options are all visible upfront, with an estimated total that updates as items change</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-cat sr d2">
+      <div class="fs-cat-head"><div class="fs-cat-tag"><span class="fs-cat-num">06</span></div><h3>Item Details</h3></div>
+      <div class="fs-pair">
+        <div class="fs-col">
+          <div class="fs-lbl">before</div>
+          <div class="fs-frame fs-frame-phone">
+            <img class="fs-before-img on" data-bimg="1" src="screens/costco/final/items-before-1.png" alt="Original item page"/>
+            <img class="fs-before-img" data-bimg="2" src="screens/costco/final/items-before-2.png" alt="Original item page opening a disruptive pop-up for product details"/>
+            <img class="fs-before-img" data-bimg="3" src="screens/costco/final/items-before-3.png" alt="Pop-up with no add-to-cart option, forcing a back-out to the item page"/>
+          </div>
+          <div class="fs-before-sw">
+            <button class="on" data-bimg="1">1</button>
+            <button data-bimg="2">2</button>
+            <button data-bimg="3">3</button>
+          </div>
+          <div class="ba-notes">
+            <div class="ba-note r">Viewing product details required clicking into a full-screen pop-up, disrupting the browsing flow</div>
+            <div class="ba-note r">Adding an item to cart from that pop-up wasn't possible, forcing users to back out and find the item again</div>
+            <div class="ba-note r">The heart icon for saving an item wasn't intuitive, users didn't associate it with "save"</div>
+          </div>
+        </div>
+        <div class="fs-col">
+          <div class="fs-lbl after">after</div>
+          <div class="fs-frame fs-frame-phone"><img class="on" src="screens/costco/final/items-after.gif" alt="Redesigned item page with an inline expandable accordion for details and a direct add button"/></div>
+          <div class="ba-notes">
+            <div class="ba-note g">Product details expand inline as an accordion, no pop-up to click out of</div>
+            <div class="ba-note g">An "Add" button lets users add an item to cart directly from this view</div>
+            <div class="ba-note g">Replaced the heart icon with a save/bookmark icon after usability testing showed it read more clearly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REFLECTION ═════════════════════════════════════ -->
+<section class="impact" id="s-impact">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">reflection</div>
+    <h2>What <em>we learned</em>.</h2>
+    <div class="refl-grid">
+      <div class="refl-card">
+        <p>Co-leading the project taught me that good collaboration isn't about dividing screens equally. We spent a significant amount of time aligning on research findings, design priorities, and interaction patterns before moving into high-fidelity design. That shared understanding made the final experience feel much more cohesive.</p>
+      </div>
+      <div class="refl-card">
+        <p>At the start of the project, many of the issues appeared visual. As our research progressed, it became clear that navigation, information architecture, and task flow had a much greater impact on the overall experience than changing colors or typography alone.</p>
+      </div>
+      <div class="refl-card">
+        <p>One of the biggest challenges was simplifying the experience without oversimplifying the product. Costco offers dozens of services across shopping, memberships, pharmacy, travel, and warehouse experiences. Rather than removing functionality, we focused on improving information architecture and prioritizing the features users needed most.</p>
+      </div>
+    </div>
+
+    <div class="refl-next">
+      <div class="refl-next-h">With more time, I'd</div>
+      <ul>
+        <li>Prototype and test the redesigned navigation to validate whether it measurably improves task completion rates before moving into development.</li>
+        <li>Narrow the scope even further — focusing the redesign on the single highest-impact flow rather than touching every section at once.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSE ══════════════════════════════════════════ -->
+<section class="close-sec">
+  <div class="wp">
+    <p class="cq">Thanks for reading!</p>
+    <div class="close-actions">
+      <a class="back-pill f" href="04 Studio Class - Shippable.html">back to portfolio</a>
+    </div>
+    <div class="footbar">
+      <span>© 2026 Michelle Yi</span>
+      <a class="top" href="#top">back to top ↑</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STICKY TOC ══ -->
+<nav id="case-toc" aria-label="Page sections">
+  <div class="counter-trigger" id="ctr-btn">
+    <span class="counter-cur" id="ctr-cur">01</span>
+    <span class="counter-sep">/</span>
+    <span class="counter-tot">10</span>
+    <span class="counter-name" id="ctr-name">Overview</span>
+  </div>
+  <div class="counter-dropdown">
+    <a href="#s-overview"     class="active" data-i="0"><span class="cdn">01</span>Overview</a>
+    <a href="#s-research"     data-i="1"><span class="cdn">02</span>Research</a>
+    <a href="#s-insights"     data-i="2"><span class="cdn">03</span>Insights</a>
+    <a href="#s-competitive"  data-i="3"><span class="cdn">04</span>Analysis</a>
+    <a href="#s-principles"   data-i="4"><span class="cdn">05</span>How Might We</a>
+    <a href="#s-ideation"     data-i="5"><span class="cdn">06</span>Ideation</a>
+    <a href="#s-design"       data-i="6"><span class="cdn">07</span>Design</a>
+    <a href="#s-impact"       data-i="9"><span class="cdn">10</span>Impact</a>
+  </div>
+</nav>
+
+<script>
+// scroll reveal
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.sr').forEach(el=>obs.observe(el));
+
+// sketches carousel
+(function(){
+  const track=document.getElementById('sk-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.querySelectorAll('.sk-cat-btn')];
+  const prev=document.getElementById('sk-car-prev');
+  const next=document.getElementById('sk-car-next');
+  const count=document.getElementById('sk-car-count');
+  let idx=0;
+
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  // sync idx when user scrolls/swipes manually
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+
+// lo-fi carousel
+(function(){
+  const track=document.getElementById('lf-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.getElementById('lf-cat-pills').querySelectorAll('.sk-cat-btn')];
+  const prev=document.getElementById('lf-car-prev');
+  const next=document.getElementById('lf-car-next');
+  const count=document.getElementById('lf-car-count');
+  let idx=0;
+
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+
+// idea tabs
+document.querySelectorAll('.idea-tabs button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.idea-tabs button').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const tab=btn.dataset.tab;
+    document.querySelectorAll('.idea-panel').forEach(p=>p.classList.remove('show'));
+    const target=document.getElementById('tab-'+tab);
+    if(target)target.classList.add('show');
+  });
+});
+
+// Persona style-C switcher
+(function(){
+  const tabs=document.querySelectorAll('.cpt');
+  const views=document.querySelectorAll('.c-view');
+  const vtabs=document.querySelectorAll('.cvt');
+  let curP='hannah',curV='persona';
+  function show(){
+    tabs.forEach(t=>t.classList.toggle('on',t.dataset.p===curP));
+    vtabs.forEach(t=>t.classList.toggle('on',t.dataset.view===curV));
+    views.forEach(v=>v.classList.remove('show'));
+    const target=document.getElementById('c-'+(curV==='persona'?'pv':'jv')+'-'+curP);
+    if(target)target.classList.add('show');
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>{curP=t.dataset.p;show();}));
+  vtabs.forEach(t=>t.addEventListener('click',()=>{curV=t.dataset.view;show();}));
+  show();
+})();
+
+// ── IA Diagrams ────────────────────────────────────────
+(function(){
+  const C={
+    root:{bg:'#3A2B28',fg:'#FFFBF3'},gold:{bg:'#E8A020',fg:'#3A2B28'},
+    new:{bg:'#5E9AA0',fg:'#FFFBF3'},def:{bg:'#FFFBF3',fg:'#3A2B28',sk:'#3A2B28'},
+    rm:{bg:'#F4E2C9',fg:'rgba(58,43,40,.42)',sk:'rgba(105,74,71,.3)',dash:true},
+  };
+  function d(l,s,ch){return{label:l,style:s,children:ch||[]};}
+  function n(l,s){return d(l,s||'def',[]);}
+  const OLD=d('Costco App · Original','root',[
+    d('Explore','gold',[n('Search'),n('Savings'),n("What's New"),n('Insurance'),n('Grocery'),n('Same Day'),n('Pharmacy'),n('Travel'),n('Inbox')]),
+    d('Shop','gold',[n('Add to Cart'),n('Categories'),n('Search'),n('Services')]),
+    d('Account','gold',[n('Membership'),n('Inbox'),n('Lists'),n('Settings'),n('Help'),n('Warehouse'),n('Cart')]),
+    d('Warehouse','gold',[n('Inventory'),n('Locator'),n('Savings'),n('Lists'),n('Orders'),n('Visa'),n('Optical'),n('Pharmacy'),n('Tires'),n('Travel')]),
+  ]);
+  const NEW=d('Costco App · Redesigned','root',[
+    d('Explore','gold',[n('Search'),n('Savings'),n("What's New"),n('Favorites'),n('Same Day')]),
+    d('Shop','gold',[n('Selected For You'),n('Categories'),n('Search + Filters')]),
+    d('Warehouse','gold',[n('Inventory'),n('Locator'),n('My Lists','new'),n('Orders'),d('Deals','def',[n('Savings'),n('Events')])]),
+    d('Account','gold',[n('Member Card','new'),n('Inbox','new'),n('Lists','new'),n('Settings'),n('Membership')]),
+    d('Services','gold',[n('Visa'),n('Optical'),n('Pharmacy'),n('Tires'),n('Travel')]),
+    n('Search','new'),n('Inbox','new'),
+    d('Cart','new',[n('Items'),n('Suggestions'),n('Recently Viewed'),n('Checkout')]),
+  ]);
+  const SHOP=d('Shop','gold',[n('Search'),n('Selected For You'),d('Categories','def',[n('Search'),n('Filter','new'),d('Subcategories','def',[n('Items')])])]);
+  const WAREHOUSE=d('Warehouse','gold',[
+    d('My Warehouse','def',[n('Change Location'),n('Search Inventory'),n('Add to List','new'),n('Warehouse Details')]),
+    d('Warehouse Locator','def',[n('Set Warehouse','new'),n('See Details')]),
+    d('Deals','def',[d('Savings','def',[n('Product Details'),n('Add to List','new')]),d('Events','def',[n('Add to Cart','new')])]),
+    d('My Lists','def',[d('View Lists','def',[n('See Total'),n('Remove'),n('Add to Cart','new'),n('See Stock','new')]),d('Create Lists','def',[n('From History')])]),
+    d('Orders','def',[d('Online','def',[n('Filter by Date'),n('Reorder','new')]),n('Warehouse'),n('Installation')]),
+  ]);
+  const TABS=[
+    {id:'ia-old',label:'Original IA',data:OLD,intro:'The original app had no clear hierarchy — Explore, Shop, Account, and Warehouse all equally buried.'},
+    {id:'ia-new',label:'Redesigned IA',data:NEW,intro:'The redesign surfaces 5 core nav sections. New features highlighted in mint.'},
+    {id:'ia-shop',label:'Shop — detail',data:SHOP,intro:'Shop gets a persistent filter layer at every level of the category hierarchy.'},
+    {id:'ia-warehouse',label:'Warehouse — detail',data:WAREHOUSE,intro:'Restructured around user intent: finding items, managing lists, and tracking orders.'},
+  ];
+  function render(root,container){
+    const NW=120,NH=28,HG=10,VG=40;
+    function cw(n){const lw=Math.max(NW,n.label.length*7)+HG;if(!n.children||!n.children.length){n._w=lw;return;}n.children.forEach(cw);n._w=Math.max(lw,n.children.reduce((s,c)=>s+c._w,0));}
+    function pos(n,lx,d){n._cx=lx+n._w/2;n._cy=d*(NH+VG)+NH/2;if(!n.children||!n.children.length)return;const tw=n.children.reduce((s,c)=>s+c._w,0);let x=lx+(n._w-tw)/2;n.children.forEach(c=>{pos(c,x,d+1);x+=c._w;});}
+    const all=[],edges=[];
+    function col(n,p){all.push(n);if(p)edges.push([p,n]);(n.children||[]).forEach(c=>col(c,n));}
+    cw(root);pos(root,0,0);col(root,null);
+    const W=root._w,H=Math.max(...all.map(n=>n._cy))+NH/2+24;
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.style.cssText='display:block;min-width:'+W+'px;height:'+H+'px;';
+    edges.forEach(([p,c])=>{const x1=p._cx,y1=p._cy+NH/2,x2=c._cx,y2=c._cy-NH/2,m=(y1+y2)/2;const el=document.createElementNS('http://www.w3.org/2000/svg','path');el.setAttribute('d','M'+x1+','+y1+'V'+m+'H'+x2+'V'+y2);el.setAttribute('fill','none');el.setAttribute('stroke','rgba(58,43,40,.18)');el.setAttribute('stroke-width','1.5');el.setAttribute('stroke-linecap','round');svg.appendChild(el);});
+    all.forEach(n=>{const col=C[n.style||'def'];const nw=Math.max(NW,n.label.length*7);const rx=n._cx-nw/2,ry=n._cy-NH/2;const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');rect.setAttribute('x',rx);rect.setAttribute('y',ry);rect.setAttribute('width',nw);rect.setAttribute('height',NH);rect.setAttribute('rx',NH/2);rect.setAttribute('fill',col.bg);if(col.sk){rect.setAttribute('stroke',col.sk);rect.setAttribute('stroke-width','1.5');}if(col.dash)rect.setAttribute('stroke-dasharray','4 3');svg.appendChild(rect);const txt=document.createElementNS('http://www.w3.org/2000/svg','text');txt.setAttribute('x',n._cx);txt.setAttribute('y',n._cy);txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');txt.setAttribute('fill',col.fg);txt.setAttribute('font-size','11');txt.setAttribute('font-family','Host Grotesk,system-ui,sans-serif');txt.setAttribute('font-weight','600');txt.textContent=n.label;svg.appendChild(txt);});
+    container.innerHTML='';container.appendChild(svg);
+  }
+  const panel=document.getElementById('tab-ia');
+  if(!panel)return;
+  const bar=document.createElement('div');bar.className='ia-subtabs';
+  TABS.forEach((t,i)=>{const b=document.createElement('button');b.className='ia-stab'+(i===0?' on':'');b.textContent=t.label;b.dataset.id=t.id;bar.appendChild(b);});
+  panel.appendChild(bar);
+  const canvases={};
+  TABS.forEach((t,i)=>{
+    const wrap=document.createElement('div');wrap.className='ia-canvas'+(i===0?' show':'');wrap.id=t.id;
+    const intro=document.createElement('p');intro.className='ia-intro';intro.textContent=t.intro;wrap.appendChild(intro);
+    const canvas=document.createElement('div');wrap.appendChild(canvas);panel.appendChild(wrap);
+    canvases[t.id]={canvas,data:t.data,rendered:false};
+  });
+  function activate(id){document.querySelectorAll('.ia-stab').forEach(b=>b.classList.toggle('on',b.dataset.id===id));document.querySelectorAll('.ia-canvas').forEach(c=>c.classList.toggle('show',c.id===id));if(!canvases[id].rendered){render(canvases[id].data,canvases[id].canvas);canvases[id].rendered=true;}}
+  activate(TABS[0].id);
+  bar.addEventListener('click',e=>{const b=e.target.closest('.ia-stab');if(b)activate(b.dataset.id);});
+})();
+
+// counter animation for impact
+document.querySelectorAll('.ibn').forEach(el=>{
+  const target=+el.dataset.count;
+  const obs2=new IntersectionObserver(([e])=>{
+    if(!e.isIntersecting)return;obs2.unobserve(el);
+    let start=0;const dur=1200;const step=ts=>{if(!start)start=ts;const p=Math.min((ts-start)/dur,1);el.textContent=Math.round(p*target);if(p<1)requestAnimationFrame(step);};
+    requestAnimationFrame(step);
+  },{threshold:0.5});
+  obs2.observe(el);
+});
+
+// ── Sticky TOC ───────────────────────────────────────
+window.addEventListener('load',function(){
+  const toc=document.getElementById('case-toc');
+  const btn=document.getElementById('ctr-btn');
+  const cur=document.getElementById('ctr-cur');
+  const name=document.getElementById('ctr-name');
+  if(!toc||!btn)return;
+  const LABELS=['Overview','Research','Insights','Analysis','How Might We','Ideation','Design','Before & After','Impact'];
+  const links=[...toc.querySelectorAll('.counter-dropdown a[href]')];
+  const sections=links.map(l=>document.getElementById(l.getAttribute('href').slice(1))).filter(Boolean);
+  btn.addEventListener('click',e=>{e.stopPropagation();toc.classList.toggle('open');});
+  document.addEventListener('click',()=>toc.classList.remove('open'));
+  links.forEach((a,i)=>{a.addEventListener('click',e=>{e.preventDefault();toc.classList.remove('open');const t=sections[i];if(t)window.scrollTo({top:t.offsetTop-80,behavior:'smooth'});});});
+  function setActive(i){cur.textContent=String(i+1).padStart(2,'0');name.textContent=LABELS[i]||'';links.forEach((l,j)=>l.classList.toggle('active',j===i));}
+  function onScroll(){const sy=window.scrollY;const heroH=(document.querySelector('.hero')||{offsetHeight:400}).offsetHeight;toc.classList.toggle('vis',sy>heroH*0.5);let ai=0;sections.forEach((s,i)=>{if(s&&sy>=s.offsetTop-window.innerHeight*0.35)ai=i;});setActive(ai);}
+  window.addEventListener('scroll',onScroll,{passive:true});
+  onScroll();
+});
+</script>
+
+
+
+<div class="toc-widget" id="toc-widget">
+  <div class="toc-panel" id="toc-panel"></div>
+  <div class="toc-fab" id="toc-fab"><span class="tf-count" id="tf-count">01</span><span class="tf-bar">/</span><span class="tf-total" id="tf-total"></span><span class="tf-sep">|</span><span class="tf-label" id="tf-label"></span></div>
+</div>
+<script>
+(function(){
+  const sections=[{"id":"s-overview","label":"Overview"},{"id":"s-research","label":"Personas"},{"id":"s-insights","label":"Insights"},{"id":"s-competitive","label":"Analysis"},{"id":"s-principles","label":"How Might We"},{"id":"s-ideation","label":"Ideation"},{"id":"s-design","label":"Design"},{"id":"s-impact","label":"Impact"}];
+  const panel=document.getElementById('toc-panel');
+  const widget=document.getElementById('toc-widget');
+  const fab=document.getElementById('toc-fab');
+  document.getElementById('tf-total').textContent=String(sections.length).padStart(2,'0');
+  panel.innerHTML=sections.map((s,i)=>'<a class="toc-item" data-i="'+i+'" href="#'+s.id+'"><span class="ti-n">'+String(i+1).padStart(2,'0')+'</span><span class="ti-l">'+s.label+'</span></a>').join('');
+  const items=[...panel.querySelectorAll('.toc-item')];
+  fab.addEventListener('click',()=>widget.classList.toggle('open'));
+  document.addEventListener('click',(e)=>{ if(!widget.contains(e.target)) widget.classList.remove('open'); });
+  items.forEach(it=>it.addEventListener('click',()=>widget.classList.remove('open')));
+  function setActive(i){
+    items.forEach(it=>it.classList.toggle('active',+it.dataset.i===i));
+    document.getElementById('tf-count').textContent=String(i+1).padStart(2,'0');
+    document.getElementById('tf-label').textContent=sections[i].label;
+  }
+  setActive(0);
+  const els=sections.map(s=>document.getElementById(s.id)).filter(Boolean);
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=els.indexOf(e.target);
+        if(idx>-1) setActive(idx);
+      }
+    });
+  },{rootMargin:'-40% 0px -50% 0px',threshold:0});
+  els.forEach(el=>io.observe(el));
+})();
+(function(){
+  const sw=document.querySelector('.fs-before-sw');
+  if(!sw)return;
+  const btns=sw.querySelectorAll('button');
+  const imgs=document.querySelectorAll('.fs-before-img');
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    btns.forEach(x=>x.classList.toggle('on',x===b));
+    imgs.forEach(im=>im.classList.toggle('on',im.dataset.bimg===b.dataset.bimg));
+  }));
+})();
+</script>
+</body>
+</html>

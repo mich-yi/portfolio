@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TravelBuddies · Michelle Yi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+:root{--toc-accent:var(--md);;}
+
+.toc-widget{position:fixed;left:24px;bottom:24px;z-index:80;font-family:var(--sans);}
+.toc-fab{display:flex;align-items:center;gap:8px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:999px;padding:9px 16px;cursor:pointer;box-shadow:0 8px 20px rgba(58,43,40,.1);transition:box-shadow .2s;}
+.toc-fab:hover{box-shadow:0 10px 26px rgba(58,43,40,.16);}
+.toc-fab .tf-count{font:700 12px/1 var(--sans);color:var(--toc-accent);}
+.toc-fab .tf-sep{color:rgba(58,43,40,.3);font-size:12px;}
+.toc-fab .tf-total{font:600 12px/1 var(--sans);color:rgba(58,43,40,.4);}
+.toc-fab .tf-bar{color:rgba(58,43,40,.25);}
+.toc-fab .tf-label{font:600 12px/1 var(--sans);color:var(--ink);}
+.toc-panel{position:absolute;bottom:calc(100% + 12px);left:0;width:220px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:20px;padding:16px;box-shadow:0 20px 44px rgba(58,43,40,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s;}
+.toc-widget.open .toc-panel{opacity:1;visibility:visible;transform:translateY(0);}
+.toc-item{display:flex;align-items:baseline;gap:10px;padding:8px 6px;border-radius:10px;cursor:pointer;text-decoration:none;transition:background .15s;}
+.toc-item:hover{background:var(--cream);}
+.toc-item .ti-n{font:700 11px/1 var(--sans);color:rgba(58,43,40,.35);flex:none;width:18px;}
+.toc-item .ti-l{font:600 13px/1.3 var(--sans);color:rgba(58,43,40,.55);}
+.toc-item.active .ti-n,.toc-item.active .ti-l{color:var(--toc-accent);}
+.toc-item.active .ti-l{font-weight:700;}
+@media(max-width:680px){.toc-widget{left:14px;bottom:14px;}.toc-panel{width:190px;}}
+
+
+:root{--bg:#FFF6E9;--paper:#FFFBF3;--cream:#FFF0DE;--cd:#F4E2C9;--mint:#96C1C5;--ms:#C3DCDE;--md:#5E9AA0;--brown:#694A47;--ink:#3A2B28;--sans:"Host Grotesk",system-ui,sans-serif;--serif:"Instrument Serif",Georgia,serif;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:var(--md);text-decoration:none;}a:hover{color:var(--ink);}
+img{max-width:100%;display:block;}
+em{font-style:italic;}
+::selection{background:var(--ms);color:var(--ink);}
+.wp{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px);position:relative;z-index:2;}
+.sr{opacity:0;transform:translateY(22px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1);}
+.sr.in{opacity:1;transform:none;}
+.sr.d1{transition-delay:.1s;}.sr.d2{transition-delay:.2s;}.sr.d3{transition-delay:.28s;}
+@media(prefers-reduced-motion:reduce){.sr{opacity:1!important;transform:none!important;}}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--md);opacity:1;}
+.ctar{display:flex;gap:9px;flex-wrap:wrap;}
+.ctar a{font-size:13px;font-weight:600;border:1.5px solid var(--ink);border-radius:30px;padding:11px 20px;color:var(--ink);transition:background .25s,color .25s,transform .2s;}
+.ctar a.f{background:var(--ink);color:var(--paper);}
+.ctar a:hover,.ctar a.f:hover{background:var(--md);border-color:var(--md);color:var(--paper);transform:translateY(-2px);}
+.back-link{position:fixed;top:20px;left:20px;z-index:50;font:600 12px/1 var(--sans);letter-spacing:.02em;background:var(--paper);border:1.5px solid var(--ink);border-radius:30px;padding:10px 16px;display:flex;align-items:center;gap:6px;color:var(--ink);}
+.back-link:hover{background:var(--md);color:var(--paper)!important;border-color:var(--md);}
+
+section{padding:clamp(90px,13vh,160px) 0;position:relative;}
+section + section{border-top:2px solid var(--ink);}
+.sec-h{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(16px,2.4vh,22px);}
+.sec-h em{font-style:italic;color:var(--md);}
+.sec-sub{font-size:clamp(15px,1.4vw,17px);line-height:1.7;color:var(--ink);max-width:62ch;margin-bottom:clamp(48px,7vh,72px);}
+
+/* hero — unified editorial system */
+.hero{background:var(--hcolor);overflow:hidden;position:relative;}
+.hero-inner{max-width:1180px;margin:0 auto;min-height:92vh;padding:clamp(96px,12vh,130px) clamp(20px,3vw,36px) clamp(48px,6vh,68px);position:relative;display:grid;grid-template-columns:minmax(280px,.84fr) minmax(320px,1.16fr);align-items:center;gap:clamp(20px,3.5vw,48px);}
+.hero::before{content:"";position:absolute;width:56vw;height:56vw;max-width:760px;max-height:760px;border-radius:50%;background:rgba(255,255,255,.09);right:-14%;top:-9%;pointer-events:none;z-index:1;}
+.hero .hp-dot{position:absolute;width:9px;height:9px;background:rgba(255,255,255,.55);opacity:.6;transform:rotate(45deg);z-index:3;}
+.hero-left{position:relative;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(16px,2.2vh,22px);}
+.hero .htag{font:700 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);}
+.hero h1{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--paper);font-size:var(--tsize,clamp(40px,4.4vw,76px));line-height:1.08;max-width:13ch;text-wrap:pretty;}
+.hero h1 em{font-style:italic;opacity:.72;}
+.hero .hq{color:rgba(255,255,255,.82);max-width:38ch;font-size:clamp(14px,1.2vw,16.5px);line-height:1.6;}
+.hero-phones{position:relative;z-index:2;height:clamp(460px,66vh,660px);display:flex;align-items:center;justify-content:center;gap:14px;}
+.hero-phones img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 30px 54px rgba(0,0,0,.26));}
+.hero-phones:not(.solo) img:first-child{transform:rotate(-5deg) translateY(3%);margin-right:-9%;z-index:1;}
+.hero-phones:not(.solo) img:last-child{transform:rotate(5deg) translateY(-2%);z-index:2;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;min-height:auto;gap:32px;}.hero-phones{height:clamp(320px,52vh,420px);order:-1;}}
+
+/* meta strip */
+.meta-strip{background:var(--ink);}
+.meta-strip .inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.meta-strip .mi{padding:clamp(20px,3.2vh,28px) clamp(20px,3vw,36px);border-right:1.5px solid rgba(255,246,233,.1);border-top:1.5px solid rgba(255,246,233,.14);}
+.meta-strip .mi:last-child{border-right:0;}
+.meta-strip .mk{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,246,233,.4);margin-bottom:6px;}
+.meta-strip .mv{font-size:clamp(13px,1.3vw,15px);font-weight:500;color:rgba(255,246,233,.88);}
+@media(max-width:720px){.meta-strip .inner{grid-template-columns:1fr 1fr;}}
+
+.card{border:2px solid var(--ink);border-radius:24px;background:var(--paper);}
+
+/* context */
+.context{background:var(--bg);}
+.ov-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,32px);}
+.ov-col{padding:clamp(32px,4.4vw,52px);}
+.ov-col-s{background:var(--cream);}
+.ov-col-num{font-family:var(--serif);font-style:italic;font-size:clamp(40px,5.5vw,60px);line-height:.85;color:var(--md);opacity:.4;margin-bottom:14px;}
+.ov-col-lbl{font:600 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;color:var(--ink);opacity:.7;}
+.ov-col-title{font-family:var(--serif);font-size:clamp(20px,2.2vw,28px);line-height:1.2;letter-spacing:-.01em;margin-bottom:14px;}
+.ov-col-title em{color:var(--md);}
+.ov-col p{font-size:15px;line-height:1.75;color:var(--ink);}
+@media(max-width:680px){.ov-cols{grid-template-columns:1fr;}}
+.tb-problem{font-family:var(--serif);font-size:clamp(24px,3.2vw,36px);line-height:1.3;letter-spacing:-.01em;max-width:36ch;margin-bottom:clamp(20px,2.8vh,26px);}
+.tb-problem em{color:var(--md);font-style:italic;}
+.tb-problem-sub{font-size:15px;line-height:1.75;color:var(--ink);max-width:58ch;margin-bottom:clamp(36px,5vh,44px);}
+.tb-hmw{padding-top:clamp(28px,3.8vh,36px);border-top:1.5px solid rgba(105,74,71,.2);max-width:62ch;}
+.tb-hmw .hlbl{display:block;font:700 10.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--md);margin-bottom:12px;}
+.tb-hmw p{font-family:var(--serif);font-size:clamp(20px,2.4vw,26px);line-height:1.4;letter-spacing:-.01em;color:var(--ink);}
+
+/* ══ ESSAY + MARGINALIA NARRATIVE SYSTEM ══ */
+.narrative-wrap{display:grid;grid-template-columns:1fr 260px;gap:clamp(32px,5vw,64px);align-items:start;}
+.narrative-col p{font-family:var(--serif);font-size:clamp(19px,2.1vw,24px);line-height:1.6;letter-spacing:-.005em;color:var(--ink);max-width:62ch;}
+.narrative-col p+p{margin-top:clamp(20px,2.8vh,26px);}
+.narrative-col em{color:var(--md);font-style:italic;}
+.narrative-rail{position:sticky;top:120px;display:flex;flex-direction:column;gap:clamp(28px,4vh,40px);padding-top:8px;}
+.rail-note{border-left:2px solid var(--md);padding-left:14px;}
+.rail-note .rn-lbl{font:700 9.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--md);margin-bottom:6px;}
+.rail-note p{font-family:var(--serif);font-style:italic;font-size:14px;line-height:1.5;color:var(--brown);}
+.rail-note cite{display:block;font:600 10px/1 var(--sans);color:rgba(58,43,40,.45);font-style:normal;margin-top:5px;}
+@media(max-width:900px){.narrative-wrap{grid-template-columns:1fr;}.narrative-rail{position:static;flex-direction:row;flex-wrap:wrap;gap:20px;}.rail-note{flex:1;min-width:200px;}}
+
+/* research: Context/Insights, matching Costco's ov-col system */
+.insights{background:var(--paper);}
+.rs-cols{display:flex;align-items:stretch;gap:clamp(14px,2.5vw,24px);margin-bottom:clamp(40px,5.4vh,52px);}
+.rs-col{flex:1;padding:clamp(22px,3.5vw,40px);border:2px solid var(--ink);border-radius:20px;background:var(--cream);}
+.rs-col-num{font-family:var(--serif);font-style:italic;font-size:clamp(40px,5.6vw,62px);line-height:.85;color:var(--ink);opacity:.12;margin-bottom:10px;}
+.rs-col-lbl{font:700 9px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;color:var(--ink);}
+.rs-col-title{font-family:var(--serif);font-size:clamp(17px,2vw,23px);line-height:1.2;letter-spacing:-.01em;margin-bottom:12px;}
+.rs-col-title em{font-style:italic;color:var(--md);}
+.rs-col p{font-size:clamp(13px,1.4vw,15px);line-height:1.7;color:var(--ink);}
+.rs-meta{display:flex;gap:clamp(28px,4vw,56px);margin:clamp(4px,1vh,8px) 0 clamp(36px,4.8vh,44px);}
+.rs-meta-item b{display:block;font-family:var(--serif);font-style:italic;font-size:clamp(34px,4.2vw,52px);line-height:1;color:var(--ink);}
+.rs-meta-item span{font:700 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:rgba(58,43,40,.45);margin-top:6px;display:block;}
+.rs-lbl{font:700 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(58,43,40,.55);margin-bottom:0;border-bottom:1.5px solid rgba(105,74,71,.2);padding-bottom:14px;}
+.rs-guide{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:clamp(44px,6vh,56px);}
+.rs-guide-card{padding:clamp(18px,2.2vw,22px);}
+.rs-guide-theme{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--md);margin-bottom:12px;}
+.rs-guide-q{font-size:13px;line-height:1.55;color:var(--ink);margin-bottom:8px;padding-left:14px;position:relative;}
+.rs-guide-q::before{content:"\2022";position:absolute;left:0;color:var(--ink);opacity:.5;}
+.rs-guide-q:last-child{margin-bottom:0;}
+@media(max-width:900px){.rs-guide{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.rs-guide{grid-template-columns:1fr;}}
+.rs-quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(12px,2vw,18px);margin-bottom:clamp(44px,6vh,56px);}
+.rs-quote{border:1.5px solid rgba(105,74,71,.18);border-radius:16px;padding:clamp(18px,2.4vw,24px);background:var(--paper);}
+.rs-quote p{font-family:var(--serif);font-style:italic;font-size:clamp(14.5px,1.6vw,16.5px);line-height:1.5;color:var(--ink);margin-bottom:10px;}
+.rs-quote cite{font:700 9.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.55;font-style:normal;}
+@media(max-width:680px){.rs-quotes{grid-template-columns:1fr;}}
+.ins-list{display:flex;flex-direction:column;}
+.ins-row{display:flex;gap:24px;padding:24px 0;border-bottom:1.5px solid rgba(105,74,71,.16);align-items:baseline;}
+.ins-row:last-child{border-bottom:0;}
+.ins-row .in-num{font-family:var(--serif);font-style:italic;font-size:30px;color:var(--md);opacity:.7;flex:none;width:30px;}
+.ins-row p{font-size:15.5px;line-height:1.65;color:var(--ink);}
+@media(max-width:600px){.ins-row{flex-direction:column;gap:6px;}}
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,3.6vh,36px) clamp(32px,4vw,48px);}
+.insight-block h4{font-family:var(--serif);font-size:clamp(18px,2vw,22px);letter-spacing:-.01em;color:var(--ink);margin-bottom:10px;}
+.insight-block h4 span{color:var(--md);font-style:italic;margin-right:8px;}
+.insight-block p{font-size:14px;line-height:1.7;color:var(--brown);margin-bottom:10px;}
+.insight-block .ev{font-size:12px;line-height:1.5;color:rgba(58,43,40,.5);}
+.insight-block .ev b{font:700 10px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--md);margin-right:6px;}
+@media(max-width:680px){.insight-grid{grid-template-columns:1fr;}}
+
+/* research: competitive */
+.compet{background:var(--bg);}
+.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.6vw,16px);}
+.comp-card{padding:clamp(18px,2.2vw,22px);}
+.comp-head{display:flex;align-items:center;gap:10px;margin-bottom:clamp(14px,2vh,18px);}
+.comp-icon{width:40px;height:40px;border-radius:11px;flex:none;overflow:hidden;border:1px solid rgba(58,43,40,.12);}
+.comp-icon img{width:100%;height:100%;display:block;object-fit:cover;}
+.comp-name{font-family:var(--serif);font-size:16px;font-style:italic;color:var(--ink);}
+.comp-tags{display:flex;flex-direction:column;gap:8px;}
+.comp-tag{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.4;color:var(--ink);}
+.comp-tag .dot{width:14px;height:14px;border-radius:50%;flex:none;margin-top:1px;display:flex;align-items:center;justify-content:center;}
+.comp-tag .dot svg{width:9px;height:9px;}
+.comp-tag.pro .dot{background:rgba(94,154,160,.16);}
+.comp-tag.pro .dot svg{stroke:var(--md);}
+.comp-tag.con .dot{background:rgba(58,43,40,.08);}
+.comp-tag.con .dot svg{stroke:rgba(58,43,40,.45);}
+.comp-take{margin-top:clamp(28px,3.8vh,36px);padding:clamp(26px,3.4vh,36px);}
+.comp-lbl{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--md);margin-bottom:10px;}
+.comp-take p{font-family:var(--serif);font-size:clamp(19px,2vw,24px);line-height:1.4;color:var(--ink);max-width:70ch;}
+.comp-take p em{color:var(--md);}
+@media(max-width:1000px){.comp-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.comp-grid{grid-template-columns:1fr;}}
+.comp-also-icon{width:30px;height:30px;border-radius:9px;overflow:hidden;border:1px solid rgba(58,43,40,.12);flex:none;}
+.comp-icon-mono{display:flex;align-items:center;justify-content:center;background:var(--cd);font:700 12px/1 var(--sans);color:var(--ink);}
+/* personas & journeys */
+.personas{background:var(--paper);}
+.p-tabs{display:flex;gap:8px;margin-bottom:clamp(18px,2.4vh,24px);flex-wrap:wrap;}
+.p-tabs button{font:600 13px/1 var(--sans);letter-spacing:.01em;border:1.5px solid var(--ink);border-radius:30px;padding:11px 20px;background:var(--paper);cursor:pointer;transition:background .2s,color .2s;color:var(--ink);}
+.p-tabs button.on{background:var(--ink);color:var(--paper);}
+.v-tabs{display:flex;gap:3px;background:var(--cd);border-radius:30px;padding:4px;width:max-content;margin-bottom:clamp(32px,4.4vh,44px);}
+.v-tabs button{font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:transparent;border:0;padding:9px 18px;border-radius:24px;cursor:pointer;transition:background .2s,color .2s;}
+.v-tabs button.on{background:var(--ink);color:var(--paper);}
+.p-view,.j-view{display:none;}
+.p-view.show,.j-view.show{display:block;}
+
+/* persona card */
+.persona-card{padding:clamp(28px,4vw,44px);}
+.persona-head{display:flex;gap:clamp(20px,3vw,32px);align-items:center;margin-bottom:clamp(28px,4vh,40px);flex-wrap:wrap;}
+.persona-photo{width:clamp(88px,10vw,120px);height:clamp(88px,10vw,120px);border-radius:50%;overflow:hidden;flex:none;border:2px solid var(--ink);}
+.persona-photo img{width:100%;height:100%;object-fit:cover;}
+.persona-name{font-family:var(--serif);font-size:clamp(24px,3vw,34px);letter-spacing:-.01em;margin-bottom:8px;}
+.persona-bio{font-size:14.5px;line-height:1.7;color:var(--ink);max-width:60ch;}
+.persona-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3.4vw,44px);}
+.persona-cols h4{display:flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:700;font-size:16px;margin-bottom:14px;padding-bottom:8px;border-bottom:1.5px solid rgba(58,43,40,.14);}
+.persona-cols h4 .dot{display:none;}
+.persona-cols ul{list-style:none;display:flex;flex-direction:column;gap:12px;}
+.persona-cols li{font-size:14px;line-height:1.6;color:var(--ink);padding-left:16px;position:relative;}
+.persona-cols li::before{content:"";position:absolute;left:0;top:8px;width:5px;height:5px;border-radius:50%;background:var(--brown);opacity:.4;}
+.persona-cols li strong{color:var(--ink);}
+@media(max-width:680px){.persona-cols{grid-template-columns:1fr;}}
+
+/* journey map */
+.journey-card{padding:clamp(28px,4vw,44px) clamp(20px,3vw,36px) clamp(36px,5vh,52px);overflow-x:auto;}
+.jm-phases{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:clamp(36px,5.5vh,56px);min-width:640px;}
+.jm-phases span{font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--md);text-align:center;padding-bottom:12px;border-bottom:2px solid var(--ms);}
+.jm-track{position:relative;min-width:640px;padding-top:170px;}
+.jm-line-svg{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:1;}
+.jm-line-svg polyline{fill:none;stroke:var(--ms);stroke-width:2px;}
+.jm-stops{display:flex;justify-content:space-between;position:relative;}
+.jm-stop{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 8px;max-width:220px;}
+.jm-dotzone{height:130px;display:flex;align-items:flex-end;justify-content:center;width:100%;}
+.jm-stop .jm-dot{width:28px;height:28px;border-radius:50%;background:var(--md);border:3px solid var(--paper);box-shadow:0 0 0 2px var(--ink);display:flex;align-items:center;justify-content:center;margin-bottom:0;position:relative;z-index:2;transform:translateY(var(--h,0px));}
+.jm-stop .jm-dot svg{width:14px;height:14px;fill:var(--paper);}
+.jm-stop h5{font-family:var(--sans);font-weight:700;font-size:14.5px;margin-top:18px;margin-bottom:8px;color:var(--ink);}
+.jm-stop p{font-size:12.5px;line-height:1.55;color:var(--ink);}
+
+/* IA */
+.ia-sec{background:var(--bg);}
+.ia-card{padding:clamp(28px,4vw,48px);overflow-x:auto;}
+.ia-tree{min-width:760px;}
+.ia-root{display:flex;justify-content:center;margin-bottom:34px;}
+.ia-root .ia-node{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700;padding:14px 32px;}
+.ia-branches{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(10px,1.6vw,18px);position:relative;}
+.ia-branches::before{content:"";position:absolute;left:10%;right:10%;top:-17px;height:2px;background:rgba(105,74,71,.3);}
+.ia-col{display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;}
+.ia-col::before{content:"";position:absolute;top:-17px;width:2px;height:17px;background:rgba(105,74,71,.3);left:50%;transform:translateX(-50%);}
+.ia-node{border:1.5px solid var(--ink);border-radius:30px;padding:9px 16px;font-size:12.5px;font-weight:600;text-align:center;background:var(--paper);width:100%;}
+.ia-col .ia-head{background:var(--ms);font-weight:700;}
+@media(max-width:900px){.ia-branches{grid-template-columns:repeat(5,minmax(120px,1fr));}}
+
+
+/* lo-fi carousel */
+.sk-view-sw{display:inline-flex;gap:4px;background:rgba(105,74,71,.06);border-radius:10px;padding:4px;margin-bottom:20px;}
+.sk-view-sw button{border:0;background:transparent;cursor:pointer;padding:7px 16px;border-radius:8px;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);transition:background .2s,color .2s;}
+.sk-view-sw button.on{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(58,43,40,.08);}
+.sk-carousel{display:none;}
+.sk-carousel.show{display:block;}
+.sk-cat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.sk-cat-btn{border:1.5px solid rgba(58,43,40,.16);background:var(--paper);cursor:pointer;padding:8px 18px;border-radius:999px;font:700 11px/1 var(--sans);letter-spacing:.04em;text-transform:lowercase;color:var(--ink);transition:background .2s,color .2s,border-color .2s;}
+.sk-cat-btn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sk-car-wrap{position:relative;display:flex;align-items:center;gap:12px;}
+.sk-car-track{flex:1;display:flex;gap:16px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:4px 4px 12px;}
+.sk-car-track::-webkit-scrollbar{height:5px;}
+.sk-car-track::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-car-slide{flex:none;scroll-snap-align:center;height:clamp(320px,42vh,460px);display:flex;align-items:center;}
+.sk-car-slide img{height:100%;width:auto;border-radius:12px;border:1.5px solid rgba(105,74,71,.14);box-shadow:0 6px 24px rgba(58,43,40,.1);background:var(--cream);object-fit:contain;}
+.sk-car-arrow{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(58,43,40,.18);background:var(--paper);cursor:pointer;font-size:18px;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;}
+.sk-car-arrow:hover{background:rgba(58,43,40,.06);border-color:rgba(58,43,40,.35);}
+.sk-car-count{text-align:center;margin-top:12px;font:600 11px/1 var(--sans);letter-spacing:.04em;color:rgba(58,43,40,.4);}
+
+/* ══ FINAL SOLUTION (pillar pattern) ══════════════════ */
+.final-sec{background:var(--cream);}
+.pillar{padding:clamp(56px,7vh,88px) 0;border-bottom:1.5px solid rgba(105,74,71,.16);}
+.pillar:last-child{border-bottom:0;}
+.pillar-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,80px);align-items:center;}
+.pillar-grid.rev{grid-template-columns:1.1fr 1fr;}
+.pillar-grid.rev .pillar-copy{order:2;}
+.pillar-grid.rev .pillar-visual{order:1;}
+.pillar-tag{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.pillar-tag .pn{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--md);opacity:.7;}
+.pillar-tag .pl{font:700 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.6;}
+.pillar-copy h3{font-family:var(--serif);font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-.015em;margin-bottom:clamp(20px,2.8vh,26px);max-width:20ch;}
+.pillar-block{margin-bottom:16px;}
+.pillar-block .pbl{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--md);margin-bottom:8px;}
+.pillar-block p{font-size:14.5px;line-height:1.7;color:var(--ink);}
+.pillar-feats{list-style:none;display:flex;flex-direction:column;margin-top:clamp(24px,3.2vh,32px);}
+.pfeat{display:flex;gap:16px;align-items:flex-start;padding:14px 0;cursor:pointer;}
+.pfeat .pf-dot{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(105,74,71,.32);margin-top:3px;position:relative;transition:border-color .2s;}
+.pfeat .pf-dot::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--md);transform:scale(0);transition:transform .2s;}
+.pfeat.on .pf-dot{border-color:var(--md);}
+.pfeat.on .pf-dot::after{transform:scale(1);}
+.pfeat .pf-title{font-family:var(--serif);font-size:clamp(17px,1.8vw,20px);letter-spacing:-.01em;color:rgba(58,43,40,.4);transition:color .2s;}
+.pfeat.on .pf-title{color:var(--ink);}
+.pfeat .pf-desc{font-size:13.5px;line-height:1.6;color:var(--ink);margin-top:8px;max-height:0;overflow:hidden;opacity:0;transition:max-height .25s,opacity .2s;}
+.pfeat.on .pf-desc{max-height:120px;opacity:1;}
+.pillar-visual{position:relative;display:flex;justify-content:center;}
+.pillar-phone-single{position:relative;width:min(240px,68vw);}
+.pillar-phone-single .ph-frame{border-radius:40px;overflow:hidden;aspect-ratio:9/19.5;background:#000;}
+.pillar-phone-single .ph-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.pillar-thumbs{display:flex;gap:7px;margin-top:16px;justify-content:center;flex-wrap:wrap;max-width:min(240px,68vw);}
+.pillar-thumb{width:28px;height:28px;border-radius:7px;overflow:hidden;border:2px solid transparent;cursor:pointer;opacity:.4;transition:opacity .18s,border-color .18s;background:#000;flex:none;}
+.pillar-thumb.on{opacity:1;border-color:var(--md);}
+.pillar-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+@media(max-width:820px){.pillar-grid,.pillar-grid.rev{grid-template-columns:1fr;}.pillar-grid.rev .pillar-copy,.pillar-grid.rev .pillar-visual{order:initial;}.pillar-visual{margin-bottom:8px;}}
+.sk-gallery{display:flex;flex-direction:column;gap:clamp(22px,3vh,34px);}
+.sk-row{display:flex;gap:clamp(14px,2vw,22px);align-items:flex-start;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
+.sk-row::-webkit-scrollbar{height:4px;}
+.sk-row::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-group{display:flex;flex-direction:column;gap:10px;flex:none;}
+.sk-pill{display:inline-flex;align-items:center;padding:9px 22px;background:var(--ink);color:var(--paper);border-radius:999px;font:600 11px/1 var(--sans);letter-spacing:.07em;text-transform:lowercase;width:fit-content;margin-bottom:8px;}
+.sk-imgs{display:flex;gap:6px;height:clamp(150px,13vw,190px);flex:none;}
+.sk-imgs img{border-radius:8px;object-fit:contain;object-position:center;height:100%;width:auto;flex:none;display:block;border:1px solid rgba(105,74,71,.1);background:var(--cream);}
+.sk-intro{font-size:clamp(13px,1.3vw,15px);line-height:1.7;color:var(--ink);margin-bottom:clamp(18px,2.8vh,28px);max-width:64ch;}
+
+.close-sec{padding:clamp(64px,9vh,100px) 0;background:var(--paper);border-top:2px solid var(--ink);text-align:center;}
+.close-sec .cq{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,48px);letter-spacing:-.015em;margin:0 0 clamp(24px,3.2vh,32px);}
+.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vh,24px);}
+.close-actions a{font-size:13.5px;font-weight:600;border:1.5px solid var(--ink);border-radius:30px;padding:11px 24px;text-decoration:none;color:var(--ink);transition:background .25s,color .25s;display:inline-flex;align-items:center;letter-spacing:.01em;}
+.close-actions a.back-pill{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.close-actions a.back-pill:hover{background:var(--brown);border-color:var(--brown);}
+.close-copy{font-size:12.5px;color:var(--ink);opacity:.5;}
+.footbar{border-top:1.5px solid rgba(105,74,71,.2);padding:18px 0 0;margin-top:clamp(28px,4vh,40px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12.5px;font-weight:500;color:var(--ink);opacity:.7;}
+.footbar .top{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink);text-decoration:none;opacity:1;}
+.footbar .top:hover{color:var(--md);}
+
+.cs-footer a:hover{color:var(--ink);}
+/* ══ SHARED PERSONA SELECTOR (card-grid + underline toggle) ══ */
+.c-ptabs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--ink);border:2px solid var(--ink);border-radius:18px;overflow:hidden;margin-bottom:clamp(18px,2.8vh,28px);}
+.c-ptabs .cpt{background:var(--cream);padding:clamp(12px,2vh,18px) clamp(12px,2vw,18px);cursor:pointer;border:0;display:flex;flex-direction:column;gap:4px;transition:background .18s;text-align:left;}
+.c-ptabs .cpt:hover{background:var(--cd);}
+.c-ptabs .cpt.on{background:var(--paper);}
+.c-ptabs .cpt .cpnum{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1;color:var(--ink);opacity:.25;margin-bottom:2px;}
+.c-ptabs .cpt.on .cpnum{opacity:.5;}
+.c-ptabs .cpt .cpname{font-weight:700;font-size:clamp(13px,1.3vw,15px);letter-spacing:-.01em;color:var(--ink);}
+.c-ptabs .cpt .cpsub{font-size:11px;color:var(--ink);}
+.c-vtabs{display:flex;gap:0;margin-bottom:clamp(16px,2.4vh,26px);}
+.c-vtabs .cvt{font:700 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;background:transparent;border:0;padding:11px 0;cursor:pointer;color:var(--ink);opacity:.55;position:relative;margin-right:26px;transition:color .2s,opacity .2s;}
+.c-vtabs .cvt:hover{opacity:.85;}
+.c-vtabs .cvt::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--ink);transform:scaleX(0);transition:transform .22s cubic-bezier(.2,.7,.2,1);}
+.c-vtabs .cvt.on{color:var(--ink);opacity:1;font-weight:800;}
+.c-vtabs .cvt.on::after{transform:scaleX(1);}
+@media(max-width:680px){.c-ptabs{grid-template-columns:1fr 1fr;}}
+</style>
+
+<body>
+
+<a href="04 Studio Class - Shippable.html" class="back-link">← back to portfolio</a>
+
+<header class="hero" id="s-hero" data-screen-label="hero" style="--hcolor:#2E8BCE">
+  <div class="hero-inner">
+    <div class="hp-dot" style="top:8%;left:6%"></div>
+    <div class="hp-dot" style="bottom:10%;right:7%"></div>
+    <div class="hero-left">
+      <div class="htag">UX/UI · Mobile · Jan – Apr 2025</div>
+      <h1 style="--tsize:clamp(32px,3.6vw,58px);max-width:15ch;">Finding Your <em>Travel Partner.</em></h1>
+      <p class="hq">Solo travelers struggle to find reliable, compatible companions for their trips. TravelBuddies helps people discover and connect with the right person for safe, meaningful travel.</p>
+    </div>
+    <div class="hero-phones">
+      <img src="screens/travelbuddies/hero-welcome.png" alt="TravelBuddies welcome screen"/>
+      <img src="screens/travelbuddies/hero-trips.png" alt="TravelBuddies trips screen"/>
+    </div>
+  </div>
+</header>
+
+<div class="meta-strip">
+  <div class="inner">
+    <div class="mi"><div class="mk">Timeline</div><div class="mv">Jan 2025 – April 2025</div></div>
+    <div class="mi"><div class="mk">Role</div><div class="mv">UX Designer</div></div>
+    <div class="mi"><div class="mk">Expertise</div><div class="mv">UX / UI Design</div></div>
+    <div class="mi"><div class="mk">Team</div><div class="mv">1 lead, 3 designers</div></div>
+  </div>
+</div>
+
+<section class="context" id="s-context" data-screen-label="context">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">context</div>
+    <h2 class="sec-h sr">Project <em>Context</em></h2>
+    <div class="rs-cols sr d1">
+      <div class="rs-col">
+        <div class="rs-col-num">01</div>
+        <div class="rs-col-lbl">the problem</div>
+        <div class="rs-col-title">Hard to find <em>who</em> to travel with.</div>
+        <p>Solo travelers struggle to find reliable, compatible companions for their trips. Existing platforms focus on general social networking rather than helping people connect with who they'd actually want to travel with.</p>
+      </div>
+      <div class="rs-col">
+        <div class="rs-col-num">02</div>
+        <div class="rs-col-lbl">how might we</div>
+        <div class="rs-col-title">Help travelers connect with <em>the right person.</em></div>
+        <p>Make it easier for travelers to actively discover and connect with the right person, for a safer, more meaningful trip.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="insights" id="s-insights" data-screen-label="insights">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">user research</div>
+    <h2 class="sec-h sr">Interviews &amp; <em>Insights</em></h2>
+    <p class="sec-sub sr d1" style="margin-bottom:0;">We interviewed 8 users to understand how people choose travel companions, then affinity-mapped the responses into consistent patterns.</p>
+    <div class="rs-meta sr d1">
+      <div class="rs-meta-item"><b>8</b><span>Interviews</span></div>
+      <div class="rs-meta-item"><b>17</b><span>Questions</span></div>
+      <div class="rs-meta-item"><b>4</b><span>Themes</span></div>
+    </div>
+
+    <div class="rs-guide sr d2">
+      <div class="rs-guide-card card"><div class="rs-guide-theme">context</div><div class="rs-guide-q">Would you look for users or location when looking for a travel buddy?</div><div class="rs-guide-q">How far ahead do you plan a trip?</div></div>
+      <div class="rs-guide-card card"><div class="rs-guide-theme">motivation &amp; competition</div><div class="rs-guide-q">Why would you use an app to find travel buddies?</div><div class="rs-guide-q">What motivates you to not travel alone?</div></div>
+      <div class="rs-guide-card card"><div class="rs-guide-theme">features</div><div class="rs-guide-q">What information would you want to see on other people's profiles?</div><div class="rs-guide-q">What would make you feel safe?</div></div>
+      <div class="rs-guide-card card"><div class="rs-guide-theme">overall experience</div><div class="rs-guide-q">What might convince you to take a trip with someone from the app?</div></div>
+    </div>
+
+    <div class="rs-quotes sr d2">
+      <div class="rs-quote"><p>"I want to go on a trip with someone I get along with, which matters more than location."</p><cite>on choosing users over location</cite></div>
+      <div class="rs-quote"><p>"I'd want identity verification, plus the chance to talk beforehand to see what they're like."</p><cite>on feeling safe with a stranger</cite></div>
+    </div>
+
+    <div class="rs-lbl sr d2">insights</div>
+    <div class="ins-list sr d2">
+      <div class="ins-row"><span class="in-num">01</span><p>Travelers search by person or by place, not one dominant preference, so both matter.</p></div>
+      <div class="ins-row"><span class="in-num">02</span><p>Compatibility beats convenience: shared habits and goals matter more than an active user base alone.</p></div>
+      <div class="ins-row"><span class="in-num">03</span><p>Trust must be established before commitment, real evidence of identity, not just a profile.</p></div>
+      <div class="ins-row"><span class="in-num">04</span><p>Users want the app to do one job well, finding a travel buddy, without extra features.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="compet" id="s-competitive" data-screen-label="research">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">user research</div>
+    <h2 class="sec-h sr">Competitive <em>Analysis</em></h2>
+    <p class="sec-sub sr d1">We conducted a competitive analysis to understand the current landscape and identify gaps and opportunities within existing partner-matching apps.</p>
+    <div class="comp-grid sr d2">
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-hostelworld.png" alt="HostelWorld"/></div><div class="comp-name">HostelWorld</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Discovery-focused discounts &amp; safety info</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Must book before you can chat</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-travello.png" alt="Travello"/></div><div class="comp-name">Travello</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Feed + trip map, easy to start chatting</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Random matches, group chats go dead</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-couchsurfing.png" alt="Couchsurfing"/></div><div class="comp-name">Couchsurfing</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Reviews &amp; meetups build trust</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>No identity verification, paywalled chat</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-gaffl.png" alt="GAFFL"/></div><div class="comp-name">GAFFL</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Trip-based matching + expense splitting</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Small user base, outdated safety</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-tourbar.png" alt="Tourbar"/></div><div class="comp-name">Tourbar</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Filters, verification &amp; video calls</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Outdated UI, feels sketchy</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-222place.png" alt="222.Place"/></div><div class="comp-name">222.Place</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Curated, no-swipe personality matching</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Few cities, unclear signup cost</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-globallowed.png" alt="TripBFF"/></div><div class="comp-name">TripBFF</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Thorough onboarding, balanced UI</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Local feature paywalled, cluttered chats</div></div>
+      </div>
+      <div class="comp-card card">
+        <div class="comp-head"><div class="comp-icon"><img src="screens/travelbuddies/ic-travelbuddy.png" alt="Travel Buddy"/></div><div class="comp-name">Travel Buddy</div></div>
+        <div class="comp-tags"><div class="comp-tag pro"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12l6 6L20 6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Flight search + trip customization</div><div class="comp-tag con"><span class="dot"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke-width="3" stroke-linecap="round"/></svg></span>Cluttered layout, no location filter</div></div>
+      </div>
+    </div>
+    <div class="comp-take card sr d3"><div class="comp-lbl">the gap</div><p>Every competitor forces a tradeoff: book first, then meet <em>(HostelWorld)</em>; match randomly, then go quiet <em>(Travello, GAFFL)</em>; or feel unsafe and outdated <em>(Tourbar, Couchsurfing)</em>. None combine safe verification with real, filterable compatibility for travel companions specifically.</p></div>
+  </div>
+</section>
+
+<section class="personas" id="s-personas" data-screen-label="personas">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">meet the users</div>
+    <h2 class="sec-h sr">User <em>Personas &amp; Journeys</em></h2>
+    <p class="sec-sub sr d1">To better understand our target users, we examined their attitudes, motivations, goals, and pain points, then mapped each to a corresponding journey.</p>
+
+    <div class="c-ptabs sr d2">
+      <button class="cpt on" data-p="marissa"><span class="cpnum">01</span><span class="cpname">Meticulous Marissa</span><span class="cpsub">CEO · 29</span></button>
+      <button class="cpt" data-p="ollie"><span class="cpnum">02</span><span class="cpname">Outgoing Ollie</span><span class="cpsub">Marketing professional · 26</span></button>
+      <button class="cpt" data-p="sally"><span class="cpnum">03</span><span class="cpname">Skeptical Sally</span><span class="cpsub">Undergraduate student · 22</span></button>
+    </div>
+    <div class="c-vtabs sr d2">
+      <button class="cvt on" data-view="persona">Persona</button>
+      <button class="cvt" data-view="journey">Journey map</button>
+    </div>
+
+    <div class="sr d3">
+      <div class="p-view show" id="pv-marissa"><div class="persona-card card">
+        <div class="persona-head"><div class="persona-photo"><img src="screens/travelbuddies/persona-marissa.png" alt="Meticulous Marissa"/></div><div><div class="persona-name">Meticulous Marissa</div><p class="persona-bio">A 29-year-old CEO based in Toronto, Canada. As a highly detail-oriented planner, she enjoys mapping out trips well in advance to ensure a smooth experience. While she loves traveling, she prefers having companions who are reliable, organized, and aligned with her itinerary. She's looking for like-minded travelers who appreciate structure but are still open to adventure.</p></div></div>
+        <div class="persona-cols">
+          <div><h4><span class="dot"></span>Pain Points</h4><ul><li><strong>Dislike for Chaos:</strong> Gets frustrated with last-minute changes or disorganized travel plans.</li><li><strong>Finding Like-Minded Planners:</strong> Struggles to find travel companions who appreciate structured itineraries.</li><li><strong>Planning Fatigue:</strong> Feels exhausted being the only one managing logistics in group trips.</li></ul></div>
+          <div><h4><span class="dot"></span>Needs</h4><ul><li><strong>Compatible Travel Partners:</strong> A way to connect with travel buddies who align with her planning style.</li><li><strong>Clear Expectations:</strong> A way to communicate and set planning expectations with future travel buddies.</li><li><strong>Reliability Checks:</strong> A rating or review system to confirm a travel buddy's dependability.</li></ul></div>
+        </div>
+      </div></div>
+      <div class="p-view" id="pv-ollie"><div class="persona-card card">
+        <div class="persona-head"><div class="persona-photo"><img src="screens/travelbuddies/persona-ollie.png" alt="Outgoing Ollie"/></div><div><div class="persona-name">Outgoing Ollie</div><p class="persona-bio">A 26-year-old marketing professional in Chicago. As an energetic and extroverted traveler, he thrives on meeting new people and immersing himself in new experiences. Whether exploring hidden gems or bonding with locals over food, he seeks open-minded companions who embrace adventure. While he enjoys solo trips, he finds that traveling with like-minded people makes the experience more exciting and memorable.</p></div></div>
+        <div class="persona-cols">
+          <div><h4><span class="dot"></span>Pain Points</h4><ul><li><strong>Difficult to Plan:</strong> Scheduling trips is challenging with varying budgets and timelines.</li><li><strong>Finding the Right Vibe:</strong> Struggles to find travel companions who match his social energy and spontaneity.</li><li><strong>Safety Concerns:</strong> Worries about meeting strangers in unfamiliar places.</li></ul></div>
+          <div><h4><span class="dot"></span>Needs</h4><ul><li><strong>Seamless Trip Planning:</strong> A way to coordinate budgets and travel days effortlessly.</li><li><strong>Stress-Free Travel:</strong> Prefers relaxing over following a strict schedule.</li><li><strong>Safe and Easy Connections:</strong> Wants a simple and secure way to find compatible travel partners.</li></ul></div>
+        </div>
+      </div></div>
+      <div class="p-view" id="pv-sally"><div class="persona-card card">
+        <div class="persona-head"><div class="persona-photo"><img src="screens/travelbuddies/persona-sally.png" alt="Skeptical Sally"/></div><div><div class="persona-name">Skeptical Sally</div><p class="persona-bio">A 22-year-old undergraduate student eager to explore new places with a travel buddy over summer break. While she's excited about the idea of meeting new people, she has only ever traveled with close friends and feels uncertain about planning a trip with someone she doesn't know. She worries about compatibility, safety, and how well they will get along during the trip, making her hesitant to step outside her comfort zone.</p></div></div>
+        <div class="persona-cols">
+          <div><h4><span class="dot"></span>Pain Points</h4><ul><li><strong>Hard to Connect:</strong> Finds it difficult to open up to strangers.</li><li><strong>Safety Concerns:</strong> Worried about the risks of traveling one-on-one with someone she doesn't know.</li><li><strong>Fear of Being Stood Up:</strong> Unsure if her travel buddy will follow through on the planned trip.</li></ul></div>
+          <div><h4><span class="dot"></span>Needs</h4><ul><li><strong>Breaking the Ice:</strong> An active and guided conversation to help connect with new travel buddies.</li><li><strong>Building Trust:</strong> Identity confirmation to ensure the travel buddy is reliable.</li><li><strong>Trip Commitment:</strong> A way to confirm travel plans and prevent last-minute bailing.</li></ul></div>
+        </div>
+      </div></div>
+
+      <div class="j-view" id="jv-marissa"><div class="journey-card card"><div class="jm-phases"><span>Discovery</span><span>Adoption</span><span>Habituation</span><span>Maintenance</span></div><div class="jm-track"><svg class="jm-line-svg"><polyline points=""></polyline></svg><div class="jm-stops">
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-50px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Hopeful</h5><p>Marissa is excited about the prospects of going to Spain with someone who matches her traveling style.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Curious</h5><p>Looking for a way to connect with someone based on travel plans, she comes across an app made for connecting travel buddies.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Determined</h5><p>With a general timeframe for her trip to Spain, she filters the app to find others traveling there during the same period.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-90px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Interested</h5><p>Browses profiles, looking for travelers who match or are open to her detailed planning style.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-140px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Satisfied</h5><p>Connects with a like-minded traveler, and their shared planning style makes the trip smooth and enjoyable.</p></div>
+      </div></div></div></div>
+      <div class="j-view" id="jv-ollie"><div class="journey-card card"><div class="jm-phases"><span>Discovery</span><span>Adoption</span><span>Habituation</span><span>Maintenance</span></div><div class="jm-track"><svg class="jm-line-svg"><polyline points=""></polyline></svg><div class="jm-stops">
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Frustrated, Overwhelmed</h5><p>Wants to go on a trip but is struggling to find a compatible travel partner.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-140px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Hopeful, Curious</h5><p>Discovers a travel buddy app that connects travelers with others based on shared interests, itineraries, and travel styles.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-220px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Excited</h5><p>Connects with another traveler who also has similar goals and interests as him.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-220px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Relieved, Relaxed</h5><p>Coordinates the trip details and feels at ease with the plan coming together.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-300px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Happy, Fulfilled</h5><p>Successfully planned the trip and enjoyed each other's company!</p></div>
+      </div></div></div></div>
+      <div class="j-view" id="jv-sally"><div class="journey-card card"><div class="jm-phases"><span>Discovery</span><span>Adoption</span><span>Habituation</span><span>Maintenance</span></div><div class="jm-track"><svg class="jm-line-svg"><polyline points=""></polyline></svg><div class="jm-stops">
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-110px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Excited, Nervous</h5><p>Wants to go on a trip with someone but is worried about whether she'll be able to find someone she gets along with.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:-55px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Stumped</h5><p>Begins to talk to someone she matched with on the app, but the conversation keeps dying out.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Worried</h5><p>Gets along with her potential travel buddy in terms of travel preferences and personality, but doesn't fully trust that this person is safe to go on a trip with.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Doubtful</h5><p>Continues weighing whether to commit, still uneasy about meeting a stranger in person.</p></div>
+        <div class="jm-stop"><div class="jm-dotzone" style="--h:0px"><div class="jm-dot"><svg viewBox="0 0 24 24"><path d="M2 16L22 8L14 12L10 22L8 14L2 16Z"/></svg></div></div><h5>Anxious</h5><p>Decides to go on the trip with the travel buddy she found through the app. They planned a date and location to meet.</p></div>
+      </div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="ia-sec" id="s-ia" data-screen-label="ideation">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">ideation</div>
+    <h2 class="sec-h sr">Information <em>Architecture</em></h2>
+    <p class="sec-sub sr d1">We established an information architecture to map out core features and ensure a logical, user-friendly navigation structure.</p>
+    <div class="ia-card card sr d2"><div class="ia-tree">
+      <div class="ia-root"><div class="ia-node">TravelBuddies</div></div>
+      <div class="ia-branches">
+        <div class="ia-col"><div class="ia-node ia-head">Onboarding</div><div class="ia-node">ID Verification</div><div class="ia-node">Bio</div><div class="ia-node">Personality Quiz</div></div>
+        <div class="ia-col"><div class="ia-node ia-head">Home</div><div class="ia-node">Discovery</div><div class="ia-node">User Matches</div><div class="ia-node">Location Matches</div><div class="ia-node">Past Trips</div></div>
+        <div class="ia-col"><div class="ia-node ia-head">Trips</div><div class="ia-node">Start Trip</div><div class="ia-node">Manage Trips</div><div class="ia-node">Trip Ideas</div><div class="ia-node">Past Trips</div></div>
+        <div class="ia-col"><div class="ia-node ia-head">Chats</div><div class="ia-node">Start Chat</div><div class="ia-node">Chats</div><div class="ia-node">Search</div></div>
+        <div class="ia-col"><div class="ia-node ia-head">Profile</div><div class="ia-node">Edit Profile</div><div class="ia-node">Bio</div><div class="ia-node">Postcards</div><div class="ia-node">Social Media</div><div class="ia-node">Current Location</div></div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section class="ia-sec" id="s-sketches" data-screen-label="early sketches">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">ideation</div>
+    <h2 class="sec-h sr">Early <em>Sketches</em></h2>
+    <p class="sec-sub sr d1">Before digitizing anything, we hand-sketched core flows on paper and notebooks to explore layout and navigation quickly.</p>
+    <div class="sr d2">
+      <div class="sk-car-wrap">
+        <button class="sk-car-arrow" id="sk-car-prev" aria-label="Previous">‹</button>
+        <div class="sk-car-track" id="sk-car-track"><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/01.png" alt="TravelBuddies early sketch 1"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/02.png" alt="TravelBuddies early sketch 2"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/03.png" alt="TravelBuddies early sketch 3"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/04.png" alt="TravelBuddies early sketch 4"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/05.png" alt="TravelBuddies early sketch 5"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/06.png" alt="TravelBuddies early sketch 6"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/07.png" alt="TravelBuddies early sketch 7"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/08.png" alt="TravelBuddies early sketch 8"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/09.png" alt="TravelBuddies early sketch 9"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/10.png" alt="TravelBuddies early sketch 10"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/11.png" alt="TravelBuddies early sketch 11"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/12.png" alt="TravelBuddies early sketch 12"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/13.png" alt="TravelBuddies early sketch 13"/></div><div class="sk-car-slide"><img src="screens/travelbuddies/sketches/14.png" alt="TravelBuddies early sketch 14"/></div></div>
+        <button class="sk-car-arrow" id="sk-car-next" aria-label="Next">›</button>
+      </div>
+      <div class="sk-car-count" id="sk-car-count">1 / 14</div>
+    </div>
+  </div>
+</section>
+
+<section class="ia-sec" id="s-lofi" data-screen-label="lo-fi wireframes">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">ideation</div>
+    <h2 class="sec-h sr">Lo-Fi <em>Wireframes</em></h2>
+    <p class="sec-sub sr d1">From sketches, we moved into digital lo-fi wireframes to test layout, flow, and structure before adding visual design.</p>
+    <div class="sk-cat-pills sr d2" id="lf-cat-pills"><button class="sk-cat-btn on" data-cat="onboarding">onboarding</button><button class="sk-cat-btn" data-cat="home">home</button><button class="sk-cat-btn" data-cat="trips">trips</button><button class="sk-cat-btn" data-cat="chat">chat</button><button class="sk-cat-btn" data-cat="profile">profile</button></div>
+    <div class="sk-car-wrap sr d2">
+      <button class="sk-car-arrow" id="lf-car-prev" aria-label="Previous">‹</button>
+      <div class="sk-car-track" id="lf-car-track">
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding1.png" alt="TravelBuddies onboarding wireframe 1"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding2.png" alt="TravelBuddies onboarding wireframe 2"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding3.png" alt="TravelBuddies onboarding wireframe 3"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding4.png" alt="TravelBuddies onboarding wireframe 4"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding5.png" alt="TravelBuddies onboarding wireframe 5"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding6.png" alt="TravelBuddies onboarding wireframe 6"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding7.png" alt="TravelBuddies onboarding wireframe 7"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding8.png" alt="TravelBuddies onboarding wireframe 8"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding9.png" alt="TravelBuddies onboarding wireframe 9"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding10.png" alt="TravelBuddies onboarding wireframe 10"/></div>
+        <div class="sk-car-slide" data-cat="onboarding"><img src="screens/travelbuddies/lofi-onboarding11.png" alt="TravelBuddies onboarding wireframe 11"/></div>
+        <div class="sk-car-slide" data-cat="home"><img src="screens/travelbuddies/lofi-home1.png" alt="TravelBuddies home wireframe 1"/></div>
+        <div class="sk-car-slide" data-cat="home"><img src="screens/travelbuddies/lofi-home2.png" alt="TravelBuddies home wireframe 2"/></div>
+        <div class="sk-car-slide" data-cat="home"><img src="screens/travelbuddies/lofi-home3.png" alt="TravelBuddies home wireframe 3"/></div>
+        <div class="sk-car-slide" data-cat="home"><img src="screens/travelbuddies/lofi-home4.png" alt="TravelBuddies home wireframe 4"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips1.png" alt="TravelBuddies trips wireframe 1"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips2.png" alt="TravelBuddies trips wireframe 2"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips3.png" alt="TravelBuddies trips wireframe 3"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips4.png" alt="TravelBuddies trips wireframe 4"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips5.png" alt="TravelBuddies trips wireframe 5"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips6.png" alt="TravelBuddies trips wireframe 6"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips7.png" alt="TravelBuddies trips wireframe 7"/></div>
+        <div class="sk-car-slide" data-cat="trips"><img src="screens/travelbuddies/lofi-trips8.png" alt="TravelBuddies trips wireframe 8"/></div>
+        <div class="sk-car-slide" data-cat="chat"><img src="screens/travelbuddies/lofi-chat1.png" alt="TravelBuddies chat wireframe 1"/></div>
+        <div class="sk-car-slide" data-cat="chat"><img src="screens/travelbuddies/lofi-chat2.png" alt="TravelBuddies chat wireframe 2"/></div>
+        <div class="sk-car-slide" data-cat="profile"><img src="screens/travelbuddies/lofi-profile1.png" alt="TravelBuddies profile wireframe 1"/></div>
+        <div class="sk-car-slide" data-cat="profile"><img src="screens/travelbuddies/lofi-profile2.png" alt="TravelBuddies profile wireframe 2"/></div>
+        <div class="sk-car-slide" data-cat="profile"><img src="screens/travelbuddies/lofi-profile3.png" alt="TravelBuddies profile wireframe 3"/></div>
+      </div>
+      <button class="sk-car-arrow" id="lf-car-next" aria-label="Next">›</button>
+    </div>
+    <div class="sk-car-count" id="lf-car-count">1 / 27</div>
+  </div>
+</section>
+
+<section class="final-sec" id="s-design" data-screen-label="final solution">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">final solution</div>
+    <h2 class="sec-h sr">From Insight to <em>Interface</em></h2>
+    <p class="sec-sub sr d1">Each core area traces back to a specific research finding, not just a feature we thought would be nice to have.</p>
+  </div>
+
+  <div class="wp">
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">01</span><span class="pl">Onboarding</span></div>
+          <h3>Build trust before the first match.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users are looking for trustworthy depictions of other user personalities to assess compatibility and safety before traveling with others.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/travelbuddies/final/onboarding-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Languages &amp; profile photos</div><div class="pf-desc">Shared languages and multiple representative photos give users real signal about who they'd actually be traveling with.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/onboarding-4.gif"><span class="pf-dot"></span><div><div class="pf-title">Interests &amp; compatibility quiz</div><div class="pf-desc">An optional quiz surfaces travel-style compatibility upfront, rather than users guessing from a bio alone.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/onboarding-6.gif"><span class="pf-dot"></span><div><div class="pf-title">ID verification</div><div class="pf-desc">Verifying identity directly addresses the safety concerns users raised about traveling with strangers.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="onboarding">
+            <div class="ph-frame"><img src="screens/travelbuddies/final/onboarding-2.gif" alt="TravelBuddies onboarding flow"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid rev">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">02</span><span class="pl">Home</span></div>
+          <h3>Search by person or by place.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users typically have a set preference between searching by other users or by location, having both allows for more ways to connect.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/travelbuddies/final/home-1.gif"><span class="pf-dot"></span><div><div class="pf-title">Search with intent</div><div class="pf-desc">Users can search for specific travel partners or specific destinations, not just one fixed path.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/home-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Personalized top picks &amp; filters</div><div class="pf-desc">Recommendations and filters by location, interests, age, and gender help users refine toward the buddies most likely to be a fit.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="home">
+            <div class="ph-frame"><img src="screens/travelbuddies/final/home-1.gif" alt="TravelBuddies home screen"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">03</span><span class="pl">Trips</span></div>
+          <h3>Give the app one clear job.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users want the app focused on finding travel buddies, without distractions or overwhelming features and components.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/travelbuddies/final/trips-1.gif"><span class="pf-dot"></span><div><div class="pf-title">Upcoming &amp; past trips</div><div class="pf-desc">Trips stay organized around the one thing the app is for, planning and remembering travel with a buddy.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/trips-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Suggested trip ideas</div><div class="pf-desc">Destinations, budgets, and activities are suggested rather than requiring users to plan from a blank page.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/trips-3.gif"><span class="pf-dot"></span><div><div class="pf-title">Create &amp; invite</div><div class="pf-desc">Creating a trip and adding scheduled activities keeps coordination inside the app instead of scattering across texts.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="trips">
+            <div class="ph-frame"><img src="screens/travelbuddies/final/trips-1.gif" alt="TravelBuddies trips screen"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid rev">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">04</span><span class="pl">Profile</span></div>
+          <h3>Make credibility visible at a glance.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users are looking for trustworthy depictions of other personalities to assess compatibility and safety before committing to travel together.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>Profiles surface pronouns, languages, and travel style alongside linked social accounts, trip and buddy counts, and postcards from past trips, giving users real evidence to judge compatibility from, not just a bio.</p></div>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="profile">
+            <div class="ph-frame"><img src="screens/travelbuddies/final/profile-1.gif" alt="TravelBuddies profile screen"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">05</span><span class="pl">Chats</span></div>
+          <h3>Give conversations a reason to start.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users value an active user base that shares the same goals of looking for a travel buddy with similar habits.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/travelbuddies/final/chat-1.gif"><span class="pf-dot"></span><div><div class="pf-title">Messaging &amp; recommended buddies</div><div class="pf-desc">New buddy recommendations keep the app encouraging fresh connections, not just idle chats.</div></div></li>
+            <li class="pfeat" data-src="screens/travelbuddies/final/chat-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Shared interests, surfaced</div><div class="pf-desc">Highlighting shared interests inside a chat gives two strangers an easy, concrete way to start talking.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="chat">
+            <div class="ph-frame"><img src="screens/travelbuddies/final/chat-1.gif" alt="TravelBuddies chat screen"/></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// final solution: selector list swaps the pillar phone image, thumbnail strip browses all screens per category
+(function(){
+  const counts={onboarding:6,home:2,trips:3,profile:1,chat:2};
+  document.querySelectorAll('.pillar').forEach(pillar=>{
+    const feats=pillar.querySelectorAll('.pfeat');
+    const img=pillar.querySelector('.ph-frame img');
+    const phoneEl=pillar.querySelector('.pillar-phone-single');
+    if(!phoneEl) return;
+    const cat=phoneEl.dataset.pillar;
+    const n=counts[cat]||1;
+    feats.forEach(f=>f.addEventListener('click',()=>{
+      feats.forEach(x=>x.classList.remove('on'));
+      f.classList.add('on');
+      if(img) img.src=f.dataset.src;
+    }));
+    if(n>1){
+      const thumbWrap=document.createElement('div');
+      thumbWrap.className='pillar-thumbs';
+      for(let i=1;i<=n;i++){
+        const src='screens/travelbuddies/final/'+cat+'-'+i+'.gif';
+        const t=document.createElement('div');
+        t.className='pillar-thumb'+(i===1?' on':'');
+        t.dataset.src=src;
+        t.innerHTML='<img src="'+src+'" alt="'+cat+' screen '+i+'"/>';
+        t.addEventListener('click',()=>{
+          thumbWrap.querySelectorAll('.pillar-thumb').forEach(x=>x.classList.remove('on'));
+          t.classList.add('on');
+          if(img) img.src=src;
+          feats.forEach(x=>x.classList.toggle('on',x.dataset.src===src));
+        });
+        thumbWrap.appendChild(t);
+      }
+      phoneEl.appendChild(thumbWrap);
+    }
+  });
+})();
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+
+// lo-fi: grid / carousel view switch
+(function(){
+  const swBtns=document.querySelectorAll('.sk-view-sw button[data-lfv]');
+  const grid=document.getElementById('lf-grid-view');
+  const car=document.getElementById('lf-carousel-view');
+  if(!swBtns.length)return;
+  swBtns.forEach(b=>b.addEventListener('click',()=>{
+    swBtns.forEach(x=>x.classList.toggle('on',x===b));
+    const v=b.dataset.lfv;
+    grid.style.display=v==='grid'?'flex':'none';
+    car.classList.toggle('show',v==='carousel');
+  }));
+})();
+
+// lo-fi carousel
+(function(){
+  const track=document.getElementById('lf-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.querySelectorAll('#lf-cat-pills .sk-cat-btn')];
+  const prev=document.getElementById('lf-car-prev');
+  const next=document.getElementById('lf-car-next');
+  const count=document.getElementById('lf-car-count');
+  let idx=0;
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+
+function drawJourneyLines(){
+  document.querySelectorAll('.jm-track').forEach(track=>{
+    const svg=track.querySelector('.jm-line-svg');
+    const poly=svg.querySelector('polyline');
+    const dots=track.querySelectorAll('.jm-dot');
+    const tr=track.getBoundingClientRect();
+    if(tr.width===0)return;
+    svg.setAttribute('width',tr.width);svg.setAttribute('height',tr.height);
+    const pts=[...dots].map(d=>{const r=d.getBoundingClientRect();return (r.left+r.width/2-tr.left)+','+(r.top+r.height/2-tr.top);});
+    poly.setAttribute('points',pts.join(' '));
+  });
+}
+window.addEventListener('resize',drawJourneyLines);
+window.addEventListener('load',drawJourneyLines);
+(function(){
+  let curP='marissa',curV='persona';
+  const ptabs=document.querySelectorAll('.c-ptabs .cpt');
+  const vtabs=document.querySelectorAll('.c-vtabs .cvt');
+  function render(){
+    ptabs.forEach(b=>b.classList.toggle('on',b.dataset.p===curP));
+    vtabs.forEach(b=>b.classList.toggle('on',b.dataset.view===curV));
+    document.querySelectorAll('.p-view,.j-view').forEach(v=>v.classList.remove('show'));
+    const id=(curV==='persona'?'pv-':'jv-')+curP;
+    document.getElementById(id).classList.add('show');
+    requestAnimationFrame(drawJourneyLines);
+  }
+  ptabs.forEach(b=>b.addEventListener('click',()=>{curP=b.dataset.p;render();}));
+  vtabs.forEach(b=>b.addEventListener('click',()=>{curV=b.dataset.view;render();}));
+  render();
+  setTimeout(drawJourneyLines,300);
+})();
+</script>
+<script>
+(function(){
+  const track=document.getElementById('sk-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const prev=document.getElementById('sk-car-prev');
+  const next=document.getElementById('sk-car-next');
+  const count=document.getElementById('sk-car-count');
+  let idx=0;
+  function update(){count.textContent=(idx+1)+' / '+slides.length;}
+  function goTo(i){idx=Math.max(0,Math.min(slides.length-1,i));slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});update();}
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{const r=s.getBoundingClientRect();const d=Math.abs((r.left+r.width/2)-center);if(d<closestDist){closestDist=d;closest=i;}});
+      idx=closest;update();
+    },100);
+  },{passive:true});
+})();
+</script>
+
+<section class="close-sec">
+  <div class="wp">
+    <p class="cq">Thanks for reading!</p>
+    <div class="close-actions">
+      <a class="back-pill f" href="04 Studio Class - Shippable.html">back to portfolio</a>
+    </div>
+    <div class="footbar">
+      <span>© 2026 Michelle Yi</span>
+      <a class="top" href="#top">back to top ↑</a>
+    </div>
+  </div>
+</section>
+
+<div class="toc-widget" id="toc-widget">
+  <div class="toc-panel" id="toc-panel"></div>
+  <div class="toc-fab" id="toc-fab"><span class="tf-count" id="tf-count">01</span><span class="tf-bar">/</span><span class="tf-total" id="tf-total"></span><span class="tf-sep">|</span><span class="tf-label" id="tf-label"></span></div>
+</div>
+<script>
+(function(){
+  const sections=[{"id":"s-context","label":"Context"},{"id":"s-insights","label":"Research"},{"id":"s-competitive","label":"Analysis"},{"id":"s-personas","label":"Personas"},{"id":"s-ia","label":"IA"},{"id":"s-sketches","label":"Sketches"},{"id":"s-lofi","label":"Lo-Fi"},{"id":"s-design","label":"Design"}];
+  const panel=document.getElementById('toc-panel');
+  const widget=document.getElementById('toc-widget');
+  const fab=document.getElementById('toc-fab');
+  document.getElementById('tf-total').textContent=String(sections.length).padStart(2,'0');
+  panel.innerHTML=sections.map((s,i)=>'<a class="toc-item" data-i="'+i+'" href="#'+s.id+'"><span class="ti-n">'+String(i+1).padStart(2,'0')+'</span><span class="ti-l">'+s.label+'</span></a>').join('');
+  const items=[...panel.querySelectorAll('.toc-item')];
+  fab.addEventListener('click',()=>widget.classList.toggle('open'));
+  document.addEventListener('click',(e)=>{ if(!widget.contains(e.target)) widget.classList.remove('open'); });
+  items.forEach(it=>it.addEventListener('click',()=>widget.classList.remove('open')));
+  function setActive(i){
+    items.forEach(it=>it.classList.toggle('active',+it.dataset.i===i));
+    document.getElementById('tf-count').textContent=String(i+1).padStart(2,'0');
+    document.getElementById('tf-label').textContent=sections[i].label;
+  }
+  setActive(0);
+  const els=sections.map(s=>document.getElementById(s.id)).filter(Boolean);
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=els.indexOf(e.target);
+        if(idx>-1) setActive(idx);
+      }
+    });
+  },{rootMargin:'-40% 0px -50% 0px',threshold:0});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>

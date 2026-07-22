@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Habitat · Michelle Yi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<style>
+:root{--toc-accent:var(--rust);;}
+
+.toc-widget{position:fixed;left:24px;bottom:24px;z-index:80;font-family:var(--sans);}
+.toc-fab{display:flex;align-items:center;gap:8px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:999px;padding:9px 16px;cursor:pointer;box-shadow:0 8px 20px rgba(58,43,40,.1);transition:box-shadow .2s;}
+.toc-fab:hover{box-shadow:0 10px 26px rgba(58,43,40,.16);}
+.toc-fab .tf-count{font:700 12px/1 var(--sans);color:var(--toc-accent);}
+.toc-fab .tf-sep{color:rgba(58,43,40,.3);font-size:12px;}
+.toc-fab .tf-total{font:600 12px/1 var(--sans);color:rgba(58,43,40,.4);}
+.toc-fab .tf-bar{color:rgba(58,43,40,.25);}
+.toc-fab .tf-label{font:600 12px/1 var(--sans);color:var(--ink);}
+.toc-panel{position:absolute;bottom:calc(100% + 12px);left:0;width:220px;background:var(--paper);border:1.5px solid rgba(58,43,40,.16);border-radius:20px;padding:16px;box-shadow:0 20px 44px rgba(58,43,40,.18);opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,transform .2s,visibility .2s;}
+.toc-widget.open .toc-panel{opacity:1;visibility:visible;transform:translateY(0);}
+.toc-item{display:flex;align-items:baseline;gap:10px;padding:8px 6px;border-radius:10px;cursor:pointer;text-decoration:none;transition:background .15s;}
+.toc-item:hover{background:var(--cream);}
+.toc-item .ti-n{font:700 11px/1 var(--sans);color:rgba(58,43,40,.35);flex:none;width:18px;}
+.toc-item .ti-l{font:600 13px/1.3 var(--sans);color:rgba(58,43,40,.55);}
+.toc-item.active .ti-n,.toc-item.active .ti-l{color:var(--toc-accent);}
+.toc-item.active .ti-l{font-weight:700;}
+@media(max-width:680px){.toc-widget{left:14px;bottom:14px;}.toc-panel{width:190px;}}
+
+
+:root{
+  --bg:#FFF6E9;--paper:#FFFBF3;--cream:#FFF0DE;--cd:#F4E2C9;
+  --olive:#5B6B3F;--olived:#3A4527;--olivesoft:#DCE3C9;
+  --brown:#694A47;--ink:#3A2B28;--rust:#8A4A26;
+  --sh:none;--sh-sm:none;
+  --sans:"Host Grotesk",system-ui,sans-serif;
+  --serif:"Instrument Serif",Georgia,serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+a:hover{color:var(--olive);}
+img{max-width:100%;display:block;}
+em{font-style:italic;}
+::selection{background:var(--olivesoft);color:var(--ink);}
+.wp{max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,56px);position:relative;z-index:2;}
+.sr{opacity:0;transform:translateY(22px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1);}
+.sr.in{opacity:1;transform:none;}
+.sr.d1{transition-delay:.1s;}.sr.d2{transition-delay:.2s;}.sr.d3{transition-delay:.28s;}
+@media(prefers-reduced-motion:reduce){.sr{opacity:1!important;transform:none!important;}}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--rust);opacity:1;}
+.ctar{display:flex;gap:9px;flex-wrap:wrap;}
+.ctar a{font-size:13px;font-weight:600;border:1.5px solid var(--ink);border-radius:30px;padding:11px 20px;transition:background .25s,color .25s,transform .2s;}
+.ctar a.f{background:var(--ink);color:var(--paper);}
+.ctar a:hover,.ctar a.f:hover{background:var(--olive);border-color:var(--olive);color:var(--paper);transform:translateY(-2px);}
+.back-link{position:fixed;top:20px;left:20px;z-index:50;font:600 12px/1 var(--sans);letter-spacing:.02em;background:var(--paper);border:1.5px solid var(--ink);border-radius:30px;padding:10px 16px;display:flex;align-items:center;gap:6px;box-shadow:var(--sh-sm);}
+.back-link:hover{background:var(--olive);color:var(--paper)!important;border-color:var(--olive);}
+
+/* ══ SECTION SHELL — consistent editorial rhythm ═════ */
+section{padding:clamp(90px,13vh,160px) 0;position:relative;}
+section + section{border-top:2px solid var(--ink);}
+.sec-h{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4.4vw,60px);line-height:1.04;letter-spacing:-.02em;margin-bottom:clamp(16px,2.4vh,22px);}
+.sec-h em{font-style:italic;color:var(--rust);}
+.sec-sub{font-size:clamp(15px,1.4vw,17px);line-height:1.7;color:var(--ink);max-width:62ch;margin-bottom:clamp(48px,7vh,72px);}
+
+/* ══ HERO ═════════════════════════════════════════════ */
+/* hero — unified editorial system */
+.hero{background:var(--hcolor);overflow:hidden;position:relative;}
+.hero-inner{max-width:1180px;margin:0 auto;min-height:92vh;padding:clamp(96px,12vh,130px) clamp(20px,3vw,36px) clamp(48px,6vh,68px);position:relative;display:grid;grid-template-columns:minmax(280px,.84fr) minmax(320px,1.16fr);align-items:center;gap:clamp(20px,3.5vw,48px);}
+.hero::before{content:"";position:absolute;width:56vw;height:56vw;max-width:760px;max-height:760px;border-radius:50%;background:rgba(255,255,255,.09);right:-14%;top:-9%;pointer-events:none;z-index:1;}
+.hero .hp-dot{position:absolute;width:9px;height:9px;background:rgba(255,255,255,.55);opacity:.6;transform:rotate(45deg);z-index:3;}
+.hero-left{position:relative;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:clamp(16px,2.2vh,22px);}
+.hero .htag{font:700 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62);}
+.hero h1{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--paper);font-size:var(--tsize,clamp(40px,4.4vw,76px));line-height:1.08;max-width:13ch;text-wrap:pretty;}
+.hero h1 em{font-style:italic;opacity:.72;}
+.hero .hq{color:rgba(255,255,255,.82);max-width:38ch;font-size:clamp(14px,1.2vw,16.5px);line-height:1.6;}
+.hero-phones{position:relative;z-index:2;height:clamp(460px,66vh,660px);display:flex;align-items:center;justify-content:center;gap:14px;}
+.hero-phones img{height:100%;width:auto;object-fit:contain;display:block;filter:drop-shadow(0 30px 54px rgba(0,0,0,.26));}
+.hero-phones:not(.solo) img:first-child{transform:rotate(-5deg) translateY(3%);margin-right:-9%;z-index:1;}
+.hero-phones:not(.solo) img:last-child{transform:rotate(5deg) translateY(-2%);z-index:2;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;min-height:auto;gap:32px;}.hero-phones{height:clamp(320px,52vh,420px);order:-1;}}
+
+/* ══ META STRIP ═══════════════════════════════════════ */
+.meta-strip{background:var(--ink);}
+.meta-strip .inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);}
+.meta-strip .mi{padding:clamp(20px,3.2vh,28px) clamp(20px,3vw,36px);border-right:1.5px solid rgba(255,246,233,.1);}
+.meta-strip .mi:last-child{border-right:0;}
+.meta-strip .mk{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,246,233,.4);margin-bottom:6px;}
+.meta-strip .mv{font-size:clamp(13px,1.3vw,15px);font-weight:500;color:rgba(255,246,233,.88);}
+@media(max-width:720px){.meta-strip .inner{grid-template-columns:1fr 1fr;}}
+
+/* ══ CARD SYSTEM — one shared treatment for every boxed
+   element in the piece (used by ov-col, ins card, frames,
+   IA backdrop, journey/persona frame) ═══════════════════ */
+.card{border:2px solid var(--ink);border-radius:24px;background:var(--paper);box-shadow:var(--sh);}
+
+/* ══ CONTEXT (problem / solution) ════════════════════ */
+.context{background:var(--bg);}
+.ov-cols{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,32px);}
+.ov-col{padding:clamp(32px,4.4vw,52px);}
+.ov-col-s{background:var(--cream);}
+.ov-col-num{font-family:var(--serif);font-style:italic;font-size:clamp(40px,5.5vw,60px);line-height:.85;color:var(--rust);opacity:.4;margin-bottom:14px;}
+.ov-col-lbl{font:600 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;color:var(--ink);opacity:.7;}
+.ov-col-title{font-family:var(--serif);font-size:clamp(20px,2.2vw,28px);line-height:1.2;letter-spacing:-.01em;margin-bottom:14px;}
+.ov-col-title em{color:var(--rust);}
+.ov-col p{font-size:15px;line-height:1.75;color:var(--ink);}
+@media(max-width:680px){.ov-cols{grid-template-columns:1fr;}}
+
+/* ══ INSIGHTS ═════════════════════════════════════════ */
+.insights{background:var(--paper);}
+.ins-item{display:grid;grid-template-columns:56px 1fr;gap:clamp(18px,2.6vw,28px);align-items:baseline;padding:clamp(26px,3.6vh,36px) 0;border-top:1.5px solid rgba(105,74,71,.16);}
+.ins-item:last-child{border-bottom:1.5px solid rgba(105,74,71,.16);}
+.ins-item .in{font-family:var(--serif);font-style:italic;font-size:clamp(26px,3vw,34px);color:var(--rust);opacity:.45;}
+.ins-item .ib p{font-size:16px;line-height:1.75;letter-spacing:-.005em;color:var(--ink);max-width:66ch;}
+
+/* ══ COMPETITIVE ANALYSIS ═════════════════════════════ */
+.compet{background:var(--bg);}
+.cmat-wrap{overflow-x:auto;}
+.cmat-wrap.card{padding:0;overflow:hidden;}
+.cmat{width:100%;border-collapse:collapse;background:var(--paper);}
+.cmat thead{background:var(--cream);border-bottom:2px solid var(--ink);}
+.cmat thead th{padding:clamp(12px,2vh,16px) clamp(8px,1.2vw,12px);font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--ink);text-align:center;border-right:1.5px solid rgba(105,74,71,.14);}
+.cmat thead th:last-child{border-right:0;}
+.cmat thead th .ch-inner{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.cmat thead th .ch-logo{width:32px;height:32px;border-radius:9px;object-fit:contain;box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.cmat thead th .ch-name{font-size:9.5px;font-weight:600;white-space:nowrap;}
+.cmat thead th.feat-h{text-align:left;padding-left:clamp(18px,2.4vw,28px);min-width:170px;}
+.cmat tbody tr{border-bottom:1.5px solid rgba(105,74,71,.08);}
+.cmat tbody tr:last-child{border-bottom:0;}
+.cmat tbody tr:hover{background:rgba(105,74,71,.03);}
+.cmat tbody td{padding:clamp(9px,1.5vh,12px) clamp(8px,1.2vw,12px);text-align:center;font-size:13px;border-right:1.5px solid rgba(105,74,71,.08);}
+.cmat tbody td:last-child{border-right:0;}
+.cmat tbody td.feat-cell{text-align:left;font-size:13px;font-weight:600;color:var(--ink);padding-left:clamp(18px,2.4vw,28px);border-right:1.5px solid rgba(105,74,71,.14);white-space:nowrap;}
+.cmat .ci{display:inline-block;width:13px;height:13px;border-radius:50%;}
+.cmat-legend{display:flex;align-items:center;gap:clamp(16px,3vw,28px);padding:clamp(14px,2vh,18px) clamp(18px,2.4vw,28px);border-top:1.5px solid rgba(105,74,71,.12);flex-wrap:wrap;}
+.cmat-legend .li{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--ink);}
+.cmat-legend .li svg{width:13px;height:13px;flex:none;}
+
+/* ══ PERSONAS & JOURNEYS — two-level tabs (like Costco) ═ */
+.personas{background:var(--paper);}
+.p-tabs{display:flex;gap:8px;margin-bottom:clamp(18px,2.4vh,24px);flex-wrap:wrap;}
+.p-tabs button{font:600 13px/1 var(--sans);letter-spacing:.01em;border:1.5px solid var(--ink);border-radius:30px;padding:11px 20px;background:var(--paper);cursor:pointer;transition:background .2s,color .2s;}
+.p-tabs button.on{background:var(--ink);color:var(--paper);}
+.v-tabs{display:flex;gap:3px;background:var(--cd);border-radius:30px;padding:4px;width:max-content;margin-bottom:clamp(32px,4.4vh,44px);}
+.v-tabs button{font:600 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);background:transparent;border:0;padding:9px 18px;border-radius:24px;cursor:pointer;transition:background .2s,color .2s;}
+.v-tabs button.on{background:var(--ink);color:var(--paper);}
+.p-view{display:none;}
+.p-view.show{display:block;}
+.p-frame,.j-frame{max-width:840px;margin:0 auto;overflow:hidden;background:var(--paper);}
+.j-frame{box-shadow:none!important;}
+.p-frame img,.j-frame img{width:100%;display:block;}
+.j-view{display:none;}
+.j-view.show{display:block;}
+
+/* ══ IDEATION / DESIGN (image galleries) ═════════════ */
+.gallery-sec{background:var(--bg);}
+.gallery-sec.alt{background:var(--paper);}
+.ia-frame.card{padding:clamp(20px,3vw,32px);background:transparent;border:0;box-shadow:none;max-width:760px;margin:0 auto;}
+.ia-frame img{border-radius:8px;}
+.insight-frame.card{padding:clamp(20px,3vw,32px);background:transparent;border:0;box-shadow:none;max-width:760px;margin:0 auto;}
+.insight-frame img{border-radius:8px;}
+.gal-frame.card{padding:0;overflow:hidden;background:transparent;border:0;box-shadow:none;}
+.gal-frame img{width:100%;display:block;}
+
+/* ══ FINAL SOLUTION ═══════════════════════════════════ */
+.final-sec{background:var(--cream);}
+.pillar{padding:clamp(56px,7vh,88px) 0;border-bottom:1.5px solid rgba(105,74,71,.16);}
+.pillar:last-child{border-bottom:0;}
+.pillar-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(40px,6vw,80px);align-items:center;}
+.pillar-grid.rev{grid-template-columns:1.1fr 1fr;}
+.pillar-grid.rev .pillar-copy{order:2;}
+.pillar-grid.rev .pillar-visual{order:1;}
+.pillar-tag{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.pillar-tag .pn{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--rust);opacity:.6;}
+.pillar-tag .pl{font:700 10.5px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink);opacity:.6;}
+.pillar-copy h3{font-family:var(--serif);font-size:clamp(26px,3vw,36px);line-height:1.25;letter-spacing:-.015em;margin-bottom:clamp(20px,2.8vh,26px);max-width:16ch;}
+.pillar-block{margin-bottom:16px;}
+.pillar-block .pbl{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-bottom:8px;}
+.pillar-block p{font-size:14.5px;line-height:1.7;color:var(--ink);}
+.pillar-feats{list-style:none;display:flex;flex-direction:column;margin-top:clamp(24px,3.2vh,32px);}
+.pfeat{display:flex;gap:16px;align-items:flex-start;padding:14px 0;cursor:pointer;}
+.pfeat .pf-dot{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid rgba(105,74,71,.32);margin-top:3px;position:relative;transition:border-color .2s;}
+.pfeat .pf-dot::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--rust);transform:scale(0);transition:transform .2s;}
+.pfeat.on .pf-dot{border-color:var(--rust);}
+.pfeat.on .pf-dot::after{transform:scale(1);}
+.pfeat .pf-title{font-family:var(--serif);font-size:clamp(17px,1.8vw,20px);letter-spacing:-.01em;color:rgba(58,43,40,.4);transition:color .2s;}
+.pfeat.on .pf-title{color:var(--ink);}
+.pfeat .pf-desc{font-size:13.5px;line-height:1.6;color:var(--ink);margin-top:8px;max-height:0;overflow:hidden;opacity:0;transition:max-height .25s,opacity .2s;}
+.pfeat.on .pf-desc{max-height:120px;opacity:1;}
+.pillar-visual{position:relative;display:flex;justify-content:center;}
+.pillar-phone-single{position:relative;width:min(240px,68vw);}
+.pillar-phone-single .ph-frame{border-radius:40px;overflow:hidden;aspect-ratio:9/19.5;background:#000;}
+.pillar-phone-single .ph-frame img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
+.pillar-phone-duo{position:relative;width:100%;max-width:420px;height:clamp(340px,42vh,420px);}
+.pillar-phone-duo .ph-back,.pillar-phone-duo .ph-front{position:absolute;border-radius:30px;overflow:hidden;background:#000;box-shadow:0 20px 40px -12px rgba(58,43,40,.28);}
+.pillar-phone-duo .ph-back{width:56%;top:0;left:0;aspect-ratio:9/19;opacity:.55;}
+.pillar-phone-duo .ph-front{width:62%;bottom:0;right:0;aspect-ratio:9/19;border:6px solid var(--paper);}
+.pillar-phone-duo img{width:100%;height:100%;object-fit:cover;object-position:center top;transform:scale(1.14);display:block;}
+.pillar-thumbs{display:flex;gap:7px;margin-top:16px;justify-content:center;flex-wrap:wrap;max-width:min(240px,68vw);}
+.pillar-thumb{width:28px;height:28px;border-radius:7px;overflow:hidden;border:2px solid transparent;cursor:pointer;opacity:.4;transition:opacity .18s,border-color .18s;background:#000;flex:none;}
+.pillar-thumb.on{opacity:1;border-color:var(--rust);}
+.pillar-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+@media(max-width:820px){.pillar-grid,.pillar-grid.rev{grid-template-columns:1fr;}.pillar-grid.rev .pillar-copy,.pillar-grid.rev .pillar-visual{order:initial;}.pillar-visual{margin-bottom:8px;}}
+
+/* ══ REFLECTION ═══════════════════════════════════════ */
+.reflect-sec{background:var(--paper);}
+.refl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:clamp(40px,5.4vh,52px);}
+.refl-card{border:2px solid var(--ink);border-radius:18px;padding:clamp(20px,2.4vw,26px);background:var(--cream);display:flex;flex-direction:column;gap:10px;}
+.refl-card .rf-num{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--rust);opacity:.5;line-height:1;}
+.refl-card h4{font-family:var(--serif);font-size:clamp(17px,1.8vw,20px);letter-spacing:-.01em;color:var(--ink);}
+.refl-card p{font-size:13px;line-height:1.65;color:var(--brown);}
+@media(max-width:900px){.refl-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.refl-grid{grid-template-columns:1fr;}}
+.refl-quote{max-width:70ch;margin:0 auto;text-align:center;padding-top:clamp(28px,4vh,36px);border-top:1.5px solid rgba(105,74,71,.2);}
+.refl-quote p{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.6vw,28px);line-height:1.4;letter-spacing:-.01em;color:var(--ink);}
+.refl-quote p em{color:var(--rust);font-style:italic;}
+
+/* ══ CLOSE ════════════════════════════════════════════ */
+.close-sec{background:var(--cream);border-top:2px solid var(--ink);padding:clamp(64px,9vh,100px) 0;text-align:center;}
+.close-sec .cq{font-family:var(--serif);font-weight:400;font-size:clamp(30px,4vw,48px);letter-spacing:-.015em;margin:0 0 clamp(24px,3.2vh,32px);}
+.close-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:clamp(18px,2.6vh,24px);}
+.close-actions a{font-size:13.5px;font-weight:600;border:1.5px solid var(--ink);border-radius:30px;padding:11px 24px;text-decoration:none;color:var(--ink);transition:background .25s,color .25s,transform .2s;display:inline-flex;align-items:center;letter-spacing:.01em;}
+.close-actions a.back-pill{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.close-actions a.back-pill:hover{background:var(--olive);border-color:var(--olive);transform:translateY(-2px);}
+.close-copy{font-size:12.5px;color:var(--ink);opacity:.5;}
+.footbar{border-top:1.5px solid rgba(105,74,71,.2);padding:18px 0 0;margin-top:clamp(28px,4vh,40px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:12.5px;font-weight:500;color:var(--ink);opacity:.7;}
+.footbar .top{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--ink);text-decoration:none;opacity:1;}
+.footbar .top:hover{color:var(--olive);}
+
+.sk-view-sw{display:inline-flex;gap:4px;background:rgba(105,74,71,.06);border-radius:10px;padding:4px;margin-bottom:20px;}
+.sk-view-sw button{border:0;background:transparent;cursor:pointer;padding:7px 16px;border-radius:8px;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);transition:background .18s,color .18s;}
+.sk-view-sw button.on{background:var(--paper);color:var(--ink);box-shadow:0 2px 8px rgba(58,43,40,.08);}
+.sk-carousel{display:none;}
+.sk-carousel.show{display:block;}
+.sk-cat-pills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.sk-cat-btn{border:1.5px solid rgba(58,43,40,.16);background:var(--paper);cursor:pointer;padding:8px 18px;border-radius:999px;font:700 11px/1 var(--sans);letter-spacing:.04em;text-transform:lowercase;color:var(--ink);transition:background .18s,color .18s,border-color .18s;}
+.sk-cat-btn.on{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.sk-car-wrap{position:relative;display:flex;align-items:center;gap:12px;}
+.sk-car-track{flex:1;display:flex;gap:16px;overflow-x:auto;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:4px 4px 12px;}
+.sk-car-track::-webkit-scrollbar{height:5px;}
+.sk-car-track::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-car-slide{flex:none;scroll-snap-align:center;height:clamp(320px,42vh,460px);display:flex;align-items:center;}
+.sk-car-slide img{height:100%;width:auto;border-radius:12px;box-shadow:0 6px 24px rgba(58,43,40,.1);background:var(--cream);object-fit:contain;}
+.sk-car-arrow{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(58,43,40,.18);background:var(--paper);cursor:pointer;font-size:18px;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;}
+.sk-car-arrow:hover{background:rgba(58,43,40,.06);border-color:rgba(58,43,40,.35);}
+.sk-car-count{text-align:center;margin-top:12px;font:600 11px/1 var(--sans);letter-spacing:.04em;color:rgba(58,43,40,.4);}
+.sk-gallery{display:flex;flex-direction:column;gap:clamp(22px,3vh,34px);}
+.sk-row{display:flex;gap:clamp(14px,2vw,22px);align-items:flex-start;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
+.sk-row::-webkit-scrollbar{height:4px;}
+.sk-row::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px;}
+.sk-group{display:flex;flex-direction:column;gap:10px;flex:none;}
+.sk-pill{display:inline-flex;align-items:center;padding:9px 22px;background:var(--ink);color:#FFFBF3;border-radius:999px;font:600 11px/1 var(--sans);letter-spacing:.07em;text-transform:lowercase;width:fit-content;margin-bottom:8px;}
+.sk-imgs{display:flex;gap:6px;height:clamp(150px,13vw,190px);flex:none;}
+.sk-imgs img{border-radius:8px;object-fit:contain;object-position:center;height:100%;width:auto;flex:none;display:block;background:var(--cream);}
+
+/* ══ RESEARCH: interview guide preview ═══════════════ */
+.guide-stat-line{font-family:var(--serif);font-size:clamp(20px,2.4vw,28px);line-height:1.5;color:var(--ink);max-width:52ch;margin-bottom:clamp(36px,5vh,48px);}
+.guide-stat-line b{font-style:italic;color:var(--rust);font-weight:400;}
+.guide-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:clamp(44px,6vh,64px);}
+.guide-card{padding:clamp(20px,2.4vw,24px);}
+.guide-theme{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--rust);margin-bottom:12px;}
+.guide-q{font-size:13.5px;line-height:1.55;color:var(--ink);margin-bottom:9px;padding-left:14px;position:relative;}
+.guide-q::before{content:"•";position:absolute;left:0;color:var(--ink);opacity:.5;}
+.guide-q:last-child{margin-bottom:0;}
+
+/* ══ RESEARCH: affinity mapping preview ═══════════════ */
+.aff-intro{font-family:var(--serif);font-size:clamp(19px,2vw,25px);line-height:1.35;max-width:56ch;margin-bottom:22px;}
+.aff-board{display:flex;gap:14px;overflow-x:auto;padding:18px 4px 26px;margin-bottom:6px;}
+.note{flex:none;width:148px;min-height:104px;padding:13px 12px;font-size:12px;line-height:1.4;font-weight:500;color:#3A2B28;box-shadow:0 6px 14px rgba(58,43,40,.14);display:flex;align-items:center;}
+.note:nth-child(odd){transform:none;}
+.note:nth-child(even){transform:none;}
+.note.y{background:#F6DE81;}
+.note.p{background:#F3B8CE;}
+.note.b{background:#AFD4E8;}
+.note.g{background:#C7DDA6;}
+.aff-cap{font:600 11px/1 var(--sans);letter-spacing:.04em;color:rgba(58,43,40,.4);margin-bottom:clamp(30px,4.2vh,40px);}
+.aff-arrow{display:flex;align-items:center;gap:10px;color:var(--ink);opacity:.55;margin:-14px 0 clamp(30px,4.2vh,40px);}
+.aff-arrow svg{width:16px;height:22px;flex:none;}
+.aff-arrow .txt{font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;}
+.aff-expand{display:inline-flex;align-items:center;gap:8px;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);background:none;border:1.5px solid rgba(105,74,71,.3);border-radius:20px;padding:9px 18px;cursor:pointer;margin:-6px 0 clamp(30px,4.2vh,40px);transition:background .2s,color .2s;}
+.aff-expand:hover{background:var(--brown);color:var(--cream);}
+.aff-expand svg{width:11px;height:11px;transition:transform .25s;}
+.aff-expand.open svg{transform:rotate(180deg);}
+.aff-full{max-height:0;overflow:hidden;transition:max-height .5s ease;}
+.aff-full.open{max-height:3200px;}
+.aff-full-inner{display:flex;flex-direction:row;gap:16px;overflow-x:auto;padding:6px 4px 10px;margin-bottom:clamp(30px,4.2vh,40px);}
+.aff-full-inner img{width:auto;height:420px;max-width:none;flex:none;margin:0;border-radius:10px;display:block;background:#fff;}
+.fig-embed-wrap{margin-top:clamp(28px,3.8vh,36px);border-radius:14px;overflow:hidden;border:1px solid rgba(105,74,71,.16);}
+.fig-embed-wrap iframe{width:100%;height:min(70vh,560px);display:block;border:none;}
+.fig-embed-cap{font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:rgba(58,43,40,.45);margin-top:12px;}
+
+/* ══ HMW ITERATION ═════════════════════════════════════ */
+.hmw{background:var(--cream);}
+.hmw-cluster{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:clamp(34px,4.6vh,46px);}
+.hmw-chip{font-size:12px;font-weight:500;padding:8px 16px;border-radius:20px;border:1.5px dashed rgba(105,74,71,.32);color:var(--ink);opacity:.62;}
+.hmw-final{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(16px,2.2vw,22px);}
+.hmw-card{padding:clamp(26px,3.2vw,32px);}
+.hmw-card .hn{font:700 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--rust);opacity:.75;margin-bottom:12px;display:block;}
+.hmw-card p{font-family:var(--serif);font-size:clamp(18px,1.9vw,22px);line-height:1.32;letter-spacing:-.01em;}
+.hmw-lead{color:var(--rust);font-style:italic;}
+
+/* ══ COMPETITIVE PATTERNS ═════════════════════════════ */
+.pattern-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:clamp(14px,2vw,20px);margin-bottom:clamp(40px,5.4vh,52px);}
+.pattern-card{padding:clamp(22px,2.6vw,26px);}
+.pattern-card .pn{font-family:var(--serif);font-style:italic;color:var(--rust);opacity:.5;font-size:26px;margin-bottom:8px;display:block;}
+.pattern-card h4{font-family:var(--serif);font-size:18px;margin-bottom:8px;letter-spacing:-.01em;}
+.pattern-card p{font-size:13px;line-height:1.6;color:var(--ink);}
+
+/* ══ IA AREA CAROUSEL intro ════════════════════════════ */
+.ia-intro{font-family:var(--serif);font-size:clamp(19px,2vw,25px);line-height:1.35;max-width:58ch;margin-bottom:clamp(28px,3.8vh,38px);}
+.ia-flow-cap{text-align:center;font:600 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:rgba(58,43,40,.45);margin-top:14px;}
+
+.cs-footer a:hover{color:var(--ink);}
+/* ══ SHARED PERSONA SELECTOR (card-grid + underline toggle) ══ */
+.c-ptabs{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--ink);border:2px solid var(--ink);border-radius:18px;overflow:hidden;margin-bottom:clamp(18px,2.8vh,28px);}
+.c-ptabs .cpt{background:var(--cream);padding:clamp(12px,2vh,18px) clamp(12px,2vw,18px);cursor:pointer;border:0;display:flex;flex-direction:column;gap:4px;transition:background .18s;text-align:left;}
+.c-ptabs .cpt:hover{background:var(--cd);}
+.c-ptabs .cpt.on{background:var(--paper);}
+.c-ptabs .cpt .cpnum{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1;color:var(--ink);opacity:.25;margin-bottom:2px;}
+.c-ptabs .cpt.on .cpnum{opacity:.5;}
+.c-ptabs .cpt .cpname{font-weight:700;font-size:clamp(13px,1.3vw,15px);letter-spacing:-.01em;color:var(--ink);}
+.c-ptabs .cpt .cpsub{font-size:11px;color:var(--ink);}
+.c-vtabs{display:flex;gap:0;margin-bottom:clamp(16px,2.4vh,26px);}
+.c-vtabs .cvt{font:700 11px/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;background:transparent;border:0;padding:11px 0;cursor:pointer;color:var(--ink);opacity:.55;position:relative;margin-right:26px;transition:color .2s,opacity .2s;}
+.c-vtabs .cvt:hover{opacity:.85;}
+.c-vtabs .cvt::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--ink);transform:scaleX(0);transition:transform .22s cubic-bezier(.2,.7,.2,1);}
+.c-vtabs .cvt.on{color:var(--ink);opacity:1;font-weight:800;}
+.c-vtabs .cvt.on::after{transform:scaleX(1);}
+@media(max-width:680px){.c-ptabs{grid-template-columns:1fr 1fr;}}
+</style>
+
+<body>
+
+<a href="04 Studio Class - Shippable.html" class="back-link">← back to portfolio</a>
+
+<!-- ══ HERO ═══════════════════════════════════════════ -->
+<header class="hero" id="s-hero" style="--hcolor:#5B6B3F">
+  <div class="hero-inner">
+    <div class="hp-dot" style="top:8%;left:6%"></div>
+    <div class="hp-dot" style="bottom:10%;right:7%"></div>
+    <div class="hero-left">
+      <div class="htag">UX/UI · Mobile · Fall 2024</div>
+      <h1 style="--tsize:clamp(38px,4.2vw,68px);max-width:12ch;">Habits that <em>actually stick.</em></h1>
+      <p class="hq">Designing a mobile experience for sustainable habit formation, helping people build routines that last, without the guilt.</p>
+    </div>
+    <div class="hero-phones">
+      <img src="screens/habitat/hero-welcome.png" alt="Habitat welcome screen"/>
+      <img src="screens/habitat/hero-home.png" alt="Habitat home dashboard"/>
+    </div>
+  </div>
+</header>
+
+<div class="meta-strip">
+  <div class="inner">
+    <div class="mi"><div class="mk">Timeline</div><div class="mv">Sep 2024 – Dec 2024</div></div>
+    <div class="mi"><div class="mk">Role</div><div class="mv">UX Designer</div></div>
+    <div class="mi"><div class="mk">Expertise</div><div class="mv">UX / UI Design</div></div>
+    <div class="mi"><div class="mk">Team</div><div class="mv">2 leads, 4 designers</div></div>
+  </div>
+</div>
+
+<!-- ══ CONTEXT ══════════════════════════════════════════ -->
+<section class="context" id="s-context">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">context</div>
+    <h2 class="sec-h sr">Project <em>Context</em></h2>
+    <div class="ov-cols sr d1">
+      <div class="ov-col card">
+        <div class="ov-col-num">01</div>
+        <div class="ov-col-lbl">the problem</div>
+        <div class="ov-col-title">Habits rarely stick.</div>
+        <p>Many people struggle with staying consistent and get discouraged when attempting to keep accountability with daily habits. Although there are many habit-tracking apps on the market, most lack the flexibility and customization to keep a diverse audience engaged and motivated.</p>
+      </div>
+      <div class="ov-col card ov-col-s">
+        <div class="ov-col-num">02</div>
+        <div class="ov-col-lbl">the solution</div>
+        <div class="ov-col-title">A habit tracker built on <em>personalization</em>.</div>
+        <p>We designed Habitat to help users achieve their goals sustainably by incorporating personalization and behavioral science principles, so the app adapts to them, not the other way around.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RESEARCH ═════════════════════════════════════════ -->
+<section class="insights" id="s-insights">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">research</div>
+    <h2 class="sec-h sr">From <em>Conversations</em> to Insight</h2>
+    <p class="sec-sub sr d1">Before we could design anything, we needed to understand how people actually relate to habits, not how we assumed they did.</p>
+
+    <p class="guide-stat-line sr d2">We sat down with <b>12</b> users, asking <b>21</b> questions across <b>6</b> themes we cared about most.</p>
+
+    <div class="guide-wrap sr d2">
+      <div class="guide-card card"><div class="guide-theme">Habit Formation</div><div class="guide-q">How would you define a habit, and how is that different from a task?</div><div class="guide-q">How do you feel when you complete one? When you don't?</div></div>
+      <div class="guide-card card"><div class="guide-theme">Barriers &amp; Bad Habits</div><div class="guide-q">Tell me about a bad habit you've tried to break.</div><div class="guide-q">What's stopped you from breaking it?</div></div>
+      <div class="guide-card card"><div class="guide-theme">Building New Habits</div><div class="guide-q">Tell me about a time you tried to start a new habit? Why that one?</div><div class="guide-q">What barriers did you run into?</div></div>
+      <div class="guide-card card"><div class="guide-theme">Tracking Systems</div><div class="guide-q">What's your experience with habit-tracking apps or systems?</div><div class="guide-q">What's worked? What hasn't?</div></div>
+      <div class="guide-card card"><div class="guide-theme">Community</div><div class="guide-q">Would you want to share your progress with others, like an accountability partner?</div></div>
+      <div class="guide-card card"><div class="guide-theme">Aesthetics vs. Function</div><div class="guide-q">When you're using an app, what do you prioritize: how it looks, or how it works?</div></div>
+    </div>
+
+    <p class="aff-intro sr d2">Those 12 conversations produced dozens of individual observations. We wrote each one down and affinity-mapped them by hand, clustering repeated ideas until patterns emerged.</p>
+    <div class="aff-board sr d3">
+      <div class="note y">Highly influenced by external motivators &amp; peer pressure</div>
+      <div class="note p">Tracking feels too tedious for an already-busy schedule</div>
+      <div class="note b">Need to see the benefit up front to even start</div>
+      <div class="note g">Prefer function over aesthetics, mostly</div>
+      <div class="note p">Motivation, consistency &amp; accountability all have to work together</div>
+      <div class="note y">Community keeps people honest, but not everyone wants it</div>
+      <div class="note b">Most find existing tracking apps overwhelming</div>
+      <div class="note g">Completing a habit = a real, felt sense of reward</div>
+      <div class="note y">Reminders help, nagging doesn't</div>
+      <div class="note p">Want distractions removed, not more added</div>
+      <div class="note b">Rigid schedules and complicated journals don't survive real life</div>
+      <div class="note g">Habits take time, rushing the process backfires</div>
+    </div>
+    <div class="aff-cap sr d3">37 raw observations, clustered by hand →</div>
+    <button class="aff-expand sr d3" id="aff-toggle">view full affinity boards<svg viewBox="0 0 12 8" fill="none"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6"/></svg></button>
+    <div class="aff-full" id="aff-full">
+      <div class="aff-full-inner">
+        <img src="screens/habitat/affinity/board1.png" alt="Affinity map: Habit Formation and Functionality vs Aesthetics clusters"/>
+        <img src="screens/habitat/affinity/board2.png" alt="Affinity map: Barriers and Community/Sharing clusters"/>
+        <img src="screens/habitat/affinity/board3.png" alt="Affinity map sticky notes, yellow and green clusters"/>
+        <img src="screens/habitat/affinity/board4.png" alt="Affinity map sticky notes, blue and pink clusters"/>
+        <img src="screens/habitat/affinity/board5.png" alt="Affinity map sticky notes, orange and purple clusters"/>
+      </div>
+    </div>
+    <div class="aff-arrow sr d3"><svg viewBox="0 0 16 22" fill="none"><path d="M8 1v18M2 13l6 7 6-7" stroke="currentColor" stroke-width="1.6"/></svg><span class="txt">condensed into 5 core insights</span></div>
+
+    <div class="insight-frame card sr d3">
+      <img src="screens/habitat/insights.png" alt="Five research insights from user interviews"/>
+    </div>
+  </div>
+</section>
+
+<!-- ══ HMW ITERATION ════════════════════════════════════ -->
+<section class="hmw" id="s-hmw">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">framing the problem</div>
+    <h2 class="sec-h sr">Dozens of <em>How Might We's</em></h2>
+    <p class="sec-sub sr d1">Our five insights pointed to three recurring themes: motivation &amp; reward, simplifying tracking, and user engagement. We wrote How Might We's against each before converging on the three that would guide the design.</p>
+    <div class="hmw-cluster sr d2">
+      <div class="hmw-chip">...motivate users to start tracking habits?</div>
+      <div class="hmw-chip">...help users stay engaged after habits form?</div>
+      <div class="hmw-chip">...incorporate rewards to support motivation?</div>
+      <div class="hmw-chip">...make tracking feel less demanding?</div>
+      <div class="hmw-chip">...encourage retention after habits form?</div>
+      <div class="hmw-chip">...teach users to build habits without stress?</div>
+      <div class="hmw-chip">...help users form habits without overwhelm?</div>
+      <div class="hmw-chip">...emphasize community for support?</div>
+      <div class="hmw-chip">...encourage consistency over time?</div>
+      <div class="hmw-chip">...fight demotivation mid-streak?</div>
+    </div>
+    <div class="hmw-final sr d3">
+      <div class="hmw-card card"><span class="hn">motivation &amp; reward</span><p><span class="hmw-lead">How might we</span> help users stay motivated to complete their habits, even after the initial excitement fades?</p></div>
+      <div class="hmw-card card"><span class="hn">simplifying tracking</span><p><span class="hmw-lead">How might we</span> make habit tracking feel effortless, so it integrates into daily routines instead of adding to them?</p></div>
+      <div class="hmw-card card"><span class="hn">user engagement</span><p><span class="hmw-lead">How might we</span> build in community and accountability features without making the app feel overwhelming?</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COMPETITIVE ANALYSIS ═════════════════════════════ -->
+<section class="compet" id="s-competitive">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">research</div>
+    <h2 class="sec-h sr">Competitive <em>Analysis</em></h2>
+    <p class="sec-sub sr d1" style="margin-bottom:clamp(24px,3.2vh,30px);">We went screen-by-screen through 12 habit-tracking apps, noting where each one nailed the experience and where it fell short.</p>
+    <div class="fig-embed-wrap sr d1">
+      <iframe src="https://embed.figma.com/proto/jYOL39cXcnVGdXdIaEIZ4O/habitat-competitive-analysis?node-id=3-844&scaling=scale-down-width&content-scaling=fixed&page-id=0%3A1&embed-host=share" allowfullscreen></iframe>
+    </div>
+    <div class="fig-embed-cap sr d1">full competitive analysis board</div>
+    <div class="pattern-grid sr d1" style="margin-top:clamp(36px,5vh,48px);">
+      <div class="pattern-card card"><span class="pn">01</span><h4>Gamification cuts both ways</h4><p>Most-loved feature in interviews, also the most likely to feel overwhelming.</p></div>
+      <div class="pattern-card card"><span class="pn">02</span><h4>Aesthetics without function fails</h4><p>Cute interfaces with icons and progress bars users couldn't intuit.</p></div>
+      <div class="pattern-card card"><span class="pn">03</span><h4>Real accountability is rare</h4><p>Streaks and stats abound. Genuine partner accountability is missing.</p></div>
+      <div class="pattern-card card"><span class="pn">04</span><h4>Onboarding sets the tone</h4><p>Skippable intros leave users confused later on.</p></div>
+    </div>
+    <p class="sec-sub sr d1" style="margin-bottom:clamp(28px,3.8vh,36px);">These patterns held across the full feature grid.</p>
+    <div class="cmat-wrap card sr d2">
+      <table class="cmat">
+        <thead>
+          <tr>
+            <th class="feat-h"></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-habitica.png" alt="Habitica logo"/><span class="ch-name">Habitica</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-productive.png" alt="Productive logo"/><span class="ch-name">Productive</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-notboring.png" alt="(Not Boring) logo"/><span class="ch-name">(Not Boring)</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-atoms.png" alt="Atoms logo"/><span class="ch-name">Atoms</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-habitrabbit.png" alt="Habit Rabbit logo"/><span class="ch-name">Habit Rabbit</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-everyday.png" alt="everyday logo"/><span class="ch-name">everyday</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-wayoflife.png" alt="Way of Life logo"/><span class="ch-name">Way of Life</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-onrise.png" alt="Onrise logo"/><span class="ch-name">Onrise</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-habitify.png" alt="Habitify logo"/><span class="ch-name">Habitify</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-finch.png" alt="Finch logo"/><span class="ch-name">Finch</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-proddy.png" alt="Proddy logo"/><span class="ch-name">Proddy</span></div></th>
+            <th><div class="ch-inner"><img class="ch-logo" src="screens/habitat/logo-done.png" alt="Done logo"/><span class="ch-name">Done</span></div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="feat-cell">Habit Tracking</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Visualizations</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Gamification</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Educational Materials</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Community</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Mood Tracking</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td></tr>
+          <tr><td class="feat-cell">To-Do Lists</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td></tr>
+          <tr><td class="feat-cell">Journaling</td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#CC5A55" opacity=".55"/></svg></span></td><td><span class="ci"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#4CAF73"/></svg></span></td></tr>
+        </tbody>
+      </table>
+      <div class="cmat-legend">
+        <div class="li"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#4CAF73"/></svg>Supported</div>
+        <div class="li"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#CC5A55" opacity=".55"/></svg>Missing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PERSONAS & JOURNEYS ═══════════════════════════════ -->
+<section class="personas" id="s-personas">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">meet the users</div>
+    <h2 class="sec-h sr">User <em>Personas &amp; Journeys</em></h2>
+    <p class="sec-sub sr d1">To better understand our target users, we examined their attitudes, motivations, goals, and pain points, then mapped each to a corresponding journey.</p>
+
+    <div class="c-ptabs sr d2">
+      <button class="cpt on" data-p="emily"><span class="cpnum">01</span><span class="cpname">Energetic Emily</span><span class="cpsub">First-year student</span></button>
+      <button class="cpt" data-p="blake"><span class="cpnum">02</span><span class="cpname">Burnout Blake</span><span class="cpsub">PhD student</span></button>
+      <button class="cpt" data-p="bailey"><span class="cpnum">03</span><span class="cpname">Busy Bailey</span><span class="cpsub">Junior, college student</span></button>
+    </div>
+    <div class="c-vtabs sr d2">
+      <button class="cvt on" data-view="persona">Persona</button>
+      <button class="cvt" data-view="journey">Journey map</button>
+    </div>
+
+    <div class="sr d3">
+      <div class="p-view show" id="pv-emily"><div class="p-frame card"><img src="screens/habitat/persona-emily-orig.png" alt="Energetic Emily persona"/></div></div>
+      <div class="p-view" id="pv-blake"><div class="p-frame card"><img src="screens/habitat/persona-blake-orig.png" alt="Burnout Blake persona"/></div></div>
+      <div class="p-view" id="pv-bailey"><div class="p-frame card"><img src="screens/habitat/persona-bailey-orig.png" alt="Busy Bailey persona"/></div></div>
+
+      <div class="j-view" id="jv-emily"><div class="j-frame card"><img src="screens/habitat/journey-emily-orig.png" alt="Energetic Emily journey map"/></div></div>
+      <div class="j-view" id="jv-blake"><div class="j-frame card"><img src="screens/habitat/journey-blake-orig.png" alt="Burnout Blake journey map"/></div></div>
+      <div class="j-view" id="jv-bailey"><div class="j-frame card"><img src="screens/habitat/journey-bailey-orig.png" alt="Busy Bailey journey map"/></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ IDEATION ═════════════════════════════════════════ -->
+<section class="gallery-sec" id="s-ideation">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">ideation</div>
+    <h2 class="sec-h sr">One Flow, <em>Six Maps</em></h2>
+    <p class="ia-intro sr d1">Before we could sketch a single screen, we mapped out an information architecture for each core area, home, explore, timer, profile, analytics, annotated screen-by-screen with the team's open questions. Then we wove all six into one main user flow.</p>
+    <div class="sk-cat-pills sr d2" id="ia-cat-pills"><button class="sk-cat-btn on" data-cat="general">general</button><button class="sk-cat-btn" data-cat="home">home</button><button class="sk-cat-btn" data-cat="explore">explore</button><button class="sk-cat-btn" data-cat="timer">timer / focus</button><button class="sk-cat-btn" data-cat="profile">profile</button><button class="sk-cat-btn" data-cat="stats">analytics / stats</button></div>
+    <div class="sk-car-wrap sr d2">
+      <button class="sk-car-arrow" id="ia-car-prev" aria-label="Previous">‹</button>
+      <div class="sk-car-track" id="ia-car-track">
+        <div class="sk-car-slide" data-cat="general"><img src="screens/habitat/ia-areas/general.png" alt="General information architecture and ESSESTs legend"/></div>
+        <div class="sk-car-slide" data-cat="home"><img src="screens/habitat/ia-areas/home.png" alt="Home page information architecture"/></div>
+        <div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/ia-areas/explore.png" alt="Explore information architecture"/></div>
+        <div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/ia-areas/timer.png" alt="Timer and focus information architecture"/></div>
+        <div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/ia-areas/profile.png" alt="Profile information architecture"/></div>
+        <div class="sk-car-slide" data-cat="stats"><img src="screens/habitat/ia-areas/stats.png" alt="Analytics and stats information architecture"/></div>
+      </div>
+      <button class="sk-car-arrow" id="ia-car-next" aria-label="Next">›</button>
+    </div>
+    <div class="sk-car-count" id="ia-car-count">1 / 6</div>
+
+    <div class="ia-frame card sr d2" style="margin-top:clamp(28px,4vh,40px);margin-bottom:clamp(28px,4vh,40px);">
+      <img src="screens/habitat/ia.png" alt="Habitat consolidated main user flow"/>
+    </div>
+    <div class="ia-flow-cap sr d2" style="margin-top:-24px;margin-bottom:clamp(40px,5.6vh,56px);">the six maps, woven into one main user flow</div>
+    <p class="sec-sub sr d2">From there, we sketched the home, analytics, profile, explore, and timer screens to explore layout before moving into digital wireframes.</p>
+    <div class="sk-view-sw">
+      <button data-skv="grid" class="on">Grid</button>
+      <button data-skv="carousel">Carousel</button>
+    </div>
+    <div class="sk-gallery" id="sk-grid-view">
+  <div class="sk-row"><div class="sk-group"><div class="sk-pill">home</div><div class="sk-imgs"><img src="screens/habitat/sketches/10.png" alt="Habitat sketch 10"/><img src="screens/habitat/sketches/11.png" alt="Habitat sketch 11"/><img src="screens/habitat/sketches/12.png" alt="Habitat sketch 12"/></div></div><div class="sk-group"><div class="sk-pill">explore</div><div class="sk-imgs"><img src="screens/habitat/sketches/08.png" alt="Habitat sketch 8"/></div></div><div class="sk-group"><div class="sk-pill">analytics</div><div class="sk-imgs"><img src="screens/habitat/sketches/02.png" alt="Habitat sketch 2"/><img src="screens/habitat/sketches/03.png" alt="Habitat sketch 3"/><img src="screens/habitat/sketches/04.png" alt="Habitat sketch 4"/></div></div></div>
+  <div class="sk-row"><div class="sk-group"><div class="sk-pill">profile</div><div class="sk-imgs"><img src="screens/habitat/sketches/05.png" alt="Habitat sketch 5"/><img src="screens/habitat/sketches/06.png" alt="Habitat sketch 6"/><img src="screens/habitat/sketches/07.png" alt="Habitat sketch 7"/></div></div><div class="sk-group"><div class="sk-pill">timer</div><div class="sk-imgs"><img src="screens/habitat/sketches/01.png" alt="Habitat sketch 1"/><img src="screens/habitat/sketches/09.png" alt="Habitat sketch 9"/></div></div></div>
+</div>
+    <div class="sk-carousel" id="sk-carousel-view">
+  <div class="sk-cat-pills" id="sk-cat-pills"><button class="sk-cat-btn on" data-cat="home">home</button><button class="sk-cat-btn" data-cat="explore">explore</button><button class="sk-cat-btn" data-cat="analytics">analytics</button><button class="sk-cat-btn" data-cat="profile">profile</button><button class="sk-cat-btn" data-cat="timer">timer</button></div>
+  <div class="sk-car-wrap">
+    <button class="sk-car-arrow" id="sk-car-prev" aria-label="Previous">‹</button>
+    <div class="sk-car-track" id="sk-car-track"><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/sketches/10.png" alt="Habitat sketch 10"/></div><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/sketches/11.png" alt="Habitat sketch 11"/></div><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/sketches/12.png" alt="Habitat sketch 12"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/sketches/08.png" alt="Habitat sketch 8"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/sketches/02.png" alt="Habitat sketch 2"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/sketches/03.png" alt="Habitat sketch 3"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/sketches/04.png" alt="Habitat sketch 4"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/sketches/05.png" alt="Habitat sketch 5"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/sketches/06.png" alt="Habitat sketch 6"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/sketches/07.png" alt="Habitat sketch 7"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/sketches/01.png" alt="Habitat sketch 1"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/sketches/09.png" alt="Habitat sketch 9"/></div></div>
+    <button class="sk-car-arrow" id="sk-car-next" aria-label="Next">›</button>
+  </div>
+  <div class="sk-car-count" id="sk-car-count">1 / 12</div>
+</div>
+  </div>
+</section>
+
+<!-- ══ DESIGN (lo-fi) ═══════════════════════════════════ -->
+<section class="gallery-sec alt" id="s-design">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">design</div>
+    <h2 class="sec-h sr">Low- &amp; Mid-Fidelity <em>Wireframes</em></h2>
+    <p class="sec-sub sr d1">We developed low- and mid-fidelity wireframes across home, explore, analytics, profile, timer, and landing to explore layout and structure before moving into high-fidelity design.</p>
+    <div class="sk-view-sw">
+      <button data-lfv="grid" class="on">Grid</button>
+      <button data-lfv="carousel">Carousel</button>
+    </div>
+    <div class="sk-gallery" id="lf-grid-view">
+  <div class="sk-row"><div class="sk-group"><div class="sk-pill">home</div><div class="sk-imgs"><img src="screens/habitat/lofis/20.png" alt="Habitat wireframe 20"/><img src="screens/habitat/lofis/21.png" alt="Habitat wireframe 21"/><img src="screens/habitat/lofis/26.png" alt="Habitat wireframe 26"/><img src="screens/habitat/lofis/27.png" alt="Habitat wireframe 27"/></div></div><div class="sk-group"><div class="sk-pill">explore</div><div class="sk-imgs"><img src="screens/habitat/lofis/01.png" alt="Habitat wireframe 1"/><img src="screens/habitat/lofis/02.png" alt="Habitat wireframe 2"/><img src="screens/habitat/lofis/03.png" alt="Habitat wireframe 3"/><img src="screens/habitat/lofis/04.png" alt="Habitat wireframe 4"/><img src="screens/habitat/lofis/05.png" alt="Habitat wireframe 5"/></div></div><div class="sk-group"><div class="sk-pill">analytics</div><div class="sk-imgs"><img src="screens/habitat/lofis/14.png" alt="Habitat wireframe 14"/><img src="screens/habitat/lofis/15.png" alt="Habitat wireframe 15"/><img src="screens/habitat/lofis/16.png" alt="Habitat wireframe 16"/><img src="screens/habitat/lofis/19.png" alt="Habitat wireframe 19"/></div></div></div>
+  <div class="sk-row"><div class="sk-group"><div class="sk-pill">profile</div><div class="sk-imgs"><img src="screens/habitat/lofis/06.png" alt="Habitat wireframe 6"/><img src="screens/habitat/lofis/07.png" alt="Habitat wireframe 7"/><img src="screens/habitat/lofis/08.png" alt="Habitat wireframe 8"/><img src="screens/habitat/lofis/09.png" alt="Habitat wireframe 9"/><img src="screens/habitat/lofis/10.png" alt="Habitat wireframe 10"/><img src="screens/habitat/lofis/11.png" alt="Habitat wireframe 11"/><img src="screens/habitat/lofis/12.png" alt="Habitat wireframe 12"/><img src="screens/habitat/lofis/13.png" alt="Habitat wireframe 13"/></div></div><div class="sk-group"><div class="sk-pill">timer</div><div class="sk-imgs"><img src="screens/habitat/lofis/22.png" alt="Habitat wireframe 22"/><img src="screens/habitat/lofis/23.png" alt="Habitat wireframe 23"/><img src="screens/habitat/lofis/24.png" alt="Habitat wireframe 24"/><img src="screens/habitat/lofis/25.png" alt="Habitat wireframe 25"/></div></div><div class="sk-group"><div class="sk-pill">landing</div><div class="sk-imgs"><img src="screens/habitat/lofis/17.png" alt="Habitat wireframe 17"/><img src="screens/habitat/lofis/18.png" alt="Habitat wireframe 18"/></div></div></div>
+</div>
+    <div class="sk-carousel" id="lf-carousel-view">
+  <div class="sk-cat-pills" id="lf-cat-pills"><button class="sk-cat-btn on" data-cat="home">home</button><button class="sk-cat-btn" data-cat="explore">explore</button><button class="sk-cat-btn" data-cat="analytics">analytics</button><button class="sk-cat-btn" data-cat="profile">profile</button><button class="sk-cat-btn" data-cat="timer">timer</button><button class="sk-cat-btn" data-cat="landing">landing</button></div>
+  <div class="sk-car-wrap">
+    <button class="sk-car-arrow" id="lf-car-prev" aria-label="Previous">‹</button>
+    <div class="sk-car-track" id="lf-car-track"><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/lofis/20.png" alt="Habitat wireframe 20"/></div><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/lofis/21.png" alt="Habitat wireframe 21"/></div><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/lofis/26.png" alt="Habitat wireframe 26"/></div><div class="sk-car-slide" data-cat="home"><img src="screens/habitat/lofis/27.png" alt="Habitat wireframe 27"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/lofis/01.png" alt="Habitat wireframe 1"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/lofis/02.png" alt="Habitat wireframe 2"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/lofis/03.png" alt="Habitat wireframe 3"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/lofis/04.png" alt="Habitat wireframe 4"/></div><div class="sk-car-slide" data-cat="explore"><img src="screens/habitat/lofis/05.png" alt="Habitat wireframe 5"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/lofis/14.png" alt="Habitat wireframe 14"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/lofis/15.png" alt="Habitat wireframe 15"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/lofis/16.png" alt="Habitat wireframe 16"/></div><div class="sk-car-slide" data-cat="analytics"><img src="screens/habitat/lofis/19.png" alt="Habitat wireframe 19"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/06.png" alt="Habitat wireframe 6"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/07.png" alt="Habitat wireframe 7"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/08.png" alt="Habitat wireframe 8"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/09.png" alt="Habitat wireframe 9"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/10.png" alt="Habitat wireframe 10"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/11.png" alt="Habitat wireframe 11"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/12.png" alt="Habitat wireframe 12"/></div><div class="sk-car-slide" data-cat="profile"><img src="screens/habitat/lofis/13.png" alt="Habitat wireframe 13"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/lofis/22.png" alt="Habitat wireframe 22"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/lofis/23.png" alt="Habitat wireframe 23"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/lofis/24.png" alt="Habitat wireframe 24"/></div><div class="sk-car-slide" data-cat="timer"><img src="screens/habitat/lofis/25.png" alt="Habitat wireframe 25"/></div><div class="sk-car-slide" data-cat="landing"><img src="screens/habitat/lofis/17.png" alt="Habitat wireframe 17"/></div><div class="sk-car-slide" data-cat="landing"><img src="screens/habitat/lofis/18.png" alt="Habitat wireframe 18"/></div></div>
+    <button class="sk-car-arrow" id="lf-car-next" aria-label="Next">›</button>
+  </div>
+  <div class="sk-car-count" id="lf-car-count">1 / 27</div>
+</div>
+  </div>
+</section>
+
+<!-- ══ FINAL SOLUTION ═══════════════════════════════════ -->
+<section class="final-sec" id="s-final">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">final solution</div>
+    <h2 class="sec-h sr">Five Decisions, <em>One Product</em></h2>
+    <p class="sec-sub sr d1">Rather than a tour of every screen, here's how each core research insight shaped a specific design decision.</p>
+  </div>
+
+  <div class="wp">
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">01</span><span class="pl">Onboarding &middot; Templates &middot; Explore</span></div>
+          <h3>Lower the barrier to building a habit.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>New users abandon habit apps at setup, before they've felt any benefit, if the first steps ask for too much configuration.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>Users land straight into adding a habit from a library of preset templates, customizable with icons and colors, rather than a blank form. Explore surfaces more habits by category once they're ready to add another.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/habitat/final/onboarding-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Preset templates</div><div class="pf-desc">A library of ready-made habit templates removes the blank-page problem of setting up a first habit from scratch.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/onboarding-4.gif"><span class="pf-dot"></span><div><div class="pf-title">Icon &amp; color customization</div><div class="pf-desc">Habits can be personalized visually right away, making the app feel like theirs from the first minute.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/onboarding-6.gif"><span class="pf-dot"></span><div><div class="pf-title">Flexible goal setting</div><div class="pf-desc">Frequency, time of day, and reminders are optional, not required, so setup never feels like a form.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="onboarding">
+            <div class="ph-frame"><img src="screens/habitat/final/onboarding-2.gif" alt="Habitat onboarding flow"/></div>
+            <div class="pillar-thumbs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid rev">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">02</span><span class="pl">Home &middot; Challenges &middot; Streaks</span></div>
+          <h3>Make consistency feel rewarding.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Users disengage when progress feels invisible. A checked box isn't much of a reward for showing up day after day.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>Streaks grow a visual forest instead of just a number, habits can be grouped for stacking, and weekly challenges give users a reason to come back beyond their own individual habits.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/habitat/final/home-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Growing forest streaks</div><div class="pf-desc">Consistency grows a visual forest instead of just incrementing a number, giving streaks a sense of place.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/home-4.gif"><span class="pf-dot"></span><div><div class="pf-title">Habit stacking</div><div class="pf-desc">Related habits can be grouped together, mirroring how people naturally chain routines.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/home-6.gif"><span class="pf-dot"></span><div><div class="pf-title">Weekly challenges</div><div class="pf-desc">Time-boxed challenges give users a reason to return beyond their own individual habits.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="home">
+            <div class="ph-frame"><img src="screens/habitat/final/home-2.gif" alt="Habitat home screen"/></div>
+            <div class="pillar-thumbs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">03</span><span class="pl">Timer &middot; Intentions &middot; Breaks</span></div>
+          <h3>Support focus, not just tracking.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Checking off a habit doesn't help users actually do the work. Many habits need dedicated, distraction-free time, not just a log.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>Every focus session starts by setting an intention, then runs on customizable focus, short-break, and long-break durations, with completed tasks tracked automatically as the session runs.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/habitat/final/timer-1.gif"><span class="pf-dot"></span><div><div class="pf-title">Session intentions</div><div class="pf-desc">Setting an intention before a session gives the timer a purpose beyond just counting minutes.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/timer-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Customizable durations</div><div class="pf-desc">Focus, short-break, and long-break lengths adapt to how each user actually works.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/timer-3.gif"><span class="pf-dot"></span><div><div class="pf-title">Task tracking</div><div class="pf-desc">Completed tasks are tracked automatically as each session runs, no manual logging required.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="timer">
+            <div class="ph-frame"><img src="screens/habitat/final/timer-1.gif" alt="Habitat timer screen"/></div>
+            <div class="pillar-thumbs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid rev">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">04</span><span class="pl">Profile &middot; Partner &middot; Community</span></div>
+          <h3>Build accountability beyond yourself.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Internal motivation fades. Users kept habits longer when someone else was paying attention to their progress too.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>An accountability-partner feature and a community feed surface what friends are up to, with reminders that nudge users to stay on track alongside a partner, not just alone.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/habitat/final/profile-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Accountability partner</div><div class="pf-desc">Pairing with a partner turns motivation into something shared, not something users have to sustain alone.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/profile-4.gif"><span class="pf-dot"></span><div><div class="pf-title">Community activity</div><div class="pf-desc">A feed of what friends are up to keeps progress visible beyond just the user's own habits.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/profile-7.gif"><span class="pf-dot"></span><div><div class="pf-title">Partner reminders</div><div class="pf-desc">Reminders nudge users to stay on track alongside their partner, not just alone.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="profile">
+            <div class="ph-frame"><img src="screens/habitat/final/profile-2.gif" alt="Habitat profile screen"/></div>
+            <div class="pillar-thumbs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pillar">
+      <div class="pillar-grid">
+        <div class="pillar-copy sr">
+          <div class="pillar-tag"><span class="pn">05</span><span class="pl">Analytics</span></div>
+          <h3>Reflect progress over time.</h3>
+          <div class="pillar-block"><div class="pbl">Insight</div><p>Day-to-day habit tracking hides the bigger picture. Users wanted to see how far they'd actually come, not just today's checklist.</p></div>
+          <div class="pillar-block"><div class="pbl">Decision</div><p>Daily overviews roll up into weekly, monthly, and yearly views, with visual charts summarizing completed, missed, and skipped habits, and progress that's easy to share as a milestone.</p></div>
+          <ul class="pillar-feats">
+            <li class="pfeat on" data-src="screens/habitat/final/analytics-1.gif"><span class="pf-dot"></span><div><div class="pf-title">Weekly/monthly/yearly views</div><div class="pf-desc">Daily overviews roll up into longer timeframes, so progress reads as a trend, not just a checklist.</div></div></li>
+            <li class="pfeat" data-src="screens/habitat/final/analytics-2.gif"><span class="pf-dot"></span><div><div class="pf-title">Visual charts &amp; shareable progress</div><div class="pf-desc">Charts summarize completed, missed, and skipped habits, and progress is easy to share as a milestone.</div></div></li>
+          </ul>
+        </div>
+        <div class="pillar-visual">
+          <div class="pillar-phone-single" data-pillar="analytics">
+            <div class="ph-frame"><img src="screens/habitat/final/analytics-1.gif" alt="Habitat analytics screen"/></div>
+            <div class="pillar-thumbs"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REFLECTION ═══════════════════════════════════════ -->
+<section class="reflect-sec" id="s-reflection" data-screen-label="reflection">
+  <div class="wp">
+    <div class="eyebrow sr" style="margin-bottom:10px;">reflection</div>
+    <h2 class="sec-h sr">What Habitat <em>Taught Me</em></h2>
+    <p class="sec-sub sr d1" style="margin-bottom:clamp(36px,5vh,44px);">My first end-to-end UX project, and the one that changed how I think about design.</p>
+    <div class="refl-grid sr d2">
+      <div class="refl-card"><div class="rf-num">01</div><h4>Starting Point</h4><p>Habitat was my first UX project after joining Design Innovation, and I was the only new member on a six-person team. I'd never conducted interviews, built a competitive analysis, organized an IA, or completed an end-to-end process.</p></div>
+      <div class="refl-card"><div class="rf-num">02</div><h4>Biggest Growth</h4><p>Stepping into a team where everyone else already had design experience pushed me to learn quickly, planning research, synthesizing findings, wireframing, prototyping, so I could contribute rather than just observe.</p></div>
+      <div class="refl-card"><div class="rf-num">03</div><h4>What I'm Proud Of</h4><p>I experimented with illustration for the first time to give Habitat a more approachable, motivating personality, and saw how visual storytelling strengthens a product, not just its interface.</p></div>
+      <div class="refl-card"><div class="rf-num">04</div><h4>Looking Back</h4><p>We explored a broad set of ideas: templates, analytics, accountability, challenges, social features, focus sessions. Today, I'd narrow scope earlier and validate fewer concepts more deeply before building so wide.</p></div>
+    </div>
+    <div class="refl-quote sr d3">
+      <p>Before this project, I saw UX primarily as creating interfaces. After working through research, synthesis, testing, and iteration, I realized the interface is only the <em>final expression</em> of a much larger process, a shift that made me want to pursue product design professionally.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CLOSE ════════════════════════════════════════════ -->
+<section class="close-sec">
+  <div class="wp">
+    <p class="cq">Thanks for reading!</p>
+    <div class="close-actions">
+      <a class="back-pill f" href="04 Studio Class - Shippable.html">back to portfolio</a>
+    </div>
+    <div class="footbar">
+      <span>© 2026 Michelle Yi</span>
+      <a class="top" href="#top">back to top ↑</a>
+    </div>
+  </div>
+</section>
+
+<script>
+// final solution: selector list swaps the pillar phone image, thumbnail strip browses all screens per category
+(function(){
+  const counts={onboarding:8,home:8,timer:3,profile:8,analytics:2};
+  function extFor(cat,n){ return (cat==='profile'&&n===6) ? 'jpg' : 'gif'; }
+  document.querySelectorAll('.pillar').forEach(pillar=>{
+    const feats=pillar.querySelectorAll('.pfeat');
+    const img=pillar.querySelector('.ph-frame img');
+    const phoneEl=pillar.querySelector('.pillar-phone-single');
+    if(!phoneEl) return;
+    const cat=phoneEl.dataset.pillar;
+    const n=counts[cat]||1;
+    const thumbWrap=pillar.querySelector('.pillar-thumbs');
+    feats.forEach(f=>f.addEventListener('click',()=>{
+      feats.forEach(x=>x.classList.remove('on'));
+      f.classList.add('on');
+      if(img) img.src=f.dataset.src;
+      if(thumbWrap) thumbWrap.querySelectorAll('.pillar-thumb').forEach(t=>t.classList.toggle('on',t.dataset.src===f.dataset.src));
+    }));
+    if(thumbWrap && n>1){
+      for(let i=1;i<=n;i++){
+        const src='screens/habitat/final/'+cat+'-'+i+'.'+extFor(cat,i);
+        const t=document.createElement('div');
+        t.className='pillar-thumb';
+        t.dataset.src=src;
+        t.innerHTML='<img src="'+src+'" alt="'+cat+' screen '+i+'"/>';
+        t.addEventListener('click',()=>{
+          thumbWrap.querySelectorAll('.pillar-thumb').forEach(x=>x.classList.remove('on'));
+          t.classList.add('on');
+          if(img) img.src=src;
+          feats.forEach(x=>x.classList.toggle('on',x.dataset.src===src));
+        });
+        thumbWrap.appendChild(t);
+      }
+      const initSrc=img.getAttribute('src');
+      const initThumb=[...thumbWrap.querySelectorAll('.pillar-thumb')].find(t=>t.dataset.src===initSrc);
+      if(initThumb) initThumb.classList.add('on');
+    }
+  });
+})();
+// scroll reveal
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.12});
+document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+
+// persona + view tab switcher
+(function(){
+  let curP='emily',curV='persona';
+  const ptabs=document.querySelectorAll('.c-ptabs .cpt');
+  const vtabs=document.querySelectorAll('.c-vtabs .cvt');
+  function render(){
+    ptabs.forEach(b=>b.classList.toggle('on',b.dataset.p===curP));
+    vtabs.forEach(b=>b.classList.toggle('on',b.dataset.view===curV));
+    document.querySelectorAll('.p-view,.j-view').forEach(v=>v.classList.remove('show'));
+    const id=(curV==='persona'?'pv-':'jv-')+curP;
+    document.getElementById(id).classList.add('show');
+  }
+  ptabs.forEach(b=>b.addEventListener('click',()=>{curP=b.dataset.p;render();}));
+  vtabs.forEach(b=>b.addEventListener('click',()=>{curV=b.dataset.view;render();}));
+  render();
+})();
+</script>
+
+<script>
+(function(){
+  const swBtns=document.querySelectorAll('.sk-view-sw button[data-skv]');
+  const grid=document.getElementById('sk-grid-view');
+  const car=document.getElementById('sk-carousel-view');
+  if(swBtns.length){
+    swBtns.forEach(b=>b.addEventListener('click',()=>{
+      swBtns.forEach(x=>x.classList.toggle('on',x===b));
+      const v=b.dataset.skv;
+      grid.style.display=v==='grid'?'flex':'none';
+      car.classList.toggle('show',v==='carousel');
+    }));
+  }
+})();
+(function(){
+  const track=document.getElementById('sk-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.getElementById('sk-cat-pills').querySelectorAll('.sk-cat-btn')];
+  const prev=document.getElementById('sk-car-prev');
+  const next=document.getElementById('sk-car-next');
+  const count=document.getElementById('sk-car-count');
+  let idx=0;
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+(function(){
+  const btn=document.getElementById('aff-toggle');
+  const panel=document.getElementById('aff-full');
+  if(!btn)return;
+  btn.addEventListener('click',()=>{
+    const open=panel.classList.toggle('open');
+    btn.classList.toggle('open',open);
+    btn.firstChild.textContent=open?'hide full affinity boards':'view full affinity boards';
+  });
+})();
+(function(){
+  const track=document.getElementById('ia-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.getElementById('ia-cat-pills').querySelectorAll('.sk-cat-btn')];
+  const prev=document.getElementById('ia-car-prev');
+  const next=document.getElementById('ia-car-next');
+  const count=document.getElementById('ia-car-count');
+  let idx=0;
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+(function(){
+  const swBtns=document.querySelectorAll('.sk-view-sw button[data-lfv]');
+  const grid=document.getElementById('lf-grid-view');
+  const car=document.getElementById('lf-carousel-view');
+  if(swBtns.length){
+    swBtns.forEach(b=>b.addEventListener('click',()=>{
+      swBtns.forEach(x=>x.classList.toggle('on',x===b));
+      const v=b.dataset.lfv;
+      grid.style.display=v==='grid'?'flex':'none';
+      car.classList.toggle('show',v==='carousel');
+    }));
+  }
+})();
+(function(){
+  const track=document.getElementById('lf-car-track');
+  if(!track)return;
+  const slides=[...track.querySelectorAll('.sk-car-slide')];
+  const catBtns=[...document.getElementById('lf-cat-pills').querySelectorAll('.sk-cat-btn')];
+  const prev=document.getElementById('lf-car-prev');
+  const next=document.getElementById('lf-car-next');
+  const count=document.getElementById('lf-car-count');
+  let idx=0;
+  function update(){
+    const cat=slides[idx].dataset.cat;
+    catBtns.forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+    count.textContent=(idx+1)+' / '+slides.length;
+  }
+  function goTo(i){
+    idx=Math.max(0,Math.min(slides.length-1,i));
+    slides[idx].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+    update();
+  }
+  prev.addEventListener('click',()=>goTo(idx-1));
+  next.addEventListener('click',()=>goTo(idx+1));
+  catBtns.forEach(b=>b.addEventListener('click',()=>{
+    const i=slides.findIndex(s=>s.dataset.cat===b.dataset.cat);
+    if(i>-1)goTo(i);
+  }));
+  let scrollTimer;
+  track.addEventListener('scroll',()=>{
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      const trackRect=track.getBoundingClientRect();
+      const center=trackRect.left+trackRect.width/2;
+      let closest=0,closestDist=Infinity;
+      slides.forEach((s,i)=>{
+        const r=s.getBoundingClientRect();
+        const d=Math.abs((r.left+r.width/2)-center);
+        if(d<closestDist){closestDist=d;closest=i;}
+      });
+      idx=closest;update();
+    },100);
+  },{passive:true});
+  update();
+})();
+</script>
+
+
+
+<div class="toc-widget" id="toc-widget">
+  <div class="toc-panel" id="toc-panel"></div>
+  <div class="toc-fab" id="toc-fab"><span class="tf-count" id="tf-count">01</span><span class="tf-bar">/</span><span class="tf-total" id="tf-total"></span><span class="tf-sep">|</span><span class="tf-label" id="tf-label"></span></div>
+</div>
+<script>
+(function(){
+  const sections=[{"id":"s-context","label":"Context"},{"id":"s-insights","label":"Research"},{"id":"s-hmw","label":"How Might We"},{"id":"s-competitive","label":"Analysis"},{"id":"s-personas","label":"Personas"},{"id":"s-ideation","label":"Ideation"},{"id":"s-design","label":"Wireframes"},{"id":"s-final","label":"Final Solution"}];
+  const panel=document.getElementById('toc-panel');
+  const widget=document.getElementById('toc-widget');
+  const fab=document.getElementById('toc-fab');
+  document.getElementById('tf-total').textContent=String(sections.length).padStart(2,'0');
+  panel.innerHTML=sections.map((s,i)=>'<a class="toc-item" data-i="'+i+'" href="#'+s.id+'"><span class="ti-n">'+String(i+1).padStart(2,'0')+'</span><span class="ti-l">'+s.label+'</span></a>').join('');
+  const items=[...panel.querySelectorAll('.toc-item')];
+  fab.addEventListener('click',()=>widget.classList.toggle('open'));
+  document.addEventListener('click',(e)=>{ if(!widget.contains(e.target)) widget.classList.remove('open'); });
+  items.forEach(it=>it.addEventListener('click',()=>widget.classList.remove('open')));
+  function setActive(i){
+    items.forEach(it=>it.classList.toggle('active',+it.dataset.i===i));
+    document.getElementById('tf-count').textContent=String(i+1).padStart(2,'0');
+    document.getElementById('tf-label').textContent=sections[i].label;
+  }
+  setActive(0);
+  const els=sections.map(s=>document.getElementById(s.id)).filter(Boolean);
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=els.indexOf(e.target);
+        if(idx>-1) setActive(idx);
+      }
+    });
+  },{rootMargin:'-40% 0px -50% 0px',threshold:0});
+  els.forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>
